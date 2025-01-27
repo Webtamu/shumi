@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32328.378
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jam App Project", "Jam App Project\Jam App Project.csproj", "{490BADCE-F992-40D6-81D5-D49EC3D54FA3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{490BADCE-F992-40D6-81D5-D49EC3D54FA3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{490BADCE-F992-40D6-81D5-D49EC3D54FA3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{490BADCE-F992-40D6-81D5-D49EC3D54FA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{490BADCE-F992-40D6-81D5-D49EC3D54FA3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F155414B-9540-42E8-B388-A64EAAD1D5CE}
+	EndGlobalSection
+EndGlobal
