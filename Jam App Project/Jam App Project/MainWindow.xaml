@@ -7,7 +7,13 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-
-        <TextBlock Text="Jam time" FontSize="69" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <TextBlock Name="txtTitle" Text="Jam time" FontSize="69" 
+                   HorizontalAlignment="Center" VerticalAlignment="Top"/>
+        <TextBlock Name="txtStatus" FontSize="69" 
+                   HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
+        <Button Name="btnToggle" Content="Start Session" FontSize="14"
+                Width="200" Height="50" 
+                VerticalAlignment="Center" HorizontalAlignment="Center"
+                Click="btnToggle_Click"/>
     </Grid>
 </Window>
