@@ -1,26 +1,44 @@
 
-from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton
+from PyQt6.QtWidgets import (
+    QApplication, 
+    QWidget, 
+    QVBoxLayout,
+    QHBoxLayout,
+)
 
-class MainWindow(QMainWindow):
+from PyQt6.QtGui import QIcon
+
+from ui.buttons import *
+from ui.streak import *
+
+class MainWindow(QWidget):
     def __init__(self):
         super().__init__()
+        self.setWindowTitle("Jam App")
+        self.setWindowIcon(QIcon("resources/Orange_Puffle.png")) 
+        self.resize(800, 600)
 
-        self.setWindowTitle("My App")
+        # TODO: Refactor into view
+        theMainLayout = QVBoxLayout()
+        theTopLayout = QHBoxLayout()
+        theCenterLayout = QVBoxLayout()
 
-        button = QPushButton("Press Me!")
-        button.setCheckable(True)
-        button.clicked.connect(self.the_button_was_clicked)
+        self.thePlaceholder = cPlaceholder("orange")
+        self.theStartButton = cStartButton()
+        self.theSettingsButton = cSettingsButton()
+        self.theProfileButton = cProfileButton()
 
-        # Set the central widget of the Window.
-        self.setCentralWidget(button)
+        theTopLayout.addStretch()
+        theTopLayout.addWidget(self.theProfileButton)
+        theTopLayout.addWidget(self.theSettingsButton) 
+        
+        theCenterLayout.addWidget(self.thePlaceholder)
+        theCenterLayout.addWidget(self.theStartButton)
+      
+        theMainLayout.addLayout(theTopLayout)
+        theMainLayout.addLayout(theCenterLayout)
 
-    def the_button_was_clicked(self):
-        print("Clicked!")
-
-    def start_button(self):
-        #TODO: button to start session
-    def settings(self):
-        #TODO
+        self.setLayout(theMainLayout)
 
 
 app = QApplication([])
