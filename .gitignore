@@ -1,2 +1,7 @@
-"Jam App Project/Jam App Project/bin"
-"Jam App Project/Jam App Project/obj"
+__pycache__/
+*.pyc
+.vs/
+.vscode/
+.idea/
+*.suo
+*.sqlite

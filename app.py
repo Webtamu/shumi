@@ -1,49 +1,14 @@
+from models.models import cModel
+from views.home_view import cHomeView
+from controllers.controllers import cHomeController
+from PyQt6.QtWidgets import QApplication
 
-from PyQt6.QtWidgets import (
-    QApplication, 
-    QWidget, 
-    QVBoxLayout,
-    QHBoxLayout,
-)
-
-from PyQt6.QtGui import QIcon
-
-from ui.buttons import *
-from ui.streak import *
-
-class MainWindow(QWidget):
-    def __init__(self):
-        super().__init__()
-        self.setWindowTitle("Jam App")
-        self.setWindowIcon(QIcon("resources/Orange_Puffle.png")) 
-        self.resize(800, 600)
-
-        # TODO: Refactor into view
-        theMainLayout = QVBoxLayout()
-        theTopLayout = QHBoxLayout()
-        theCenterLayout = QVBoxLayout()
-
-        self.thePlaceholder = cPlaceholder("orange")
-        self.theStartButton = cStartButton()
-        self.theSettingsButton = cSettingsButton()
-        self.theProfileButton = cProfileButton()
-
-        theTopLayout.addStretch()
-        theTopLayout.addWidget(self.theProfileButton)
-        theTopLayout.addWidget(self.theSettingsButton) 
-        
-        theCenterLayout.addWidget(self.thePlaceholder)
-        theCenterLayout.addWidget(self.theStartButton)
-      
-        theMainLayout.addLayout(theTopLayout)
-        theMainLayout.addLayout(theCenterLayout)
-
-        self.setLayout(theMainLayout)
-
-
-app = QApplication([])
-
-window = MainWindow()
-window.show()
-
-app.exec()
+class App(QApplication):
+    def __init__(self, anArgs=[]):
+        super().__init__(anArgs)
+        self.theModel = cModel()
+        self.theView = cHomeView()
+        self.theController = cHomeController()
+        self.theController.doConnectMVC(self.theModel, self.theView)
+  
+        self.theView.show()
