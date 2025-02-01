@@ -1,16 +1,17 @@
 from PyQt6.QtWidgets import (
-    QWidget, 
     QVBoxLayout,
     QHBoxLayout,
 )
 from PyQt6.QtCore import pyqtSlot
 from PyQt6.QtGui import QIcon
 
-from ui.buttons import *
-from ui.streak import *
+from ui.buttons import StartButton, SettingsButton, ProfileButton
+from ui.heatmap import Heatmap 
+from ui.streak import Placeholder
+from views.view import View
 
-class cHomeView(QWidget):
-    def __init__(self):
+class HomeView(View):
+    def __init__(self) -> None:
         super().__init__()
 
         # General Window Info
@@ -19,10 +20,11 @@ class cHomeView(QWidget):
         self.resize(800, 600)
 
         # Adding Components
-        self.thePlaceholder = cPlaceholder("orange")
-        self.theStartButton = cStartButton()
-        self.theSettingsButton = cSettingsButton()
-        self.theProfileButton = cProfileButton()
+        self.thePlaceholder = Placeholder("orange")
+        self.theStartButton = StartButton()
+        self.theSettingsButton = SettingsButton()
+        self.theProfileButton = ProfileButton()
+        self.theHeatmap = Heatmap()
 
         self.theButtonMap = {
             "btnStart": self.theStartButton,
@@ -39,14 +41,16 @@ class cHomeView(QWidget):
         theTopLayout.addWidget(self.theSettingsButton) 
         theCenterLayout.addWidget(self.thePlaceholder)
         theCenterLayout.addWidget(self.theStartButton)
+        theCenterLayout.addWidget(self.theHeatmap.webView)
         theMainLayout.addLayout(theTopLayout)
         theMainLayout.addLayout(theCenterLayout)
         self.setLayout(theMainLayout)
+        self.show()
 
 
-    # Slot from Controller, updating UI elements
+    # Slot from Controller, updating button UI elements
     @pyqtSlot(str, bool, str)
-    def doUpdateButtonUI(self, aButtonName, aState, aText):
+    def doUpdateButtonUI(self, aButtonName: str, aState: bool, aText: str) -> None:
         # Update UI Elements
         if aButtonName in self.theButtonMap:
             self.theButtonMap[aButtonName].setChecked(aState)

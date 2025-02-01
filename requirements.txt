@@ -1,2 +1,6 @@
 pyqt6
 sqlite3
+plotly_calplot
+pandas
+numpy
+openpyxl

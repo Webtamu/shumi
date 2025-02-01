@@ -1,8 +1,8 @@
 from PyQt6.QtGui import QColor, QPalette
 from PyQt6.QtWidgets import QWidget
 
-class cPlaceholder(QWidget):
-    def __init__(self, aColor):
+class Placeholder(QWidget):
+    def __init__(self, aColor: QColor) -> None:
         super().__init__()
         self.setAutoFillBackground(True)
 
