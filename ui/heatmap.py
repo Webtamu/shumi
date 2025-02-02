@@ -9,7 +9,7 @@ class Heatmap(QWidget):
     def __init__(self) -> None:
 
         super().__init__()
-
+        '''
         # Load sales data
         file_path = "resources/sales_data.xlsx"  
         sales_data = pd.read_excel(file_path)
@@ -28,4 +28,4 @@ class Heatmap(QWidget):
         # Use QUrl to load the HTML file
         file_url = QUrl.fromLocalFile(html_path)  # Convert the file path to a QUrl
         self.webView.setUrl(file_url)
-      
+        '''

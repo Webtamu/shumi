@@ -11,16 +11,16 @@ class HomeController(Controller):
 
         # Wiring up Model and View to the Controller
         self._theModel.theButtonSignal.connect(self._handleModelResponse)
-        self._theView.theStartButton.clicked.connect(lambda: self._handleViewResponse("btnStart"))
-        self._theView.theSettingsButton.clicked.connect(lambda: self._handleViewResponse("btnSettings"))
-        self._theView.theProfileButton.clicked.connect(lambda: self._handleViewResponse("btnProfile"))
-    
-    # Slot from View (Initial Trigger), sending to Model for processing
-    @pyqtSlot(str)
+
+        # Connecting buttons to handlers
+        for btnName, btnObject in self._theView.theButtonMap.items():
+            btnObject.clicked.connect(lambda _, name=btnName: self._handleViewResponse(name))
+         
+    # Update from View (Initial Trigger), sending to Model for processing
     def _handleViewResponse(self, aButtonName: str) -> None:
         self._theModel.doUpdateButtonState(aButtonName)
 
-    # Slot from Model (Compute Response), sending to View for presentation
+    # Update from Model (Compute Response), sending to View for presentation
     @pyqtSlot(str, bool, str)
     def _handleModelResponse(self, aButtonName: str, aState: bool, aText: str) -> None:
         self._theView.doUpdateButtonUI(aButtonName, aState, aText)

@@ -21,15 +21,11 @@ class HomeView(View):
 
         # Adding Components
         self.thePlaceholder = Placeholder("orange")
-        self.theStartButton = StartButton()
-        self.theSettingsButton = SettingsButton()
-        self.theProfileButton = ProfileButton()
         self.theHeatmap = Heatmap()
-
         self.theButtonMap = {
-            "btnStart": self.theStartButton,
-            "btnSettings": self.theSettingsButton,
-            "btnProfile": self.theProfileButton
+            "btnStart": StartButton(),
+            "btnSettings": SettingsButton(),
+            "btnProfile": ProfileButton(),
         }
 
         # Layout related
@@ -37,23 +33,21 @@ class HomeView(View):
         theTopLayout = QHBoxLayout()
         theCenterLayout = QVBoxLayout()
         theTopLayout.addStretch()
-        theTopLayout.addWidget(self.theProfileButton)
-        theTopLayout.addWidget(self.theSettingsButton) 
+        theTopLayout.addWidget(self.theButtonMap["btnProfile"])
+        theTopLayout.addWidget(self.theButtonMap["btnSettings"]) 
         theCenterLayout.addWidget(self.thePlaceholder)
-        theCenterLayout.addWidget(self.theStartButton)
-        theCenterLayout.addWidget(self.theHeatmap.webView)
+        theCenterLayout.addWidget(self.theButtonMap["btnStart"])
+        theCenterLayout.addWidget(self.theHeatmap)
         theMainLayout.addLayout(theTopLayout)
         theMainLayout.addLayout(theCenterLayout)
         self.setLayout(theMainLayout)
         self.show()
 
 
-    # Slot from Controller, updating button UI elements
-    @pyqtSlot(str, bool, str)
+    # Update from Controller, updating button UI elements
     def doUpdateButtonUI(self, aButtonName: str, aState: bool, aText: str) -> None:
-        # Update UI Elements
         if aButtonName in self.theButtonMap:
             self.theButtonMap[aButtonName].setChecked(aState)
             self.theButtonMap[aButtonName].setText(aText)
             # DEBUG STATEMENT
-            print(f"Updated {aButtonName}: {aText} (Checked: {aState})")
+            print(f"Updated {aButtonName}: {aText} (State: {aState})")
