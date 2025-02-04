@@ -12,8 +12,7 @@ from views.view import View
 class SessionView(View):
     def __init__(self) -> None:...
         
-    # Slot from Controller, updating button UI elements
-    @pyqtSlot(str, bool, str)
+    # Response from Controller, updating button UI elements
     def doUpdateButtonUI(self, aButtonName: str, aState: bool, aText: str) -> None:...
 
 
