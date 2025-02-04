@@ -13,6 +13,7 @@ class HomeModel(Model):
             "btnStart": {"state": False, "text": "Start Session", "alt": "Stop Session"},
             "btnSettings": {"state": False, "text": "Settings"},
             "btnProfile": {"state": False, "text": "Profile"},
+            "btnStats": {"state": False, "text": "Stats"},
         }
     
     # Update data store and notify controller

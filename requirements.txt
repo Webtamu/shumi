@@ -1,6 +1,5 @@
 pyqt6
+pyqt6-tools
 sqlite3
-plotly_calplot
 pandas
 numpy
-openpyxl
