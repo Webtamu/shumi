@@ -1,13 +1,7 @@
-from PyQt6.QtWidgets import (
-    QVBoxLayout,
-    QHBoxLayout,
-)
-from PyQt6.QtCore import pyqtSlot
-from PyQt6.QtGui import QIcon
-
-from ui.buttons import StartButton, SettingsButton, ProfileButton
-from ui.streak import Placeholder
+from PyQt6.QtWidgets import QPushButton
+from PyQt6 import uic
 from views.view import View
+
 
 class SessionView(View):
     def __init__(self) -> None:...
