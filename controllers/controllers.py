@@ -6,7 +6,7 @@ from views.view import View
 class Controller(QObject):
 
     @abstractmethod
-    def __init__(self, aModel: Model, aView: View) -> None:
+    def __init__(self, aModel: Model=None, aView: View=None) -> None:
         super().__init__()
 
     # Slot from View (Initial Trigger), sending to Model for processing    
