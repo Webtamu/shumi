@@ -1,15 +1,22 @@
 from PyQt6.QtWidgets import QPushButton
 from PyQt6.QtGui import QIcon
 from PyQt6 import uic
-
+from PyQt6.QtCore import pyqtSignal
 from ui.streak import Placeholder
 from views.view import View
 
 class HomeView(View):
+    theNavSignal = pyqtSignal(str)
+
     def __init__(self) -> None:
         super().__init__()
         self.theWindow = uic.loadUi("qtdesigner/home_design.ui")
-        self.theWindow.setWindowIcon(QIcon("resources/orange_puffle.png")) 
+        self.theWindow.setWindowIcon(QIcon("resources/orange_puffle.png"))
+        
+        
+        print("HomeView Initialized") #DEBUG
+
+        
         self.theButtonMap = {
             "btnStart": self.theWindow.findChild(QPushButton, "btnStart"),
             "btnSettings": self.theWindow.findChild(QPushButton, "btnSettings"),
@@ -17,10 +24,16 @@ class HomeView(View):
             "btnStats": self.theWindow.findChild(QPushButton, "btnStats"),
         }
 
+
+
     # Update from Controller, updating button UI elements
     def doUpdateButtonUI(self, aButtonName: str, aState: bool, aText: str) -> None:
         if aButtonName in self.theButtonMap:
             self.theButtonMap[aButtonName].setChecked(aState)
             self.theButtonMap[aButtonName].setText(aText)
+            self.theNavSignal.emit(aButtonName)
+
             # DEBUG STATEMENT
             print(f"Updated {aButtonName}: {aText} (State: {aState})")
+    
+

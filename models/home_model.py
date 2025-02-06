@@ -21,7 +21,6 @@ class HomeModel(Model):
         if aButtonName in self._theButtonStateData:
             theButton = self._theButtonStateData[aButtonName]
             theButton["state"] = not theButton["state"]
-
             theText = theButton.get("alt", theButton["text"]) if theButton["state"] else theButton["text"]
             self.theButtonSignal.emit(aButtonName, theButton["state"], theText)
             

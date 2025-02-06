@@ -10,10 +10,10 @@ class SettingsModel(Model):
 
         # TEMP APP DATA STORE
         self._theButtonStateData = {
-            "btnStart": {"state": False, "text": "Start Session", "alt": "Stop Session"},
-            "btnSettings": {"state": False, "text": "Settings"},
-            "btnProfile": {"state": False, "text": "Profile"},
-            "btnStats": {"state": False, "text": "Stats"},
+            "pushButton": {"state": False, "text": "Profile"},
+            "pushButton_2": {"state": False, "text": "Settings"},
+            "pushButton_3": {"state": False, "text": "Stats"},
+            "pushButton_4": {"state": False, "text": "Return Home"},
         }
     
     # Update data store and notify controller
