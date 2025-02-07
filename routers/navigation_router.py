@@ -1,10 +1,8 @@
-from PyQt6.QtCore import pyqtSlot
-from models.models import Model  
 from views.view import View  
-from controllers.controllers import Controller
 from PyQt6.QtWidgets import QStackedWidget
+from PyQt6.QtCore import QObject, pyqtSlot
 
-class NavigationController(Controller):
+class NavigationRouter(QObject):
     def __init__(self) -> None:
         super().__init__()
         self.theStackedWidget = QStackedWidget()

@@ -11,20 +11,22 @@ class SettingsView(View):
         super().__init__()
         self.theWindow = uic.loadUi("qtdesigner/settings_design.ui")
         self.theWindow.setWindowIcon(QIcon("resources/orange_puffle.png")) 
+
         self.theButtonMap = {
-            "pushButton": self.theWindow.findChild(QPushButton, "pushButton"),
-            "pushButton_2": self.theWindow.findChild(QPushButton, "pushButton_2"),
-            "pushButton_3": self.theWindow.findChild(QPushButton, "pushButton_3"),
-            "pushButton_4": self.theWindow.findChild(QPushButton, "pushButton_4"),
+            "btnHome": self.theWindow.findChild(QPushButton, "btnHome"),
+            "btnSettings": self.theWindow.findChild(QPushButton, "btnSettings"),
+            "btnProfile": self.theWindow.findChild(QPushButton, "btnProfile"),
+            "btnBug": self.theWindow.findChild(QPushButton, "btnBug"),
+            "btnContact": self.theWindow.findChild(QPushButton, "btnContact"),
+            "btnAbout": self.theWindow.findChild(QPushButton, "btnAbout"),
         }
+
     # Response from Controller, updating button UI elements
     def doUpdateButtonUI(self, aButtonName: str, aState: bool, aText: str) -> None:
         if aButtonName in self.theButtonMap:
             self.theButtonMap[aButtonName].setChecked(aState)
             self.theButtonMap[aButtonName].setText(aText)
-
             self.theNavSignal.emit(aButtonName)
-
             # DEBUG STATEMENT
             print(f"Updated {aButtonName}: {aText} (State: {aState})")
 

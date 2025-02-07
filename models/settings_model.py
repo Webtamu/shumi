@@ -10,12 +10,14 @@ class SettingsModel(Model):
 
         # TEMP APP DATA STORE
         self._theButtonStateData = {
-            "pushButton": {"state": False, "text": "Profile"},
-            "pushButton_2": {"state": False, "text": "Settings"},
-            "pushButton_3": {"state": False, "text": "Stats"},
-            "pushButton_4": {"state": False, "text": "Return Home"},
+            "btnHome": {"state": False, "text": "Return Home"},
+            "btnSettings": {"state": False, "text": "Settings"},
+            "btnProfile": {"state": False, "text": "Stats"},
+            "btnBug": {"state": False, "text": "Report a Bug"},
+            "btnContact": {"state": False, "text": "Contact Us"},
+            "btnAbout": {"state": False, "text": "About"},
         }
-    
+
     # Update data store and notify controller
     def doUpdateButtonState(self, aButtonName: str) -> None:
         if aButtonName in self._theButtonStateData:

@@ -3,8 +3,8 @@ from models.settings_model import SettingsModel
 from views.home_view import HomeView
 from views.settings_view import SettingsView
 from controllers.home_controller import HomeController
-from controllers.navigation_controller import NavigationController
 from controllers.settings_controller import SettingsController
+from routers.navigation_router import NavigationRouter
 from PyQt6.QtWidgets import QApplication
 
 class App(QApplication):
@@ -13,12 +13,12 @@ class App(QApplication):
 
         self.theHomeController = HomeController(HomeModel(), HomeView())
         self.theSettingsController = SettingsController(SettingsModel(), SettingsView())
-        self.theNavigationController = NavigationController()
+        self.theNavigationRouter = NavigationRouter()
         self.initializeViews()
         
 
     def initializeViews(self):
-        self.theNavigationController.addView("viewHome", self.theHomeController.theView)
-        self.theNavigationController.addView("viewSettings", self.theSettingsController.theView)
-        self.theNavigationController.theStackedWidget.setCurrentIndex(0)
-        self.theNavigationController.doShow()
+        self.theNavigationRouter.addView("viewHome", self.theHomeController.theView)
+        self.theNavigationRouter.addView("viewSettings", self.theSettingsController.theView)
+        self.theNavigationRouter.theStackedWidget.setCurrentIndex(0)
+        self.theNavigationRouter.doShow()
