@@ -1,6 +1,7 @@
 from views.view import View  
 from PyQt6.QtWidgets import QStackedWidget
 from PyQt6.QtCore import QObject, pyqtSlot
+from helpers.signals import Signal
 
 class NavigationRouter(QObject):
     def __init__(self) -> None:
@@ -25,11 +26,11 @@ class NavigationRouter(QObject):
     def doShow(self):
         self.theStackedWidget.show()
     
-    @pyqtSlot(str)
-    def _handleViewResponse(self, aButtonName: str) -> None:
-        if aButtonName == "btnSettings":
+    @pyqtSlot(Signal)
+    def _handleViewResponse(self, aSignal: Signal) -> None:
+        if aSignal.theItemName == "btnSettings":
             self.navigateTo("viewSettings")
-        elif aButtonName == "btnHome":
+        elif aSignal.theItemName == "btnHome":
             self.navigateTo("viewHome")
         return None
 

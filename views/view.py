@@ -1,5 +1,6 @@
 from abc import abstractmethod
 from PyQt6.QtWidgets import QWidget
+from helpers.signals import Signal
 
 class View(QWidget):  
 
@@ -8,5 +9,5 @@ class View(QWidget):
         super().__init__() 
 
     @abstractmethod
-    def doUpdateButtonUI(self, aButtonName: str, aState: bool, aText: str) -> None:
+    def doUpdateButtonUI(self, aSignal: Signal) -> None:
         pass

@@ -25,21 +25,21 @@
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
-        <widget class="QPushButton" name="pushButton">
+        <widget class="QPushButton" name="btnProfile">
          <property name="text">
           <string>Profile</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="pushButton_2">
+        <widget class="QPushButton" name="btnSettings">
          <property name="text">
           <string>Settings</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="pushButton_3">
+        <widget class="QPushButton" name="btnStats">
          <property name="text">
           <string>Stats</string>
          </property>
@@ -101,7 +101,7 @@
                 <item>
                  <widget class="QLabel" name="label">
                   <property name="text">
-                   <string>Pet Status</string>
+                   <string>Pet Health</string>
                   </property>
                  </widget>
                 </item>
@@ -220,21 +220,21 @@
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_6">
+           <widget class="QPushButton" name="btnManage">
             <property name="text">
              <string>Manage Clips</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_5">
+           <widget class="QPushButton" name="btnSeeOverall">
             <property name="text">
              <string>See Overall</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_4">
+           <widget class="QPushButton" name="btnSeeRecent">
             <property name="text">
              <string>See &lt;August 2025&gt; Progress</string>
             </property>
@@ -247,7 +247,7 @@
      </widget>
     </item>
     <item>
-     <widget class="QPushButton" name="pushButton_7">
+     <widget class="QPushButton" name="btnHome">
       <property name="text">
        <string>Return Home</string>
       </property>

@@ -2,6 +2,7 @@ from PyQt6.QtCore import pyqtSlot
 from models.models import Model  
 from views.view import View  
 from controllers.controllers import Controller
+from helpers.signals import Signal
 
 class SettingsController(Controller):
     def __init__(self, aModel: Model, aView: View) -> None:
@@ -21,6 +22,6 @@ class SettingsController(Controller):
         self.theModel.doUpdateButtonState(aButtonName)
 
     # Update from Model (Compute Response), sending to View for presentation
-    @pyqtSlot(str, bool, str)
-    def _handleModelResponse(self, aButtonName: str, aState: bool, aText: str) -> None:
-        self.theView.doUpdateButtonUI(aButtonName, aState, aText)
+    @pyqtSlot(Signal)
+    def _handleModelResponse(self, aSignal: Signal) -> None:
+        self.theView.doUpdateButtonUI(aSignal)

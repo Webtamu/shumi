@@ -3,9 +3,10 @@ from PyQt6.QtWidgets import QPushButton
 from PyQt6.QtGui import QIcon
 from PyQt6 import uic
 from PyQt6.QtCore import pyqtSignal
+from helpers.signals import Signal
 
 class SettingsView(View):
-    theNavSignal = pyqtSignal(str)
+    theNavSignal = pyqtSignal(Signal)
 
     def __init__(self) -> None:
         super().__init__()
@@ -21,13 +22,14 @@ class SettingsView(View):
             "btnAbout": self.theWindow.findChild(QPushButton, "btnAbout"),
         }
 
-    # Response from Controller, updating button UI elements
-    def doUpdateButtonUI(self, aButtonName: str, aState: bool, aText: str) -> None:
-        if aButtonName in self.theButtonMap:
-            self.theButtonMap[aButtonName].setChecked(aState)
-            self.theButtonMap[aButtonName].setText(aText)
-            self.theNavSignal.emit(aButtonName)
+    # Update from Controller, updating button UI elements
+    def doUpdateButtonUI(self, aSignal: Signal) -> None:
+        if aSignal.theItemName in self.theButtonMap:
+            self.theButtonMap[aSignal.theItemName].setChecked(aSignal.theState)
+            self.theButtonMap[aSignal.theItemName].setText(aSignal.theText)
+            self.theNavSignal.emit(aSignal)
+
             # DEBUG STATEMENT
-            print(f"Updated {aButtonName}: {aText} (State: {aState})")
+            print(f"Updated {aSignal.theItemName}: {aSignal.theText} (State: {aSignal.theState})")
 
 
