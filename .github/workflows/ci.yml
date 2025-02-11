@@ -16,16 +16,20 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libegl1-mesa
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.9.13'  
+          python-version: '3.9.13'
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt  
+          pip install -r requirements.txt
 
       - name: Check if application compiles
-        run: |
-          python main.py
+        run: python main.py
