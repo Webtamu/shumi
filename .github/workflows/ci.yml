@@ -41,10 +41,28 @@ jobs:
                                   libxkbcommon-dev libxkbcommon-x11-dev
           sudo /usr/bin/Xvfb $DISPLAY -screen 0 1280x1024x24 &
 
-      # Windows: Ensure PyQt6 DLLs are found
+      # Windows: Fully remove PyQt6 before installing
+      - name: Fully Remove PyQt6 (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          pip uninstall -y PyQt6 PyQt6-Qt6 PyQt6-sip || true
+          python -m pip install --upgrade pip
+          pip install --no-cache-dir PyQt6==6.4.2
+
+      # Windows: Ensure Qt DLLs are in PATH
       - name: Fix PyQt6 DLL Path (Windows)
         if: runner.os == 'Windows'
-        run: echo "C:\hostedtoolcache\windows\Python\${{ matrix.python-version }}\x64\Lib\site-packages\PyQt6\Qt6\bin" >> $GITHUB_PATH
+        run: |
+          echo "C:\hostedtoolcache\windows\Python\${{ matrix.python-version }}\x64\Lib\site-packages\PyQt6\Qt6\bin" >> $env:GITHUB_PATH
+          echo "C:\hostedtoolcache\windows\Python\${{ matrix.python-version }}\x64\Lib\site-packages\PyQt6" >> $env:GITHUB_PATH
+
+      # Windows: Copy DLLs to C:\Qt (Alternative Fix)
+      - name: Copy Qt DLLs to C:\Qt (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          mkdir -p C:\Qt\bin
+          cp C:\hostedtoolcache\windows\Python\${{ matrix.python-version }}\x64\Lib\site-packages\PyQt6\Qt6\bin\* C:\Qt\bin
+          echo "C:\Qt\bin" >> $env:GITHUB_PATH
 
       # Install dependencies
       - name: Install Python dependencies
