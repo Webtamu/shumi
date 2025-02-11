@@ -9,5 +9,5 @@ class View(QWidget):
         super().__init__() 
 
     @abstractmethod
-    def doUpdateButtonUI(self, aSignal: Signal) -> None:
+    def updateItemUI(self, aSignal: Signal) -> None:
         pass

@@ -1,6 +1,9 @@
+from dataclasses import dataclass
+from helpers.helpers import Items, Actions
+
+@dataclass
 class Signal():
-    def __init__(self, anActionType: str="", anItemName: str="", aState: bool=False, aText: str="") -> None:
-        self.theActionType = anActionType
-        self.theItemName = anItemName
-        self.theState = aState
-        self.theText = aText
+    theActionType: Actions
+    theItem: Items
+    theState: bool 
+    theText: str

@@ -2,6 +2,7 @@ from views.view import View
 from PyQt6.QtWidgets import QStackedWidget
 from PyQt6.QtCore import QObject, pyqtSlot
 from helpers.signals import Signal
+from helpers.helpers import ViewState, Items
 
 class NavigationRouter(QObject):
     def __init__(self) -> None:
@@ -10,15 +11,15 @@ class NavigationRouter(QObject):
         self.theViewMap = {}
         self.theCounter = 0
      
-    def addView(self, aViewName: str, aView: View):
+    def addView(self, aViewState: ViewState, aView: View):
         self.theStackedWidget.addWidget(aView.theWindow)
-        self.theViewMap[aViewName] = self.theCounter
+        self.theViewMap[aViewState] = self.theCounter
         self.theCounter += 1
         aView.theNavSignal.connect(self._handleViewResponse)
 
-    def navigateTo(self, aViewName: str):
-        if aViewName in self.theViewMap:
-            self.theStackedWidget.setCurrentIndex(self.theViewMap[aViewName])
+    def navigateTo(self, aViewState: ViewState):
+        if aViewState in self.theViewMap:
+            self.theStackedWidget.setCurrentIndex(self.theViewMap[aViewState])
 
     def getCurrentView(self):
         return self.theStackedWidget.currentWidget()
@@ -28,11 +29,12 @@ class NavigationRouter(QObject):
     
     @pyqtSlot(Signal)
     def _handleViewResponse(self, aSignal: Signal) -> None:
-        if aSignal.theItemName == "btnSettings":
-            self.navigateTo("viewSettings")
-        elif aSignal.theItemName == "btnHome":
-            self.navigateTo("viewHome")
-        return None
+        theNavMap = {
+            Items.SETTINGS: ViewState.SETTINGS,
+            Items.HOME : ViewState.HOME
+        }
+        theDestination = theNavMap.get(aSignal.theItem)
+        self.navigateTo(theDestination)
 
     @pyqtSlot(str, bool, str)
     def _handleModelResponse(self, aButtonName: str, aState: bool, aText: str) -> None:

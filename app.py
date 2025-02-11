@@ -2,6 +2,7 @@ from models.home_model import HomeModel
 from models.settings_model import SettingsModel
 from views.home_view import HomeView
 from views.settings_view import SettingsView
+from helpers.helpers import ViewState
 from controllers.home_controller import HomeController
 from controllers.settings_controller import SettingsController
 from routers.navigation_router import NavigationRouter
@@ -18,7 +19,10 @@ class App(QApplication):
         
 
     def initializeViews(self):
-        self.theNavigationRouter.addView("viewHome", self.theHomeController.theView)
-        self.theNavigationRouter.addView("viewSettings", self.theSettingsController.theView)
+        self.theNavigationRouter.addView(ViewState.HOME, self.theHomeController.theView)
+        self.theNavigationRouter.addView(ViewState.SETTINGS, self.theSettingsController.theView)
         self.theNavigationRouter.theStackedWidget.setCurrentIndex(0)
         self.theNavigationRouter.doShow()
+
+    def __del__(self):
+        print("Closing Application, saving data!")

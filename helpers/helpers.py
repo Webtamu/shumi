@@ -1,4 +1,4 @@
-from enum import Enum
+from enum import Enum, auto
 
 class StatusCodes(Enum):
 
@@ -27,4 +27,32 @@ class StatusCodes(Enum):
     AI_PET_UNRESPONSIVE = 4002  
     AI_AGENT_FAILURE = 4003  
     SOCIAL_POST_FAILURE = 4004  
-    SOCIAL_FRIEND_SYNC_ERROR = 4005  
+    SOCIAL_FRIEND_SYNC_ERROR = 4005
+    
+
+ 
+class Items(Enum):
+
+    HOME = auto()
+    SETTINGS = auto()
+    STATS = auto()
+    PROFILE = auto()
+    START = auto()
+    REPORT_BUG = auto()
+    CONTACT = auto()
+    ABOUT = auto()
+
+class ViewState(Enum):
+    
+    HOME = "viewHome"
+    SETTINGS = "viewSettings"
+    PROFILE = "viewProfile"
+    STATS = "viewStats"
+    SESSION = "viewSession"
+
+class Actions(Enum):
+
+    BTN_PRESS = auto()
+    BOX_CHECK = auto()
+    LIST_SET  = auto()
+    BROWSE_SET = auto()

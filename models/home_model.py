@@ -1,31 +1,31 @@
 from PyQt6.QtCore import pyqtSignal
 from helpers.signals import Signal
 from models.models import Model
+from helpers.helpers import Items, Actions
 
 class HomeModel(Model):
-    # Signal that carries <btnName, state, text>
-    theButtonSignal = pyqtSignal(Signal)
+    theModelSignal = pyqtSignal(Signal)
 
     def __init__(self) -> None:
         super().__init__()
 
         # TEMP APP DATA STORE
-        self._theButtonStateData = {
-            "btnStart": {"state": False, "text": "Start Session", "alt": "Stop Session"},
-            "btnSettings": {"state": False, "text": "Settings"},
-            "btnProfile": {"state": False, "text": "Profile"},
-            "btnStats": {"state": False, "text": "Stats"},
+        self._theItemStateData = {
+            Items.START    : {"state": False, "text": "Start Session", "alt": "Stop Session"},
+            Items.SETTINGS : {"state": False, "text": "Settings"},
+            Items.PROFILE  : {"state": False, "text": "Profile"},
+            Items.STATS    : {"state": False, "text": "Stats"},
         }
     
     # Update data store and notify controller
-    def doUpdateButtonState(self, aButtonName: str) -> None:
-        if aButtonName in self._theButtonStateData:
-            theButton = self._theButtonStateData[aButtonName]
-            theButton["state"] = not theButton["state"]
-            theText = theButton.get("alt", theButton["text"]) if theButton["state"] else theButton["text"]
-            self.theButtonSignal.emit(Signal(anActionType="btnPress", 
-                                             anItemName=aButtonName, 
-                                             aState=theButton["state"], 
-                                             aText=theText)
+    def updateItemState(self, anItem: Items) -> None:
+        if anItem in self._theItemStateData:
+            theItem = self._theItemStateData[anItem]
+            theItem["state"] = not theItem["state"]
+            theText = theItem.get("alt", theItem["text"]) if theItem["state"] else theItem["text"]
+            self.theModelSignal.emit(Signal(theActionType=Actions.BTN_PRESS, 
+                                             theItem=anItem, 
+                                             theState=theItem["state"], 
+                                             theText=theText)
                                       )
             

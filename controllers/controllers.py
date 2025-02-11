@@ -2,6 +2,8 @@ from PyQt6.QtCore import QObject, pyqtSlot
 from abc import abstractmethod
 from models.models import Model  
 from views.view import View  
+from helpers.signals import Signal
+from helpers.helpers import Items
 
 class Controller(QObject):
 
@@ -12,11 +14,11 @@ class Controller(QObject):
     # Slot from View (Initial Trigger), sending to Model for processing    
     @abstractmethod
     @pyqtSlot(str)
-    def _handleViewResponse(self, aButtonName: str) -> None:
+    def _handleViewResponse(self, anItemName: Items) -> None:
         pass
 
     # Slot from Model (Compute Response), sending to View for presentation
     @abstractmethod
-    @pyqtSlot(str, bool, str)
-    def _handleModelResponse(self, aButtonName: str, aState: bool, aText: str) -> None:
+    @pyqtSlot(Signal)
+    def _handleModelResponse(self, aSignal: Signal) -> None:
         pass

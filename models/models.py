@@ -1,5 +1,6 @@
 from PyQt6.QtCore import QObject
 from abc import abstractmethod
+from helpers.helpers import Items
 
 class Model(QObject):
 
@@ -8,5 +9,5 @@ class Model(QObject):
         super().__init__()
 
     @abstractmethod
-    def doUpdateButtonState(self, aButtonName: str) -> None:
+    def updateItemState(self, anItem: Items) -> None:
         pass
