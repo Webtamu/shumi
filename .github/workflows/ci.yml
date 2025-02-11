@@ -1,4 +1,4 @@
-name: Basic Continuous Integration Workflow
+name: PyQt6 CI Workflow
 
 on:
   push:
@@ -12,8 +12,13 @@ jobs:
   build:
     strategy:
       matrix:
-        os: [windows-latest, macos-latest]
+        python-version: ['3.9.13']
+        os: [macos-latest, ubuntu-latest, windows-latest]
     runs-on: ${{ matrix.os }}
+
+    env:
+      DISPLAY: ":99.0"
+      QT_SELECT: "qt6"
 
     steps:
       - name: Checkout repository
@@ -22,32 +27,41 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.9.13'
+          python-version: ${{ matrix.python-version }}
 
-      # Fix PyQt6 installation issues on Windows
-      - name: Reinstall PyQt6 (Windows)
-        if: runner.os == 'Windows'
+      # Linux: Install necessary Qt/X dependencies
+      - name: Setup xvfb and dependencies (Linux)
+        if: runner.os == 'Linux'
         run: |
-          pip uninstall -y PyQt6 PyQt6-Qt6 PyQt6-sip
-          pip install --no-cache-dir PyQt6==6.5.0
+          sudo apt-get update
+          sudo apt-get install -y xvfb libxkbcommon-x11-0 libxcb-icccm4 libxcb-image0 \
+                                  libxcb-keysyms1 libxcb-randr0 libxcb-render-util0 libxcb-xinerama0 \
+                                  libxcb-xinput0 libxcb-xfixes0 libxcb-shape0 libglib2.0-0 libgl1-mesa-dev \
+                                  '^libxcb.*-dev' libx11-xcb-dev libglu1-mesa-dev libxrender-dev libxi-dev \
+                                  libxkbcommon-dev libxkbcommon-x11-dev
+          sudo /usr/bin/Xvfb $DISPLAY -screen 0 1280x1024x24 &
 
-      # Ensure Qt DLLs are in PATH
+      # Windows: Ensure PyQt6 DLLs are found
       - name: Fix PyQt6 DLL Path (Windows)
         if: runner.os == 'Windows'
-        run: |
-          echo "C:\hostedtoolcache\windows\Python\3.9.13\x64\Lib\site-packages\PyQt6\Qt6\bin" >> $GITHUB_PATH
-          echo "PATH: $PATH"
-          ls "C:\hostedtoolcache\windows\Python\3.9.13\x64\Lib\site-packages\PyQt6\Qt6\bin"
+        run: echo "C:\hostedtoolcache\windows\Python\${{ matrix.python-version }}\x64\Lib\site-packages\PyQt6\Qt6\bin" >> $GITHUB_PATH
 
-      # Verify PyQt6 before running the app
+      # Install dependencies
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip wheel
+          pip install pytest pytest-qt
+          pip install -r requirements.txt
+
+      # List installed packages (for debugging)
+      - name: List installed packages
+        run: pip freeze
+
+      # Verify PyQt6 installation before running tests
       - name: Verify PyQt6 Installation
-        if: runner.os == 'Windows'
         run: python -c "from PyQt6.QtCore import QCoreApplication; print('PyQt6 is working!')"
 
-      # Install other dependencies
-      - name: Install Python dependencies
-        run: pip install -r requirements.txt
-
-      # Run application
-      - name: Run application
-        run: python main.py
+      # Run tests using pytest instead of running the full app
+      - name: Test with pytest
+        run: |
+          pytest -x tests
