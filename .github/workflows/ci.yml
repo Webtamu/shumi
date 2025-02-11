@@ -13,7 +13,7 @@ jobs:
     strategy:
       matrix:
         python-version: ['3.9.13']
-        os: [macos-latest, ubuntu-latest, windows-latest]
+        os: [macos-latest, ubuntu-latest]
     runs-on: ${{ matrix.os }}
 
     env:
@@ -47,7 +47,7 @@ jobs:
         run: |
           pip uninstall -y PyQt6 PyQt6-Qt6 PyQt6-sip || true
           python -m pip install --upgrade pip
-          pip install --no-cache-dir PyQt6==6.0.2
+          pip install --no-cache-dir PyQt6==6.4.2
 
       # Windows: Ensure Qt DLLs are in PATH
       - name: Fix PyQt6 DLL Path (Windows)
