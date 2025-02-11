@@ -42,7 +42,7 @@ jobs:
           sudo /usr/bin/Xvfb $DISPLAY -screen 0 1280x1024x24 &
 
       # Windows: Fully remove PyQt6 before installing
-      - name: Fully Remove PyQt6 (Windows)
+      - name: Fully Remove PyQt6 and Reinstall (Windows)
         if: runner.os == 'Windows'
         run: |
           pip uninstall -y PyQt6 PyQt6-Qt6 PyQt6-sip || true
@@ -56,8 +56,8 @@ jobs:
           echo "C:\hostedtoolcache\windows\Python\${{ matrix.python-version }}\x64\Lib\site-packages\PyQt6\Qt6\bin" >> $env:GITHUB_PATH
           echo "C:\hostedtoolcache\windows\Python\${{ matrix.python-version }}\x64\Lib\site-packages\PyQt6" >> $env:GITHUB_PATH
 
-      # Windows: Copy DLLs to C:\Qt (Alternative Fix)
-      - name: Copy Qt DLLs to C:\Qt (Windows)
+      # Windows: Copy Qt DLLs to C:\Qt\bin
+      - name: Copy Qt DLLs to C:\Qt\bin (Windows)
         if: runner.os == 'Windows'
         run: |
           mkdir -p C:\Qt\bin
