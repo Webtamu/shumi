@@ -12,7 +12,7 @@ jobs:
   build:
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [windows-latest, macos-latest]
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -24,24 +24,9 @@ jobs:
         with:
           python-version: '3.9.13'
 
-      # Linux-only: install system dependencies with updated package names for Ubuntu 24.04 (noble)
-      - name: Install system dependencies (Linux only)
-        if: runner.os == 'Linux'
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libegl-mesa0 libgles2-mesa0
-
       - name: Install Python dependencies
         run: pip install -r requirements.txt
 
-      # Run the application on Linux using xvfb and offscreen mode
-      - name: Run application (Linux with Xvfb)
-        if: runner.os == 'Linux'
-        run: |
-          export QT_QPA_PLATFORM=offscreen
-          xvfb-run -a python main.py
-
-      # Run normally on Windows and macOS
       - name: Run application (Windows & macOS)
         if: runner.os != 'Linux'
         run: python main.py
