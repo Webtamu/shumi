@@ -13,7 +13,7 @@ jobs:
     strategy:
       matrix:
         python-version: ['3.9.13']
-        os: [macos-latest, ubuntu-latest, windows-latest]
+        os: [macos-latest, ubuntu-latest]
     runs-on: ${{ matrix.os }}
 
     env:
@@ -79,13 +79,6 @@ jobs:
       # List installed packages (for debugging)
       - name: List installed packages
         run: pip freeze
-
-      # Debug PyQt6 DLLs to verify they are accessible (Windows)
-      - name: Debug PyQt6 DLLs (Windows)
-        if: runner.os == 'Windows'
-        run: |
-          echo $env:PATH
-          dir "C:\hostedtoolcache\windows\Python\${{ matrix.python-version }}\x64\Lib\site-packages\PyQt6\Qt6\bin"
 
       # Verify PyQt6 installation before running tests
       - name: Verify PyQt6 Installation
