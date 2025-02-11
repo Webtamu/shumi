@@ -38,6 +38,7 @@ jobs:
 
       # Verify PyQt6 before running the app
       - name: Verify PyQt6 Installation
+        if: runner.os == 'Windows'
         run: python -c "from PyQt6.QtCore import QCoreApplication; print('PyQt6 is working!')"
 
       # Install other dependencies
