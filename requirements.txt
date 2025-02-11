@@ -1,5 +1,4 @@
 PyQt6==6.4.2
-pyqt6-tools==6.4.2.3.3
 supabase==2.13.0
 pandas==2.2.2
 numpy==1.24.2
