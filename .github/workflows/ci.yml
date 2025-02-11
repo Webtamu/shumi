@@ -24,9 +24,19 @@ jobs:
         with:
           python-version: '3.9.13'
 
-      - name: Install Python dependencies
-        run: pip install -r requirements.txt
+      # Ensure PyQt6 DLLs are accessible on Windows
+      - name: Fix PyQt6 DLL Path Issue (Windows)
+        if: runner.os == 'Windows'
+        run: echo "C:\hostedtoolcache\windows\Python\3.9.13\x64\Lib\site-packages\PyQt6\Qt6\bin" >> $GITHUB_PATH
 
-      - name: Run application (Windows & macOS)
-        if: runner.os != 'Linux'
+      - name: Install Specific PyQt6 Version
+        run: |
+          pip install --force-reinstall --no-cache-dir PyQt6==6.5.0
+          pip install -r requirements.txt
+
+      # Check if PyQt6 loads properly before running app
+      - name: Verify PyQt6 Installation
+        run: python -c "from PyQt6.QtCore import QCoreApplication; print('PyQt6 is working!')"
+
+      - name: Run application
         run: python main.py
