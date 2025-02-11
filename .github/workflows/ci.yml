@@ -55,6 +55,11 @@ jobs:
         run: |
           echo "C:\hostedtoolcache\windows\Python\${{ matrix.python-version }}\x64\Lib\site-packages\PyQt6\Qt6\bin" >> $env:GITHUB_PATH
           echo "C:\hostedtoolcache\windows\Python\${{ matrix.python-version }}\x64\Lib\site-packages\PyQt6" >> $env:GITHUB_PATH
+          echo "C:\hostedtoolcache\windows\Python\${{ matrix.python-version }}\x64\Scripts" >> $env:GITHUB_PATH
+          # Ensure Qt DLLs are in the system PATH
+          echo "C:\hostedtoolcache\windows\Python\${{ matrix.python-version }}\x64\Lib\site-packages\PyQt6\Qt6\bin" >> $env:PATH
+          echo "C:\hostedtoolcache\windows\Python\${{ matrix.python-version }}\x64\Lib\site-packages\PyQt6" >> $env:PATH
+          echo "C:\Qt\bin" >> $env:PATH
 
       # Windows: Copy Qt DLLs to C:\Qt\bin
       - name: Copy Qt DLLs to C:\Qt\bin (Windows)
@@ -74,6 +79,13 @@ jobs:
       # List installed packages (for debugging)
       - name: List installed packages
         run: pip freeze
+
+      # Debug PyQt6 DLLs to verify they are accessible (Windows)
+      - name: Debug PyQt6 DLLs (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          echo $env:PATH
+          dir "C:\hostedtoolcache\windows\Python\${{ matrix.python-version }}\x64\Lib\site-packages\PyQt6\Qt6\bin"
 
       # Verify PyQt6 installation before running tests
       - name: Verify PyQt6 Installation
