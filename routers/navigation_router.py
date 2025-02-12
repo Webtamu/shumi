@@ -11,11 +11,12 @@ class NavigationRouter(QObject):
         self.theViewMap = {}
         self.theCounter = 0
      
-    def addView(self, aViewState: ViewState, aView: View):
-        self.theStackedWidget.addWidget(aView.theWindow)
-        self.theViewMap[aViewState] = self.theCounter
-        self.theCounter += 1
-        aView.theNavSignal.connect(self._handleViewResponse)
+    def addViews(self, aViewList: list[View]):
+        for view in aViewList:
+            self.theStackedWidget.addWidget(view.theWindow)
+            self.theViewMap[view.theViewState] = self.theCounter
+            self.theCounter += 1
+            view.theNavSignal.connect(self._handleViewResponse)
 
     def navigateTo(self, aViewState: ViewState):
         if aViewState in self.theViewMap:
@@ -30,13 +31,10 @@ class NavigationRouter(QObject):
     @pyqtSlot(Signal)
     def _handleViewResponse(self, aSignal: Signal) -> None:
         theNavMap = {
-            Items.SETTINGS: ViewState.SETTINGS,
-            Items.HOME : ViewState.HOME
+            Items.SETTINGS : ViewState.SETTINGS,
+            Items.HOME     : ViewState.HOME
         }
         theDestination = theNavMap.get(aSignal.theItem)
         self.navigateTo(theDestination)
 
-    @pyqtSlot(str, bool, str)
-    def _handleModelResponse(self, aButtonName: str, aState: bool, aText: str) -> None:
-        pass
 

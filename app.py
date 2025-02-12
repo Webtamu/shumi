@@ -1,26 +1,30 @@
-from models.home_model import HomeModel
-from models.settings_model import SettingsModel
+from models.application_model import ApplicationModel
+from models.preferences_model import PreferencesModel
+from models.data_model import DataModel
+
 from views.home_view import HomeView
 from views.settings_view import SettingsView
+
+from controllers.app_controller import ApplicationController
+
 from helpers.helpers import ViewState
-from controllers.home_controller import HomeController
-from controllers.settings_controller import SettingsController
+
 from routers.navigation_router import NavigationRouter
 from PyQt6.QtWidgets import QApplication
 
 class App(QApplication):
     def __init__(self, anArgs) -> None:
         super().__init__(anArgs)
+        self.theModelList = [ApplicationModel(), PreferencesModel(), DataModel()]
+        self.theViewList = [HomeView(), SettingsView()]
+        self.theApplicationController = ApplicationController(self.theModelList, self.theViewList)
 
-        self.theHomeController = HomeController(HomeModel(), HomeView())
-        self.theSettingsController = SettingsController(SettingsModel(), SettingsView())
         self.theNavigationRouter = NavigationRouter()
         self.initializeViews()
         
 
     def initializeViews(self):
-        self.theNavigationRouter.addView(ViewState.HOME, self.theHomeController.theView)
-        self.theNavigationRouter.addView(ViewState.SETTINGS, self.theSettingsController.theView)
+        self.theNavigationRouter.addViews(self.theViewList)
         self.theNavigationRouter.theStackedWidget.setCurrentIndex(0)
         self.theNavigationRouter.doShow()
 

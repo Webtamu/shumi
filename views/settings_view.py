@@ -4,13 +4,14 @@ from PyQt6.QtGui import QIcon
 from PyQt6 import uic
 from PyQt6.QtCore import pyqtSignal
 from helpers.signals import Signal
-from helpers.helpers import Items
+from helpers.helpers import Items, ViewState
 
 class SettingsView(View):
     theNavSignal = pyqtSignal(Signal)
 
     def __init__(self) -> None:
         super().__init__()
+        self.theViewState = ViewState.SETTINGS
         self.theWindow = uic.loadUi("qtdesigner/settings_design.ui")
         self.theWindow.setWindowIcon(QIcon("resources/orange_puffle.png")) 
 

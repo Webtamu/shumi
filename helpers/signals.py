@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from helpers.helpers import Items, Actions
+from helpers.helpers import Items, Actions, ViewState
 
 @dataclass
 class Signal():
@@ -7,3 +7,4 @@ class Signal():
     theItem: Items
     theState: bool 
     theText: str
+    theSource: ViewState
