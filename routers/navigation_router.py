@@ -32,9 +32,12 @@ class NavigationRouter(QObject):
     def _handleViewResponse(self, aSignal: Signal) -> None:
         theNavMap = {
             Items.SETTINGS : ViewState.SETTINGS,
-            Items.HOME     : ViewState.HOME
+            Items.HOME     : ViewState.HOME,
+            Items.STATS     : ViewState.STATS,
+            Items.PROFILE     : ViewState.PROFILE
         }
         theDestination = theNavMap.get(aSignal.theItem)
+        print(f"Navigating to {theDestination}...")
         self.navigateTo(theDestination)
 
 

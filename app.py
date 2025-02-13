@@ -4,6 +4,8 @@ from models.data_model import DataModel
 
 from views.home_view import HomeView
 from views.settings_view import SettingsView
+from views.stats_view import StatsView
+from views.profile_view import ProfileView
 
 from controllers.app_controller import ApplicationController
 
@@ -16,7 +18,7 @@ class App(QApplication):
     def __init__(self, anArgs) -> None:
         super().__init__(anArgs)
         self.theModelList = [ApplicationModel(), PreferencesModel(), DataModel()]
-        self.theViewList = [HomeView(), SettingsView()]
+        self.theViewList = [HomeView(), SettingsView(), StatsView(), ProfileView()]
         self.theApplicationController = ApplicationController(self.theModelList, self.theViewList)
 
         self.theNavigationRouter = NavigationRouter()
