@@ -1,5 +1,5 @@
 from views.view import View
-from PyQt6.QtWidgets import QPushButton
+from PyQt6.QtWidgets import QPushButton, QCheckBox
 from PyQt6.QtGui import QIcon
 from PyQt6 import uic
 from PyQt6.QtCore import pyqtSignal
@@ -23,6 +23,7 @@ class SettingsView(View):
             Items.REPORT_BUG : self.theWindow.findChild(QPushButton, "btnBug"),
             Items.CONTACT    : self.theWindow.findChild(QPushButton, "btnContact"),
             Items.ABOUT      : self.theWindow.findChild(QPushButton, "btnAbout"),
+            Items.DARK_MODE  : self.theWindow.findChild(QCheckBox, "boxDarkMode"),
         }
 
     # Update from Controller, updating button UI elements

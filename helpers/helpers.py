@@ -41,6 +41,10 @@ class Items(Enum):
     REPORT_BUG = auto()
     CONTACT = auto()
     ABOUT = auto()
+    DARK_MODE = auto()
+    LANGUAGE = auto()
+    TIME = auto()
+    DEFAULT = auto()
 
 class ViewState(Enum):
     
@@ -49,6 +53,7 @@ class ViewState(Enum):
     PROFILE = "viewProfile"
     STATS = "viewStats"
     SESSION = "viewSession"
+    DEFAULT = auto()
 
 class Actions(Enum):
 
@@ -56,3 +61,4 @@ class Actions(Enum):
     BOX_CHECK = auto()
     LIST_SET  = auto()
     BROWSE_SET = auto()
+    DEFAULT = auto()

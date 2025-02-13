@@ -25,16 +25,17 @@ class ApplicationModel(Model):
             Items.ABOUT      : {"state": False, "text": "About"},
         }
     
+    def canHandle(self, aSignal: Signal) -> bool:
+        return (aSignal.theItem in self._theTempStateData)
+            
     # Update data store and notify controller
-    def updateItemState(self, anItem: Items, aViewState: ViewState) -> None:
-        if anItem in self._theTempStateData:
-            theItem = self._theTempStateData[anItem]
-            theItem["state"] = not theItem["state"]
-            theText = theItem.get("alt", theItem["text"]) if theItem["state"] else theItem["text"]
-            self.theModelSignal.emit(Signal(theActionType=Actions.BTN_PRESS, 
-                                             theItem=anItem, 
-                                             theState=theItem["state"], 
-                                             theText=theText,
-                                             theSource=aViewState)
-                                      )
+    def updateItemState(self, aSignal: Signal) -> None:
+        print("APPLICATION MODEL HANDLING!!")
+        theItemEntry = self._theTempStateData[aSignal.theItem]
+        theItemEntry["state"] = not theItemEntry["state"]
+        aSignal.theState = theItemEntry["state"]
+        aSignal.theText = theItemEntry.get("alt", theItemEntry["text"]) if theItemEntry["state"] else theItemEntry["text"]
+        self.theModelSignal.emit(aSignal)
+            
+
             

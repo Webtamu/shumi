@@ -16,15 +16,14 @@ class DataModel(Model):
         # TEMP APP DATA STORE
         self._theTableData = {}
     
+
+    def canHandle(self, aSignal: Signal) -> bool:
+        return (aSignal.theItem in self._theTableData)
+
     # Update data store and notify controller
-    def updateItemState(self, anItem: Items, aViewState: ViewState) -> None:
-        if anItem in self._theTempStateData:
-            theItem = self._theTempStateData[anItem]
-            theItem["state"] = not theItem["state"]
-            theText = theItem.get("alt", theItem["text"]) if theItem["state"] else theItem["text"]
-            self.theModelSignal.emit(Signal(theActionType=Actions.BTN_PRESS, 
-                                             theItem=anItem, 
-                                             theState=theItem["state"], 
-                                             theText=theText,
-                                             theSource=aViewState)
-                                      )
+    def updateItemState(self, aSignal: Signal) -> None:
+        print("DATA MODEL HANDLING!!")
+        theItemEntry = self._theTableData[aSignal.theItem]
+        theItemEntry["state"] = not theItemEntry["state"]
+        aSignal.theState = theItemEntry["state"]
+        self.theModelSignal.emit(aSignal)

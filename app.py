@@ -9,8 +9,6 @@ from views.profile_view import ProfileView
 
 from controllers.app_controller import ApplicationController
 
-from helpers.helpers import ViewState
-
 from routers.navigation_router import NavigationRouter
 from PyQt6.QtWidgets import QApplication
 
