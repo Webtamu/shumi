@@ -8,3 +8,5 @@ class Signal():
     theState: bool = False
     theText: str = ""
     theSource: ViewState = ViewState.DEFAULT
+    theBroadcastTag: bool = False
+    theDebugTag: bool = False

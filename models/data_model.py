@@ -22,7 +22,8 @@ class DataModel(Model):
 
     # Update data store and notify controller
     def updateItemState(self, aSignal: Signal) -> None:
-        print("DATA MODEL HANDLING!!")
+        if aSignal.theDebugTag:
+            print("DATA MODEL HANDLING!!")
         theItemEntry = self._theTableData[aSignal.theItem]
         theItemEntry["state"] = not theItemEntry["state"]
         aSignal.theState = theItemEntry["state"]

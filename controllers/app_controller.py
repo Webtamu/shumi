@@ -41,5 +41,9 @@ class ApplicationController(Controller):
     # Update from Model (Compute Response), sending to View for presentation
     @pyqtSlot(Signal)
     def _handleModelResponse(self, aSignal: Signal) -> None:
-        theViewSource = self.theViewMap[aSignal.theSource]
-        theViewSource.updateItemUI(aSignal)
+        if aSignal.theBroadcastTag:
+            for view in self.theViewMap.values():
+                view.updateItemUI(aSignal)
+        else:
+            theViewSource = self.theViewMap[aSignal.theSource]
+            theViewSource.updateItemUI(aSignal)

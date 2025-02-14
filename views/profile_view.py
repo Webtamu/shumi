@@ -29,8 +29,11 @@ class ProfileView(View):
             self.theItemMap[aSignal.theItem].setChecked(aSignal.theState)
             self.theItemMap[aSignal.theItem].setText(aSignal.theText)
             self.theNavSignal.emit(aSignal)
+        if aSignal.theItem == Items.DARK_MODE:
+            self.toggleDarkMode(aSignal)
 
-            # DEBUG STATEMENT
-            print(f"Updated {aSignal.theItem}: {aSignal.theText} (State: {aSignal.theState})")
+        # DEBUG STATEMENT
+        if aSignal.theDebugTag:
+            print(f"Updated {aSignal.theItem}: {aSignal.theText} (State: {aSignal.theState})")  
 
 

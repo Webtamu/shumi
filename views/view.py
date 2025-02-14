@@ -12,9 +12,8 @@ class View(QWidget):
     def updateItemUI(self, aSignal: Signal) -> None:
         pass
 
-    @abstractmethod
-    def toggleDarkMode(self, state: bool) -> None:
-        if state: 
+    def toggleDarkMode(self, aSignal: Signal) -> None:
+        if aSignal.theState: 
             with open("resources/dark_mode.qss", "r") as file:
                 self.theWindow.setStyleSheet(file.read())
         else:

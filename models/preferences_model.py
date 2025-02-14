@@ -15,9 +15,9 @@ class PreferencesModel(Model):
 
         # TEMP APP DATA STORE
         self._thePreferencesData = {
-            Items.DARK_MODE : { "state" : False },
-            Items.LANGUAGE  : { "state" : False },
-            Items.TIME      : { "state" : False }
+            Items.DARK_MODE : { "state" : False, "broadcast" : True },
+            Items.LANGUAGE  : { "state" : False, "broadcast" : True },
+            Items.TIME      : { "state" : False, "broadcast" : False }
         }
 
     def __del__(self):
@@ -29,9 +29,11 @@ class PreferencesModel(Model):
 
     # Update data store and notify controller
     def updateItemState(self, aSignal: Signal) -> None:
-        print("PREFERENCES MODEL HANDLING!!")
+        if aSignal.theDebugTag:
+            print("PREFERENCES MODEL HANDLING!!")
         theItemEntry = self._thePreferencesData[aSignal.theItem]
         theItemEntry["state"] = not theItemEntry["state"]
         aSignal.theState = theItemEntry["state"]
+        aSignal.theBroadcastTag = theItemEntry["broadcast"]
         self.theModelSignal.emit(aSignal)
             

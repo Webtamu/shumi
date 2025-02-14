@@ -30,7 +30,8 @@ class ApplicationModel(Model):
             
     # Update data store and notify controller
     def updateItemState(self, aSignal: Signal) -> None:
-        print("APPLICATION MODEL HANDLING!!")
+        if aSignal.theDebugTag:
+            print("APPLICATION MODEL HANDLING!!")
         theItemEntry = self._theTempStateData[aSignal.theItem]
         theItemEntry["state"] = not theItemEntry["state"]
         aSignal.theState = theItemEntry["state"]
