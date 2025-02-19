@@ -38,7 +38,7 @@ class NavigationRouter(QObject):
         }
         theDestination = theNavMap.get(aSignal.theItem)
 
-        if aSignal.theBroadcastTag:
+        if aSignal.theDebugTag and theDestination:
             print(f"Navigating to {theDestination}...")
 
         self.navigateTo(theDestination)
