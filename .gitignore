@@ -6,3 +6,4 @@ ui/__pycache__/*
 *.suo
 *.sqlite
 /notebooks/*
+.DS_Store
