@@ -9,4 +9,4 @@ class Signal():
     theText: str = ""
     theSource: ViewState = ViewState.DEFAULT
     theBroadcastTag: bool = False
-    theDebugTag: bool = False
+    theDebugTag: bool = True

@@ -34,7 +34,9 @@ class NavigationRouter(QObject):
             Items.SETTINGS : ViewState.SETTINGS,
             Items.HOME     : ViewState.HOME,
             Items.STATS    : ViewState.STATS,
-            Items.PROFILE  : ViewState.PROFILE
+            Items.PROFILE  : ViewState.PROFILE,
+            Items.START    : ViewState.SESSION,
+            Items.STOP     : ViewState.HOME
         }
         theDestination = theNavMap.get(aSignal.theItem)
 

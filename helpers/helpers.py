@@ -38,6 +38,7 @@ class Items(Enum):
     STATS = auto()
     PROFILE = auto()
     START = auto()
+    STOP = auto()
     REPORT_BUG = auto()
     CONTACT = auto()
     ABOUT = auto()

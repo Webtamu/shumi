@@ -23,6 +23,7 @@ class ApplicationModel(Model):
             Items.REPORT_BUG : {"state": False, "text": "Report a Bug"},
             Items.CONTACT    : {"state": False, "text": "Contact Us"},
             Items.ABOUT      : {"state": False, "text": "About"},
+            Items.STOP       : {"state": False, "text": "Stop Session"}
         }
     
     def canHandle(self, aSignal: Signal) -> bool:
