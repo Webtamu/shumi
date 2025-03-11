@@ -47,3 +47,4 @@ class ApplicationController(Controller):
         else:
             theViewSource = self.theViewMap[aSignal.theSource]
             theViewSource.updateItemUI(aSignal)
+        

@@ -21,7 +21,7 @@ class HomeView(View):
             Items.PROFILE  : self.theWindow.findChild(QPushButton, "btnProfile"),
             Items.STATS    : self.theWindow.findChild(QPushButton, "btnStats"),
         }
-        
+
     # Update from Controller, updating button UI elements
     def updateItemUI(self, aSignal: Signal) -> None:
         if aSignal.theItem in self.theItemMap:

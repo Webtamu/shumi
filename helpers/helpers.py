@@ -45,6 +45,7 @@ class Items(Enum):
     DARK_MODE = auto()
     LANGUAGE = auto()
     TIME = auto()
+    TIMER = auto()
     DEFAULT = auto()
 
 class ViewState(Enum):
