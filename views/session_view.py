@@ -19,21 +19,4 @@ class SessionView(View):
             Items.TIMER : self.theWindow.findChild(QLabel, "lblTimer"),
         }
         
-    # Update from Controller, updating button UI elements
-    def updateItemUI(self, aSignal: Signal) -> None:
-        if aSignal.theItem in self.theItemMap:
-            theItem = self.theItemMap[aSignal.theItem]
-
-            if isinstance(theItem, QPushButton):
-                theItem.setChecked(aSignal.theState)
-                theItem.setText(aSignal.theText)
-            elif isinstance(theItem, QLabel):
-                self.theItemMap[aSignal.theItem].setText(aSignal.theText)
-               
-        self.theNavSignal.emit(aSignal) 
-        if aSignal.theItem == Items.DARK_MODE:
-            self.toggleDarkMode(aSignal)
-
-        # DEBUG STATEMENT
-        if aSignal.theDebugTag:
-            print(f"Updated {aSignal.theItem}: {aSignal.theText} (State: {aSignal.theState})")    
+     
