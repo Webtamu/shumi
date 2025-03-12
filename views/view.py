@@ -1,7 +1,7 @@
 from abc import abstractmethod
 from PyQt6.QtWidgets import QWidget, QPushButton, QLabel
 from helpers.signals import Signal
-from helpers.helpers import Items
+from helpers.helpers import Items, Colors
 
 class View(QWidget):  
 
@@ -9,23 +9,28 @@ class View(QWidget):
     def __init__(self) -> None:
         super().__init__() 
 
-    def updateItemUI(self, aSignal: Signal) -> None:
-        if aSignal.theItem in self.theItemMap:
-            theItem = self.theItemMap[aSignal.theItem]
+    def updateView(self, aSignal: Signal) -> None:
+        item = self.theItemMap.get(aSignal.theItem)
 
-            if isinstance(theItem, QPushButton):
-                theItem.setChecked(aSignal.theState)
-                theItem.setText(aSignal.theText)
-            elif isinstance(theItem, QLabel):
-                self.theItemMap[aSignal.theItem].setText(aSignal.theText)
-               
-        self.theNavSignal.emit(aSignal) 
+        if item:
+            self.updateWidget(item, aSignal)
+
+        self.theNavSignal.emit(aSignal)
+
         if aSignal.theItem == Items.DARK_MODE:
             self.toggleDarkMode(aSignal)
 
         # DEBUG STATEMENT
         if aSignal.theDebugTag:
-            print(f"Updated {aSignal.theItem}: {aSignal.theText} (State: {aSignal.theState})") 
+            print(f"{Colors.YELLOW}Updated {aSignal.theItem}: {aSignal.theText} (State: {aSignal.theState}){Colors.RESET}")
+
+
+    def updateWidget(self, item: QWidget, aSignal: Signal) -> None:
+        if isinstance(item, QPushButton):
+            item.setChecked(aSignal.theState)
+            item.setText(aSignal.theText)
+        elif isinstance(item, QLabel):
+            item.setText(aSignal.theText)
 
     def toggleDarkMode(self, aSignal: Signal) -> None:
         if aSignal.theState: 

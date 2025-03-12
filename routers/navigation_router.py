@@ -2,7 +2,7 @@ from views.view import View
 from PyQt6.QtWidgets import QStackedWidget
 from PyQt6.QtCore import QObject, pyqtSlot
 from helpers.signals import Signal
-from helpers.helpers import ViewState, Items
+from helpers.helpers import ViewState, Items, Colors
 
 class NavigationRouter(QObject):
     def __init__(self) -> None:
@@ -41,7 +41,7 @@ class NavigationRouter(QObject):
         theDestination = theNavMap.get(aSignal.theItem)
 
         if aSignal.theDebugTag and theDestination:
-            print(f"Navigating to {theDestination}...")
+            print(f"{Colors.BRIGHT_YELLOW}Navigating to {theDestination}...{Colors.RESET}")
 
         self.navigateTo(theDestination)
 

@@ -1,6 +1,5 @@
 from views.view import View
 from PyQt6.QtWidgets import QPushButton
-from PyQt6.QtGui import QIcon
 from PyQt6 import uic
 from PyQt6.QtCore import pyqtSignal
 from helpers.signals import Signal
@@ -18,5 +17,6 @@ class StatsView(View):
             Items.HOME       : self.theWindow.findChild(QPushButton, "btnHome"),
             Items.SETTINGS   : self.theWindow.findChild(QPushButton, "btnSettings"),
             Items.PROFILE    : self.theWindow.findChild(QPushButton, "btnProfile"),
+            Items.STATS      : self.theWindow.findChild(QPushButton, "btnStats"),
         }
 

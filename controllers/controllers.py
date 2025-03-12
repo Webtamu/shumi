@@ -11,13 +11,13 @@ class Controller(QObject):
     def __init__(self, aModel: Model, aView: View) -> None:
         super().__init__()
 
-    # Slot from View (Initial Trigger), sending to Model for processing    
+    # Reponse from View (Initial Trigger), sending to Model for processing  
     @abstractmethod
     @pyqtSlot(str)
     def _handleViewResponse(self, anItemName: Items) -> None:
         pass
 
-    # Slot from Model (Compute Response), sending to View for presentation
+    # Response from Model (Compute Response), sending to View for presentation
     @abstractmethod
     @pyqtSlot(Signal)
     def _handleModelResponse(self, aSignal: Signal) -> None:

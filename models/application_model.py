@@ -1,8 +1,10 @@
 from PyQt6.QtCore import pyqtSignal
 from helpers.signals import Signal
 from models.models import Model
-from helpers.helpers import Items, Actions, ViewState
+from helpers.helpers import Items, Colors
 from utils.timer import Timer
+
+USER_DEFINED_TIME_PERIOD = 10
 
 class ApplicationModel(Model):
     '''
@@ -15,7 +17,7 @@ class ApplicationModel(Model):
         super().__init__()
 
         # TEMP APP DATA STORE
-        self._theTempStateData = {
+        self.theTempStateData = {
             Items.HOME       : {"state": False, "text": "Return Home"},
             Items.START      : {"state": False, "text": "Start Session"},
             Items.STOP       : {"state": False, "text": "Stop Session"},
@@ -25,33 +27,43 @@ class ApplicationModel(Model):
             Items.REPORT_BUG : {"state": False, "text": "Report a Bug"},
             Items.CONTACT    : {"state": False, "text": "Contact Us"},
             Items.ABOUT      : {"state": False, "text": "About"},
-            Items.TIMER      : {"state": False, "text": "10"},
+            Items.TIMER      : {"state": False, "text": str(USER_DEFINED_TIME_PERIOD)},
         }
+
+        self.theItemActionMap = {
+            Items.START : self.beginTimer,
+            Items.STOP  : self.stopTimer,
+        }
+
+        self.theThread = None 
     
     def canHandle(self, aSignal: Signal) -> bool:
-        return (aSignal.theItem in self._theTempStateData)
+        return (aSignal.theItem in self.theTempStateData)
     
-    def beginTimer(self):
-        self.theThread = Timer(10)
+    def beginTimer(self) -> None:
+        self.theThread = Timer(USER_DEFINED_TIME_PERIOD)
         self.theThread.theTimerSignal.connect(self.updateItemState)
         self.theThread.start()
+    
+    def stopTimer(self) -> None:
+        if self.theThread:
+            self.theThread.stop()
+            self.theThread = None
 
     # Update data store and notify controller
     def updateItemState(self, aSignal: Signal) -> None:
-        if aSignal.theItem == Items.START:
-            self.beginTimer()
+        if theAction := self.theItemActionMap.get(aSignal.theItem):
+            theAction()
 
         if aSignal.theDebugTag:
-            print("App Model Handling:", aSignal)
+            print(f"{Colors.CYAN}App Model Handling:{Colors.RESET}", aSignal)
 
-        theItemEntry = self._theTempStateData[aSignal.theItem]
+        theItemEntry = self.theTempStateData[aSignal.theItem]
 
         if aSignal.theItem != Items.TIMER:  # Don't overwrite dynamic text (like timer)
             theItemEntry["state"] = not theItemEntry["state"]
-            aSignal.theState = theItemEntry["state"]
             aSignal.theText = theItemEntry["text"]
-        else:
-            aSignal.theState = theItemEntry["state"]
+        aSignal.theState = theItemEntry["state"]
 
         self.theModelSignal.emit(aSignal)
             

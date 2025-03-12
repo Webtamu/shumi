@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from helpers.helpers import Items, Actions, ViewState
+from helpers.helpers import Items, Actions, ViewState, Colors
 
 @dataclass
 class Signal():
@@ -8,11 +8,11 @@ class Signal():
     theState: bool = False
     theText: str = ""
     theSource: ViewState = ViewState.DEFAULT
-    theBroadcastTag: bool = False
     theDebugTag: bool = True
 
     def __str__(self):
-        return (f"Signal(ActionType={self.theActionType}, Item={self.theItem}, "
-                f"State={self.theState}, Text='{self.theText}', "
-                f"Source={self.theSource}, BroadcastTag={self.theBroadcastTag}, "
-                f"DebugTag={self.theDebugTag})")
+        return (f"ActionType={Colors.CYAN}{self.theActionType}{Colors.RESET}, "
+                f"Item={Colors.CYAN}{self.theItem}{Colors.RESET}, "
+                f"State={Colors.CYAN}{self.theState}{Colors.RESET}, "
+                f"Text={Colors.CYAN}'{self.theText}'{Colors.RESET}, "
+                f"Source={Colors.CYAN}{self.theSource}{Colors.RESET}")

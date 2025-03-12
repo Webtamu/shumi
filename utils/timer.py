@@ -11,7 +11,7 @@ class Timer(QThread):
         self.theTimeLimit = aTimeLimit
         self.isRunning = True  
 
-    def run(self):
+    def run(self) -> None:
         i = self.theTimeLimit
         while i >= 0 and self.isRunning:
             self.theTimerSignal.emit(Signal(theText=str(i), 
