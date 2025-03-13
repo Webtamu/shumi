@@ -14,16 +14,19 @@ class View(QWidget):
         super().__init__() 
 
     def updateView(self, aSignal: Signal) -> None:
-        if theItemEntry := self.theItemMap.get(aSignal.theItem):
-            theInstance = theItemEntry["instance"]
-            self.updateWidget(theInstance, aSignal)
-
-            if aSignal.theDebugTag:
-                print(f"{Colors.YELLOW}Updated {aSignal.theItem} on {self.theViewState} to {aSignal.theState}{Colors.RESET}")
-
         if aSignal.theItem == Items.DARK_MODE:
             self.toggleDarkMode(aSignal)
-        
+
+        theItemEntry = self.theItemMap.get(aSignal.theItem)
+        if not theItemEntry:
+            return  # Early exit if item not found
+
+        theInstance = theItemEntry["instance"]
+        self.updateWidget(theInstance, aSignal)
+
+        if aSignal.theDebugTag:
+            print(f"{Colors.YELLOW}Updated {aSignal.theItem} on {self.theViewState} to {aSignal.theState}{Colors.RESET}")
+
         self.theNavSignal.emit(aSignal)
 
 

@@ -1,5 +1,5 @@
 from PyQt6.QtWidgets import QStackedWidget
-from PyQt6.QtCore import QObject, pyqtSlot
+from PyQt6.QtCore import QObject
 
 from views.view import View  
 from helpers.signals import Signal
@@ -17,7 +17,7 @@ class NavigationRouter(QObject):
             self.theStackedWidget.addWidget(view.theWindow)
             self.theViewMap[view.theViewState] = self.theCounter
             self.theCounter += 1
-            view.theNavSignal.connect(self._handleViewResponses)
+            view.theNavSignal.connect(self.handleNavigation)
 
     def navigateTo(self, aViewState: ViewState):
         if aViewState in self.theViewMap:
@@ -29,8 +29,7 @@ class NavigationRouter(QObject):
     def doShow(self):
         self.theStackedWidget.show()
     
-    @pyqtSlot(Signal)
-    def _handleViewResponses(self, aSignal: Signal) -> None:
+    def handleNavigation(self, aSignal: Signal) -> None:
         theNavMap = {
             Items.SETTINGS : ViewState.SETTINGS,
             Items.HOME     : ViewState.HOME,
@@ -40,6 +39,9 @@ class NavigationRouter(QObject):
             Items.STOP     : ViewState.HOME
         }
         theDestination = theNavMap.get(aSignal.theItem)
+
+        if not theDestination:
+            return
 
         if aSignal.theDebugTag and theDestination:
             print(f"{Colors.BRIGHT_YELLOW}Navigating to {theDestination}...{Colors.RESET}")

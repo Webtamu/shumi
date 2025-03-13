@@ -20,18 +20,6 @@ class Model(QObject):
         return (aSignal.theItem in self.theDataMap)
 
     # Update data store and notify controller
-    def updateItemState(self, aSignal: Signal) -> None:
-        if theAction := self.theActionMap.get(aSignal.theItem):
-            theAction()
-
-        theItemEntry = self.theDataMap[aSignal.theItem]
-
-        if aSignal.theItem != Items.TIMER:  # Don't overwrite dynamic text (like timer)
-            theItemEntry["state"] = not theItemEntry["state"]
-            aSignal.theText = theItemEntry["text"]
-        aSignal.theState = theItemEntry["state"]
-
-        if aSignal.theDebugTag:
-            print(f"{Colors.CYAN}{self.theModelType} Model Handled:{Colors.RESET}", aSignal)
-
-        self.theModelSignal.emit(aSignal)
+    @abstractmethod
+    def updateModel(self, aSignal: Signal) -> None:
+        ...

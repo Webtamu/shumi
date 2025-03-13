@@ -1,6 +1,6 @@
 from models.models import Model
 from helpers.signals import Signal
-from helpers.helpers import Items
+from helpers.helpers import Items, Colors, ViewState
 
 class PreferencesModel(Model):
     '''
@@ -22,5 +22,22 @@ class PreferencesModel(Model):
 
     def __del__(self):
         print("Writing preferences data to json!")
+
+    # Update data store and notify controller
+    def updateModel(self, aSignal: Signal) -> None:
+        if theAction := self.theActionMap.get(aSignal.theItem):
+            theAction()
+
+        theItemEntry = self.theDataMap[aSignal.theItem]
+        theItemEntry["state"] = not theItemEntry["state"]
+
+        aSignal.theText = theItemEntry["text"]
+        aSignal.theState = theItemEntry["state"]
+        aSignal.theSource = ViewState.ALL
+
+        if aSignal.theDebugTag:
+            print(f"{Colors.CYAN}{self.theModelType} Model Handled:{Colors.RESET}", aSignal)
+
+        self.theModelSignal.emit(aSignal)
 
 

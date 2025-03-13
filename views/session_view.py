@@ -12,5 +12,5 @@ class SessionView(View):
 
         self.theItemMap = {
             Items.STOP  : { "instance": self.theWindow.findChild(QPushButton, "btnStop"), "action": Actions.BTN_PRESS },
-            Items.TIMER : { "instance": self.theWindow.findChild(QLabel, "lblTimer"),     "action": Actions.LABEL_SET },
+            Items.TIMER : { "instance": self.theWindow.findChild(QLabel, "lblTimer"),     "action": Actions.NONE },
         }

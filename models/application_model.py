@@ -1,6 +1,6 @@
 from models.models import Model
 from helpers.signals import Signal
-from helpers.helpers import Items
+from helpers.helpers import Items, Colors
 from utils.timer import Timer
 
 USER_DEFINED_TIME_PERIOD = 10
@@ -34,10 +34,27 @@ class ApplicationModel(Model):
 
         self.theThread = None 
         self.theModelType = "Application"
+    
+    # Update data store and notify controller
+    def updateModel(self, aSignal: Signal) -> None:
+        if theAction := self.theActionMap.get(aSignal.theItem):
+            theAction()
+
+        theItemEntry = self.theDataMap[aSignal.theItem]
+
+        if aSignal.theItem != Items.TIMER:  # Don't overwrite dynamic text (like timer)
+            theItemEntry["state"] = not theItemEntry["state"]
+            aSignal.theText = theItemEntry["text"]
+        aSignal.theState = theItemEntry["state"]
+
+        if aSignal.theDebugTag:
+            print(f"{Colors.CYAN}{self.theModelType} Model Handled:{Colors.RESET}", aSignal)
+
+        self.theModelSignal.emit(aSignal)
 
     def beginTimer(self) -> None:
         self.theThread = Timer(USER_DEFINED_TIME_PERIOD)
-        self.theThread.theTimerSignal.connect(self.updateItemState)
+        self.theThread.theTimerSignal.connect(self.updateModel)
         self.theThread.start()
     
     def stopTimer(self) -> None:
@@ -45,5 +62,5 @@ class ApplicationModel(Model):
             self.theThread.stop()
             self.theThread = None
             
-
+    
             
