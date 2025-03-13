@@ -1,8 +1,6 @@
-from PyQt6.QtCore import pyqtSignal
-
 from models.models import Model
 from helpers.signals import Signal
-from helpers.helpers import Items, Colors
+from helpers.helpers import Items
 from utils.timer import Timer
 
 USER_DEFINED_TIME_PERIOD = 10
@@ -11,8 +9,6 @@ class ApplicationModel(Model):
     '''
     This class houses temporary application metadata which will be cleared on app reload.
     '''
-
-    theModelSignal = pyqtSignal(Signal)
 
     def __init__(self) -> None:
         super().__init__()

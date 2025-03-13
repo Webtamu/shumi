@@ -1,10 +1,13 @@
 from PyQt6.QtCore import QObject
+from PyQt6.QtCore import pyqtSignal
 from abc import abstractmethod
 
 from helpers.helpers import Items, Colors
 from helpers.signals import Signal
 
 class Model(QObject):
+
+    theModelSignal = pyqtSignal(Signal)
 
     @abstractmethod
     def __init__(self) -> None:
