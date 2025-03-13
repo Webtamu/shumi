@@ -1,6 +1,7 @@
 from PyQt6.QtCore import pyqtSignal
-from helpers.signals import Signal
+
 from models.models import Model
+from helpers.signals import Signal
 from helpers.helpers import Items, Colors
 from utils.timer import Timer
 
@@ -17,7 +18,7 @@ class ApplicationModel(Model):
         super().__init__()
 
         # TEMP APP DATA STORE
-        self.theTempStateData = {
+        self.theDataMap = {
             Items.HOME       : {"state": False, "text": "Return Home"},
             Items.START      : {"state": False, "text": "Start Session"},
             Items.STOP       : {"state": False, "text": "Stop Session"},
@@ -30,15 +31,12 @@ class ApplicationModel(Model):
             Items.TIMER      : {"state": False, "text": str(USER_DEFINED_TIME_PERIOD)},
         }
 
-        self.theItemActionMap = {
+        self.theActionMap = {
             Items.START : self.beginTimer,
             Items.STOP  : self.stopTimer,
         }
 
         self.theThread = None 
-    
-    def canHandle(self, aSignal: Signal) -> bool:
-        return (aSignal.theItem in self.theTempStateData)
     
     def beginTimer(self) -> None:
         self.theThread = Timer(USER_DEFINED_TIME_PERIOD)
@@ -49,23 +47,6 @@ class ApplicationModel(Model):
         if self.theThread:
             self.theThread.stop()
             self.theThread = None
-
-    # Update data store and notify controller
-    def updateItemState(self, aSignal: Signal) -> None:
-        if theAction := self.theItemActionMap.get(aSignal.theItem):
-            theAction()
-
-        if aSignal.theDebugTag:
-            print(f"{Colors.CYAN}App Model Handling:{Colors.RESET}", aSignal)
-
-        theItemEntry = self.theTempStateData[aSignal.theItem]
-
-        if aSignal.theItem != Items.TIMER:  # Don't overwrite dynamic text (like timer)
-            theItemEntry["state"] = not theItemEntry["state"]
-            aSignal.theText = theItemEntry["text"]
-        aSignal.theState = theItemEntry["state"]
-
-        self.theModelSignal.emit(aSignal)
             
 
             

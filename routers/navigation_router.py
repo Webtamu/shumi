@@ -1,6 +1,7 @@
-from views.view import View  
 from PyQt6.QtWidgets import QStackedWidget
 from PyQt6.QtCore import QObject, pyqtSlot
+
+from views.view import View  
 from helpers.signals import Signal
 from helpers.helpers import ViewState, Items, Colors
 
@@ -8,7 +9,7 @@ class NavigationRouter(QObject):
     def __init__(self) -> None:
         super().__init__()
         self.theStackedWidget = QStackedWidget()
-        self.theViewMap = {}
+        self.theViewMap: dict[ViewState, int] = {}
         self.theCounter = 0
      
     def addViews(self, aViewList: list[View]):

@@ -1,22 +1,16 @@
-from views.view import View
-from PyQt6.QtWidgets import QPushButton, QLabel
 from PyQt6 import uic
-from PyQt6.QtCore import pyqtSignal
-from helpers.signals import Signal
-from helpers.helpers import Items, ViewState
+from PyQt6.QtWidgets import QPushButton, QLabel
 
+from views.view import View
+from helpers.helpers import Items, Actions, ViewState
 
 class SessionView(View):
-    theNavSignal = pyqtSignal(Signal)
-
     def __init__(self) -> None:
         super().__init__()
         self.theViewState = ViewState.SESSION
         self.theWindow = uic.loadUi("qtdesigner/session_design.ui")
 
         self.theItemMap = {
-            Items.STOP  : self.theWindow.findChild(QPushButton, "btnStop"),
-            Items.TIMER : self.theWindow.findChild(QLabel, "lblTimer"),
+            Items.STOP  : { "instance": self.theWindow.findChild(QPushButton, "btnStop"), "action": Actions.BTN_PRESS },
+            Items.TIMER : { "instance": self.theWindow.findChild(QLabel, "lblTimer"),     "action": Actions.LABEL_SET },
         }
-        
-     

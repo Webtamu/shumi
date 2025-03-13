@@ -1,12 +1,14 @@
 from dataclasses import dataclass
+from typing import Optional
+
 from helpers.helpers import Items, Actions, ViewState, Colors
 
 @dataclass
 class Signal():
     theActionType: Actions = Actions.DEFAULT
     theItem: Items = Items.DEFAULT
-    theState: bool = False
-    theText: str = ""
+    theState: Optional[bool] = None  
+    theText: Optional[str] = None
     theSource: ViewState = ViewState.DEFAULT
     theDebugTag: bool = True
 

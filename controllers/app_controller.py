@@ -1,10 +1,12 @@
 from PyQt6.QtCore import pyqtSlot
-from PyQt6.QtWidgets import QPushButton, QCheckBox
-from helpers.signals import Signal
+from PyQt6.QtWidgets import QWidget
+from typing import Callable
+
 from models.models import Model  
 from views.view import View  
 from controllers.controllers import Controller
 from helpers.helpers import Actions, ViewState
+from helpers.signals import Signal
 
 class ApplicationController(Controller):
     def __init__(self, aModelList: list[Model], aViewList: list[View]) -> None:
@@ -12,7 +14,12 @@ class ApplicationController(Controller):
 
         self.theModelList: list[Model] = aModelList
         self.theViewMap: dict[ViewState, View] = {}
-        
+
+        self.theConnectionMap: dict[Actions, Callable] = {
+            Actions.BTN_PRESS  : self.connectButton,
+            Actions.BOX_CHECK  : self.connectBox,
+        }
+
         # Wiring up Model signals to Controller
         for model in self.theModelList:
             model.theModelSignal.connect(self.handleModelResponse)
@@ -24,15 +31,18 @@ class ApplicationController(Controller):
     
     # Connect items based on action types
     def connectItems(self, aView: View) -> None:
-          for itemName, itemObject in aView.theItemMap.items():
-                theSignal = Signal(theItem=itemName, theSource=aView.theViewState)
-                if isinstance(itemObject, QPushButton):
-                    theSignal.theActionType = Actions.BTN_PRESS
-                    itemObject.clicked.connect(lambda _, signal=theSignal: self.handleViewResponse(signal))
-                elif isinstance(itemObject, QCheckBox):
-                    theSignal.theActionType = Actions.BOX_CHECK
-                    itemObject.stateChanged.connect(lambda _, signal=theSignal: self.handleViewResponse(signal))
+          for item_name, item_data in aView.theItemMap.items():
+                theSignal = Signal(theItem=item_name, theSource=aView.theViewState, theActionType=item_data["action"])
 
+                if theConnection := self.theConnectionMap.get(theSignal.theActionType):
+                    theConnection(aSignal=theSignal, anItem=item_data["instance"])
+
+    def connectButton(self, aSignal: Signal, anItem: QWidget) -> None:
+        anItem.clicked.connect(lambda _, signal=aSignal: self.handleViewResponse(signal))
+
+    def connectBox(self, aSignal: Signal, anItem: QWidget) -> None:
+        anItem.stateChanged.connect(lambda _, signal=aSignal: self.handleViewResponse(signal))
+        
     # Reponse from View (Initial Trigger), sending to Model for processing
     def handleViewResponse(self, aSignal: Signal) -> None:
         for model in self.theModelList:
@@ -40,7 +50,6 @@ class ApplicationController(Controller):
                 model.updateItemState(aSignal)
                 return
         print("CANT HANDLE REQUEST") # TODO: make this a status or something later
-
 
     # Response from Model (Compute Response), sending to View for presentation
     @pyqtSlot(Signal)
@@ -52,3 +61,5 @@ class ApplicationController(Controller):
             theViewSource = self.theViewMap[aSignal.theSource]
             theViewSource.updateView(aSignal)
         
+
+    

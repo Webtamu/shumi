@@ -1,23 +1,20 @@
-from PyQt6.QtWidgets import QPushButton
 from PyQt6 import uic
-from PyQt6.QtCore import pyqtSignal
+from PyQt6.QtWidgets import QPushButton
+
 from views.view import View
-from helpers.signals import Signal
-from helpers.helpers import Items, ViewState
+from helpers.helpers import Items, Actions, ViewState
 
 class HomeView(View):
-    theNavSignal = pyqtSignal(Signal)
-
     def __init__(self) -> None:
         super().__init__()
         self.theViewState = ViewState.HOME
         self.theWindow = uic.loadUi("qtdesigner/home_design.ui")
 
         self.theItemMap = {
-            Items.START    : self.theWindow.findChild(QPushButton, "btnStart"),
-            Items.SETTINGS : self.theWindow.findChild(QPushButton, "btnSettings"),
-            Items.PROFILE  : self.theWindow.findChild(QPushButton, "btnProfile"),
-            Items.STATS    : self.theWindow.findChild(QPushButton, "btnStats"),
+            Items.START    : { "instance": self.theWindow.findChild(QPushButton, "btnStart"),    "action": Actions.BTN_PRESS },
+            Items.SETTINGS : { "instance": self.theWindow.findChild(QPushButton, "btnSettings"), "action": Actions.BTN_PRESS },
+            Items.PROFILE  : { "instance": self.theWindow.findChild(QPushButton, "btnProfile"),  "action": Actions.BTN_PRESS },
+            Items.STATS    : { "instance": self.theWindow.findChild(QPushButton, "btnStats"),    "action": Actions.BTN_PRESS },
         }
  
             

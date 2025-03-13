@@ -1,7 +1,8 @@
 from PyQt6.QtCore import pyqtSignal
-from helpers.signals import Signal
+
 from models.models import Model
-from helpers.helpers import Items, ViewState
+from helpers.signals import Signal
+from helpers.helpers import Items
 
 class PreferencesModel(Model):
     '''
@@ -14,26 +15,15 @@ class PreferencesModel(Model):
         super().__init__()
 
         # TEMP APP DATA STORE
-        self._thePreferencesData = {
-            Items.DARK_MODE : { "state" : False },
-            Items.LANGUAGE  : { "state" : False },
-            Items.TIME      : { "state" : False }
+        self.theDataMap = {
+            Items.DARK_MODE : { "state" : False, "text": "Dark Mode"},
+            Items.LANGUAGE  : { "state" : False, "text": "Language" },
+            Items.TIME      : { "state" : False, "text": "Time" }
         }
+
+        self.theActionMap = {}
 
     def __del__(self):
         print("Writing preferences data to json!")
 
-    
-    def canHandle(self, aSignal: Signal) -> bool:
-        return (aSignal.theItem in self._thePreferencesData)
 
-    # Update data store and notify controller
-    def updateItemState(self, aSignal: Signal) -> None:
-        if aSignal.theDebugTag:
-            print("PREFERENCES MODEL HANDLING!!")
-        theItemEntry = self._thePreferencesData[aSignal.theItem]
-        theItemEntry["state"] = not theItemEntry["state"]
-        aSignal.theState = theItemEntry["state"]
-        aSignal.theSource = ViewState.ALL
-        self.theModelSignal.emit(aSignal)
-            

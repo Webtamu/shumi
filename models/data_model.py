@@ -1,7 +1,7 @@
 from PyQt6.QtCore import pyqtSignal
-from helpers.signals import Signal
+
 from models.models import Model
-from helpers.helpers import Items, Actions, ViewState
+from helpers.signals import Signal
 
 class DataModel(Model):
     '''
@@ -14,17 +14,7 @@ class DataModel(Model):
         super().__init__()
 
         # TEMP APP DATA STORE
-        self._theTableData = {}
-    
+        self.theDataMap = {}
+        self.theActionMap = {}
 
-    def canHandle(self, aSignal: Signal) -> bool:
-        return (aSignal.theItem in self._theTableData)
 
-    # Update data store and notify controller
-    def updateItemState(self, aSignal: Signal) -> None:
-        if aSignal.theDebugTag:
-            print("DATA MODEL HANDLING!!")
-        theItemEntry = self._theTableData[aSignal.theItem]
-        theItemEntry["state"] = not theItemEntry["state"]
-        aSignal.theState = theItemEntry["state"]
-        self.theModelSignal.emit(aSignal)

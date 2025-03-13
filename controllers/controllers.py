@@ -1,5 +1,6 @@
 from PyQt6.QtCore import QObject, pyqtSlot
 from abc import abstractmethod
+
 from models.models import Model  
 from views.view import View  
 from helpers.signals import Signal

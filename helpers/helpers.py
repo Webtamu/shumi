@@ -64,6 +64,7 @@ class Actions(Enum):
     BOX_CHECK = auto()
     LIST_SET  = auto()
     BROWSE_SET = auto()
+    LABEL_SET = auto()
     DEFAULT = auto()
 
 class Colors(Enum):
