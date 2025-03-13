@@ -37,7 +37,8 @@ class ApplicationModel(Model):
         }
 
         self.theThread = None 
-    
+        self.theModelType = "Application"
+
     def beginTimer(self) -> None:
         self.theThread = Timer(USER_DEFINED_TIME_PERIOD)
         self.theThread.theTimerSignal.connect(self.updateItemState)

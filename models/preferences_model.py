@@ -22,6 +22,7 @@ class PreferencesModel(Model):
         }
 
         self.theActionMap = {}
+        self.theModelType = "Preferences"
 
     def __del__(self):
         print("Writing preferences data to json!")

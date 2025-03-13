@@ -11,6 +11,7 @@ class Model(QObject):
         super().__init__()
         self.theDataMap = {}
         self.theActionMap = {}
+        self.theModelType = None
 
     def canHandle(self, aSignal: Signal) -> bool:
         return (aSignal.theItem in self.theDataMap)
@@ -28,6 +29,6 @@ class Model(QObject):
         aSignal.theState = theItemEntry["state"]
 
         if aSignal.theDebugTag:
-            print(f"{Colors.CYAN}App Model Handled:{Colors.RESET}", aSignal)
+            print(f"{Colors.CYAN}{self.theModelType} Model Handled:{Colors.RESET}", aSignal)
 
         self.theModelSignal.emit(aSignal)

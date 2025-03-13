@@ -16,5 +16,6 @@ class DataModel(Model):
         # TEMP APP DATA STORE
         self.theDataMap = {}
         self.theActionMap = {}
+        self.theModelType = "Data"
 
 
