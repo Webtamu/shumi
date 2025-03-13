@@ -46,8 +46,9 @@ class Items(Enum):
     LANGUAGE = auto()
     TIME = auto()
     TIMER = auto()
+    BEGIN_TAKE = auto()
     DEFAULT = auto()
-
+    
 class ViewState(Enum):
     
     HOME = "viewHome"
@@ -55,6 +56,7 @@ class ViewState(Enum):
     PROFILE = "viewProfile"
     STATS = "viewStats"
     SESSION = "viewSession"
+    SUMMARY = "viewSummary"
     ALL = "viewAll"
     DEFAULT = auto()
 

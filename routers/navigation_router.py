@@ -31,12 +31,13 @@ class NavigationRouter(QObject):
     
     def handleNavigation(self, aSignal: Signal) -> None:
         theNavMap = {
-            Items.SETTINGS : ViewState.SETTINGS,
-            Items.HOME     : ViewState.HOME,
-            Items.STATS    : ViewState.STATS,
-            Items.PROFILE  : ViewState.PROFILE,
-            Items.START    : ViewState.SESSION,
-            Items.STOP     : ViewState.HOME
+            Items.SETTINGS   : ViewState.SETTINGS,
+            Items.HOME       : ViewState.HOME,
+            Items.STATS      : ViewState.STATS,
+            Items.PROFILE    : ViewState.PROFILE,
+            Items.START      : ViewState.SESSION,
+            Items.STOP       : ViewState.SUMMARY,
+            Items.BEGIN_TAKE : ViewState.HOME,
         }
         theDestination = theNavMap.get(aSignal.theItem)
 

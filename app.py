@@ -7,6 +7,7 @@ from views.settings_view import SettingsView
 from views.stats_view import StatsView
 from views.profile_view import ProfileView
 from views.session_view import SessionView
+from views.summary_view import SummaryView
 
 from controllers.app_controller import ApplicationController
 
@@ -17,7 +18,7 @@ class App(QApplication):
     def __init__(self, anArgs) -> None:
         super().__init__(anArgs)
         self.theModelList = [ApplicationModel(), PreferencesModel(), DataModel()]
-        self.theViewList = [HomeView(), SettingsView(), StatsView(), ProfileView(), SessionView()]
+        self.theViewList = [HomeView(), SettingsView(), StatsView(), ProfileView(), SessionView(), SummaryView()]
         self.theApplicationController = ApplicationController(self.theModelList, self.theViewList)
 
         self.theNavigationRouter = NavigationRouter()

@@ -22,7 +22,9 @@ class Timer(QThread):
             time.sleep(1)
             i -= 1
         if self.isRunning:  
-            print("TIME COMPLETE")
+            self.theTimerSignal.emit(Signal(theItem=Items.STOP,
+                                            theActionType=Actions.LABEL_SET,
+                                            theSource=ViewState.SESSION))
 
     def stop(self):
         self.isRunning = False 

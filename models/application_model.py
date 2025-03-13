@@ -25,6 +25,7 @@ class ApplicationModel(Model):
             Items.CONTACT    : {"state": False, "text": "Contact Us"},
             Items.ABOUT      : {"state": False, "text": "About"},
             Items.TIMER      : {"state": False, "text": str(USER_DEFINED_TIME_PERIOD)},
+            Items.BEGIN_TAKE : {"state": False, "text": "Begin Take"},
         }
 
         self.theActionMap = {
