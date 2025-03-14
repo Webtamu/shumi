@@ -9,6 +9,7 @@ class SummaryView(View):
         super().__init__()
         self.theViewState = ViewState.SUMMARY
         self.theWindow = uic.loadUi("qtdesigner/summary_design.ui")
+        self.initializeStyle()
 
         self.theItemMap = {
             Items.BEGIN_TAKE  : { "instance": self.theWindow.findChild(QPushButton, "btnBeginTake"),    "action": Actions.BTN_PRESS },

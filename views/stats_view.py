@@ -9,6 +9,7 @@ class StatsView(View):
         super().__init__()
         self.theViewState = ViewState.STATS
         self.theWindow = uic.loadUi("qtdesigner/stats_design.ui")
+        self.initializeStyle()
 
         self.theItemMap = {
             Items.HOME     : { "instance": self.theWindow.findChild(QPushButton, "btnHome"),     "action": Actions.BTN_PRESS },

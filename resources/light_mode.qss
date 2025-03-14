@@ -1,0 +1,35 @@
+QWidget {
+    background-color: #FFFFFF; 
+    color: #333333;  
+}
+
+QPushButton {
+    background-color: #F5F5F5; 
+    color: #333;  
+    border: 1px solid #DDDDDD;  
+    padding: 8px 16px;
+    border-radius: 8px;  
+    font-weight: 500; 
+}
+
+QPushButton:hover {
+    background-color: #E0E0E0; 
+    border: 1px solid #BBBBBB;  
+}
+
+QCheckBox {
+    color: #333;  
+}
+
+QCheckBox::indicator {
+    width: 20px;
+    height: 20px;
+    background-color: #F5F5F5;  
+    border-radius: 5px;
+    border: 1px solid #DDDDDD;  
+}
+
+QCheckBox::indicator:checked {
+    background-color: #007BFF;  
+    border: 1px solid #007BFF;  
+}

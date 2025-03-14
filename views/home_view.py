@@ -9,6 +9,7 @@ class HomeView(View):
         super().__init__()
         self.theViewState = ViewState.HOME
         self.theWindow = uic.loadUi("qtdesigner/home_design.ui")
+        self.initializeStyle()
 
         self.theItemMap = {
             Items.START    : { "instance": self.theWindow.findChild(QPushButton, "btnStart"),    "action": Actions.BTN_PRESS },

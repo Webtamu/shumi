@@ -11,6 +11,7 @@ class View(QWidget):
     @abstractmethod
     def __init__(self) -> None:
         self.theViewState = ViewState.DEFAULT
+        self.theWindow = None
         super().__init__() 
 
     def updateView(self, aSignal: Signal) -> None:
@@ -45,7 +46,12 @@ class View(QWidget):
             with open("resources/dark_mode.qss", "r") as file:
                 self.theWindow.setStyleSheet(file.read())
         else:
-            self.theWindow.setStyleSheet("")
+            with open("resources/light_mode.qss", "r") as file:
+                self.theWindow.setStyleSheet(file.read())
+    
+    def initializeStyle(self) -> None:
+        with open("resources/light_mode.qss", "r") as file:
+                self.theWindow.setStyleSheet(file.read())
 
     def updateButton(self, anItem: QWidget, aSignal: Signal) -> None:
         anItem.setChecked(aSignal.theState)

@@ -9,6 +9,7 @@ class SettingsView(View):
         super().__init__()
         self.theViewState = ViewState.SETTINGS
         self.theWindow = uic.loadUi("qtdesigner/settings_design.ui")
+        self.initializeStyle()
 
         self.theItemMap = {
             Items.HOME       : { "instance": self.theWindow.findChild(QPushButton, "btnHome"),     "action": Actions.BTN_PRESS },
