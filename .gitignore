@@ -7,3 +7,4 @@ ui/__pycache__/*
 *.sqlite
 /notebooks/*
 .DS_Store
+.env

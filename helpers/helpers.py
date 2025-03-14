@@ -28,27 +28,26 @@ class StatusCodes(Enum):
     AI_AGENT_FAILURE = 4003  
     SOCIAL_POST_FAILURE = 4004  
     SOCIAL_FRIEND_SYNC_ERROR = 4005
-    
 
- 
 class Items(Enum):
 
-    HOME = auto()
-    SETTINGS = auto()
-    STATS = auto()
-    PROFILE = auto()
-    START = auto()
-    STOP = auto()
-    REPORT_BUG = auto()
-    CONTACT = auto()
     ABOUT = auto()
+    BEGIN_TAKE = auto()
+    CONTACT = auto()
     DARK_MODE = auto()
+    DEFAULT = auto()
+    HOME = auto()
     LANGUAGE = auto()
+    PROFILE = auto()
+    REPORT_BUG = auto()
+    SETTINGS = auto()
+    START = auto()
+    STATS = auto()
+    STOP = auto()
+    SYNC = auto()
     TIME = auto()
     TIMER = auto()
-    BEGIN_TAKE = auto()
-    DEFAULT = auto()
-    
+
 class ViewState(Enum):
     
     HOME = "viewHome"

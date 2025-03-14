@@ -1,3 +1,5 @@
+from PyQt6.QtWidgets import QApplication
+
 from models.application_model import ApplicationModel
 from models.preferences_model import PreferencesModel
 from models.data_model import DataModel
@@ -10,9 +12,7 @@ from views.session_view import SessionView
 from views.summary_view import SummaryView
 
 from controllers.app_controller import ApplicationController
-
 from routers.navigation_router import NavigationRouter
-from PyQt6.QtWidgets import QApplication
 
 class App(QApplication):
     def __init__(self, anArgs) -> None:
