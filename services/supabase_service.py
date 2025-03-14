@@ -3,12 +3,14 @@ import supabase
 import os
 from dotenv import load_dotenv
 
+from helpers.helpers import Colors
+
 class SupabaseService:
     def __init__(self) -> None:
         load_dotenv()
 
-        theURL = os.getenv("SUPABASE_URL")
-        theKey = os.getenv("SUPABASE_KEY")
+        theURL: str = os.getenv("SUPABASE_URL")
+        theKey: str = os.getenv("SUPABASE_KEY")
 
         if not theURL or not theKey:
             raise ValueError("Supabase URL or Key is missing in environment variables.")
@@ -18,14 +20,34 @@ class SupabaseService:
     def isConnected(self) -> bool:
         try:
             response = self.theClient.table('users').select("*").limit(1).execute()
-            if response.data is not None:  
-                return True
-            return False
+            return response.data         
         except Exception as e:
             print(f"Supabase connection test failed: {e}")
             return False
     
-    def fetchData(self, aTableName: str) -> list[dict]:
-        theQuery = self.theClient.table(aTableName).select("*")
-        theResponse = theQuery.execute()
-        return theResponse
+    def fetchData(self, aTableName: str) -> dict:
+        try:
+            theResponse = self.theClient.table(aTableName).select("*").execute()
+            return theResponse
+        except Exception as e:
+            print(f"Data fetch failed: {e}")
+
+    def login(self, anEmail: str, aPassword: str) -> None:
+        try:
+            theResponse = self.theClient.auth.sign_in_with_password(
+                {
+                    "email": anEmail,
+                    "password": aPassword
+                }
+            )
+            print(f"{Colors.GREEN}Login successful.{Colors.RESET}")
+            self.theClient.auth.set_session(theResponse.session.access_token, theResponse.session.refresh_token)
+        except Exception as e:
+            print(f"{Colors.RED}Login failed: {e}{Colors.RESET}") 
+
+    def logout(self) -> None:
+        theResponse = self.theClient.auth.sign_out()
+        print(f"{Colors.GREEN}Logged out successfully.{Colors.RESET}")
+
+        
+
