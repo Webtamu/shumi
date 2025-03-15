@@ -2,6 +2,7 @@ import json
 from pprint import pprint
 
 from services.supabase_service import SupabaseService
+import duckdb
 from models.models import Model
 from helpers.signals import Signal
 from helpers.helpers import Items
@@ -40,6 +41,10 @@ class DataModel(Model):
 
         theResponse = self.theDatabase.fetchData(aTableName='users')
         print(theResponse.data)
+
+    # TODO Add data to Local
+
+    # TODO Add 
 
     def updateModel(self, aSignal: Signal) -> None:
         if theAction := self.theActionMap.get(aSignal.theItem):
