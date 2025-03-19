@@ -38,6 +38,7 @@ class ApplicationModel(Model):
     
     # Update data store and notify controller
     def updateModel(self, aSignal: Signal) -> None:
+
         if theAction := self.theActionMap.get(aSignal.theItem):
             theAction()
 

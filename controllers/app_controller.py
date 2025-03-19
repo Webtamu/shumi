@@ -4,7 +4,7 @@ from typing import Callable
 from models.models import Model  
 from views.view import View  
 from controllers.controllers import Controller
-from helpers.helpers import Actions, ViewState
+from helpers.helpers import Actions, ViewState, Items
 from helpers.signals import Signal
 from helpers.connections import Connections
 
@@ -32,6 +32,13 @@ class ApplicationController(Controller):
         
     # Reponse from View (Initial Trigger), sending to Model for processing
     def handleViewResponse(self, aSignal: Signal) -> None:
+        # Messy... need to find way to refactor this
+        if aSignal.theItem == Items.LOGIN:
+            loginView = self.theViewMap.get(ViewState.LOGIN)
+            theUsername = loginView.theItemMap[Items.USERNAME]["instance"].text()
+            thePassword = loginView.theItemMap[Items.PASSWORD]["instance"].text()
+            aSignal.theData = {"username": theUsername, "password": thePassword}
+
         for model in self.theModelList:
             if model.canHandle(aSignal):
                 model.updateModel(aSignal)

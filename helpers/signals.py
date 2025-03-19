@@ -9,6 +9,7 @@ class Signal():
     theItem: Items = Items.DEFAULT
     theState: Optional[bool] = None  
     theText: Optional[str] = None
+    theData = []
     theSource: ViewState = ViewState.DEFAULT
     theDebugTag: bool = True
 
@@ -17,4 +18,5 @@ class Signal():
                 f"Item={Colors.CYAN}{self.theItem}{Colors.RESET}, "
                 f"State={Colors.CYAN}{self.theState}{Colors.RESET}, "
                 f"Text={Colors.CYAN}'{self.theText}'{Colors.RESET}, "
+                f"Data={Colors.CYAN}'{self.theData}'{Colors.RESET}, "
                 f"Source={Colors.CYAN}{self.theSource}{Colors.RESET}")

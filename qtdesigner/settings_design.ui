@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1000</width>
+    <width>876</width>
     <height>800</height>
    </rect>
   </property>
@@ -228,6 +228,13 @@
                </property>
               </widget>
              </item>
+             <item>
+              <widget class="QPushButton" name="btnSync">
+               <property name="text">
+                <string>Sync</string>
+               </property>
+              </widget>
+             </item>
             </layout>
            </widget>
           </item>
@@ -378,7 +385,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1000</width>
+     <width>876</width>
      <height>22</height>
     </rect>
    </property>

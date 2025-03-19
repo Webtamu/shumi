@@ -19,7 +19,7 @@ class SupabaseService:
 
     def isConnected(self) -> bool:
         try:
-            response = self.theClient.table('users').select("*").limit(1).execute()
+            response = self.theClient.table('DuckDB').select("*").limit(1).execute()
             return response.data         
         except Exception as e:
             print(f"Supabase connection test failed: {e}")

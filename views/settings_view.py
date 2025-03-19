@@ -20,4 +20,5 @@ class SettingsView(View):
             Items.CONTACT    : { "instance": self.theWindow.findChild(QPushButton, "btnContact"),  "action": Actions.BTN_PRESS },
             Items.ABOUT      : { "instance": self.theWindow.findChild(QPushButton, "btnAbout"),    "action": Actions.BTN_PRESS },
             Items.DARK_MODE  : { "instance": self.theWindow.findChild(QCheckBox, "boxDarkMode"),   "action": Actions.BOX_CHECK },
+            Items.SYNC       : { "instance": self.theWindow.findChild(QPushButton, "btnSync"),     "action": Actions.BTN_PRESS },
         }

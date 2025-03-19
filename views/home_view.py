@@ -16,7 +16,6 @@ class HomeView(View):
             Items.SETTINGS : { "instance": self.theWindow.findChild(QPushButton, "btnSettings"), "action": Actions.BTN_PRESS },
             Items.PROFILE  : { "instance": self.theWindow.findChild(QPushButton, "btnProfile"),  "action": Actions.BTN_PRESS },
             Items.STATS    : { "instance": self.theWindow.findChild(QPushButton, "btnStats"),    "action": Actions.BTN_PRESS },
-            Items.SYNC     : { "instance": self.theWindow.findChild(QPushButton, "btnSync"),     "action": Actions.BTN_PRESS },
         }
  
             

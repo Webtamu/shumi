@@ -30,6 +30,12 @@ class StatusCodes(Enum):
     SOCIAL_FRIEND_SYNC_ERROR = 4005
 
 class Items(Enum):
+    
+    # LOGIN VIEW ITEMS
+    USERNAME = auto()
+    PASSWORD = auto()
+    STAY_SIGNED_IN = auto()
+    LOGIN = auto()
 
     ABOUT = auto()
     BEGIN_TAKE = auto()
@@ -38,25 +44,30 @@ class Items(Enum):
     DEFAULT = auto()
     HOME = auto()
     LANGUAGE = auto()
+    
     PROFILE = auto()
     REPORT_BUG = auto()
     SETTINGS = auto()
     START = auto()
     STATS = auto()
+    
     STOP = auto()
     SYNC = auto()
     TIME = auto()
     TIMER = auto()
+    
+
 
 class ViewState(Enum):
     
-    HOME = "viewHome"
-    SETTINGS = "viewSettings"
-    PROFILE = "viewProfile"
-    STATS = "viewStats"
-    SESSION = "viewSession"
-    SUMMARY = "viewSummary"
-    ALL = "viewAll"
+    HOME = auto()
+    LOGIN = auto()
+    SETTINGS = auto()
+    PROFILE = auto()
+    STATS = auto()
+    SESSION = auto()
+    SUMMARY = auto()
+    ALL = auto()
     DEFAULT = auto()
 
 class Actions(Enum):
