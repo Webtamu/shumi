@@ -9,7 +9,7 @@ class Signal():
     theItem: Items = Items.DEFAULT
     theState: Optional[bool] = None  
     theText: Optional[str] = None
-    theData = []
+    theData: dict = None
     theSource: ViewState = ViewState.DEFAULT
     theDebugTag: bool = True
 

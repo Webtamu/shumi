@@ -8,3 +8,5 @@ ui/__pycache__/*
 /notebooks/*
 .DS_Store
 .env
+local_data.duckdb
+local_data.duckdb.wal

@@ -47,6 +47,10 @@ class ApplicationController(Controller):
 
     # Response from Model (Compute Response), sending to View for presentation
     def handleModelResponse(self, aSignal: Signal) -> None:
+        if aSignal.theItem == Items.STOP:
+            ...
+            
+
         if aSignal.theSource == ViewState.ALL:
             for view in self.theViewMap.values():
                 view.updateView(aSignal)

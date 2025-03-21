@@ -5,23 +5,32 @@ from helpers.helpers import Colors
 class DuckDBService:
     def __init__(self, db_path: str = "local_data.duckdb"):
         """Initialize DuckDB connection."""
-
-
+        self.con = duckdb.connect(db_path)
         self.con.execute(
-            f'''
-            CREATE TABLE IF NOT EXISTS {uuid} (
-                id  PRIMARY KEY,
-                text TEXT
+            '''
+            CREATE TABLE IF NOT EXISTS session (
+                session_id TEXT PRIMARY KEY DEFAULT uuid(),
+                user_id TEXT, 
+                timestamp_start TIMESTAMP, 
+                timestamp_stop TIMESTAMP
             )
             '''
         )
 
-        self.con = duckdb.connect(db_path)
-        self.create_table()
+    
 
-    def insert_data(self, data: list):
+    def insert_data(self, aUserID, aStartTime, aStopTime):
         """Insert data into local DuckDB."""
-        self.con.executemany("INSERT INTO DuckDB (id, text) VALUES (?, ?)", data)
+
+        self.con.execute(
+            """
+            INSERT INTO session (user_id, timestamp_start, timestamp_stop)
+            VALUES (?, ?, ?)
+            """,
+            (aUserID, aStartTime, aStopTime)
+        )
 
 
-
+        result = self.con.execute("SELECT * FROM session").fetchall()
+        for row in result:
+            print(row)
