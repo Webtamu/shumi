@@ -12,6 +12,7 @@ class Signal():
     theData: dict = None
     theSource: ViewState = ViewState.DEFAULT
     theDebugTag: bool = True
+    theNavTag: bool = False
 
     def __str__(self):
         return (f"ActionType={Colors.CYAN}{self.theActionType}{Colors.RESET}, "
@@ -19,4 +20,5 @@ class Signal():
                 f"State={Colors.CYAN}{self.theState}{Colors.RESET}, "
                 f"Text={Colors.CYAN}'{self.theText}'{Colors.RESET}, "
                 f"Data={Colors.CYAN}'{self.theData}'{Colors.RESET}, "
-                f"Source={Colors.CYAN}{self.theSource}{Colors.RESET}")
+                f"Source={Colors.CYAN}{self.theSource}{Colors.RESET}, "
+                f"Nav={Colors.CYAN}{self.theNavTag}{Colors.RESET}")  

@@ -52,12 +52,15 @@ class DataModel(Model):
         theUsername = aSignal.theData.get("username")  
         thePassword = aSignal.theData.get("password")
 
-        self.theDatabase.login(anEmail=theUsername, aPassword=thePassword)
+        # TODO: Auto-login
+        self.theDatabase.login(anEmail="testuser@gmail.com", aPassword="testpass")
+        #self.theDatabase.login(anEmail=theUsername, aPassword=thePassword)
 
         if self.theDatabase.isConnected():
             print("Successfully connected to Supabase.")
             theUserInfo = self.theDatabase.getUserInfo()
-            self.theUserID = str(theUserInfo.user.id)
+            self.theUserID = theUserInfo.user.id
+            aSignal.theNavTag = True
 
     def updateModel(self, aSignal: Signal) -> None:
         if theAction := self.theActionMap.get(aSignal.theItem):
@@ -83,11 +86,13 @@ class DataModel(Model):
         return
 
     def beginTimer(self, aSignal: Signal) -> None:
+        aSignal.theNavTag = True
         self.theThread = Timer(USER_DEFINED_TIME_PERIOD)
         self.theThread.theTimerSignal.connect(self.updateModel)
         self.theThread.start()
     
     def stopTimer(self, aSignal: Signal) -> None:
+        aSignal.theNavTag = True
         if self.theThread:
             self.theThread.stop()
             self.addSession(self.theUserID, self.theThread.theStartTime, self.theThread.theStopTime)

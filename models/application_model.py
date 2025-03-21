@@ -41,10 +41,11 @@ class ApplicationModel(Model):
         theItemEntry["state"] = not theItemEntry["state"]
         aSignal.theText = theItemEntry["text"]
         aSignal.theState = theItemEntry["state"]
+        aSignal.theNavTag = True
 
         if aSignal.theDebugTag:
             print(f"{Colors.CYAN}{self.theModelType} Model Handled:{Colors.RESET}", aSignal)
-
+        
         self.theModelSignal.emit(aSignal)
 
   

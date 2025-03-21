@@ -27,8 +27,9 @@ class View(QWidget):
 
         if aSignal.theDebugTag:
             print(f"{Colors.YELLOW}Updated {aSignal.theItem} on {self.theViewState} to {aSignal.theState}{Colors.RESET}")
-
-        self.theNavSignal.emit(aSignal)
+        
+        if aSignal.theNavTag:
+            self.theNavSignal.emit(aSignal)
 
 
     def updateWidget(self, anItem: QWidget, aSignal: Signal) -> None:
