@@ -1,5 +1,4 @@
 import duckdb
-
 import os
 from helpers.helpers import Colors
 
@@ -9,9 +8,9 @@ class DuckDBService:
 
 
         self.con.execute(
-            '''
-            CREATE TABLE IF NOT EXISTS DuckDB (
-                id INT PRIMARY KEY,
+            f'''
+            CREATE TABLE IF NOT EXISTS {uuid} (
+                id  PRIMARY KEY,
                 text TEXT
             )
             '''

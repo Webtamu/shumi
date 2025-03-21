@@ -1,6 +1,6 @@
 import json
-import duckdb
 
+from services.duckdb_service import DuckDBService
 from services.supabase_service import SupabaseService
 from models.models import Model
 from helpers.signals import Signal
@@ -64,3 +64,9 @@ class DataModel(Model):
             print(f"{Colors.CYAN}{self.theModelType} Model Handled:{Colors.RESET}", aSignal)
 
         self.theModelSignal.emit(aSignal)
+
+
+    def addSession(self, aSignal: Signal) -> None:
+        # Get session info from supabase session
+        return
+
