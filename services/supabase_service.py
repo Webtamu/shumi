@@ -31,7 +31,7 @@ class SupabaseService:
             return theResponse
         except Exception as e:
             print(f"Data fetch failed: {e}")
-
+    
     def login(self, anEmail: str, aPassword: str) -> None:
         try:
             theResponse = self.theClient.auth.sign_in_with_password(
@@ -44,6 +44,9 @@ class SupabaseService:
             self.theClient.auth.set_session(theResponse.session.access_token, theResponse.session.refresh_token)
         except Exception as e:
             print(f"{Colors.RED}Login failed: {e}{Colors.RESET}") 
+    
+    def getUserInfo(self) -> str:
+        return self.theClient.auth.get_user()
 
     def logout(self) -> None:
         theResponse = self.theClient.auth.sign_out()

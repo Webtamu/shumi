@@ -25,8 +25,9 @@ class DataModel(Model):
             Items.SYNC: self.syncToCloud,
             Items.LOGIN: self.login,
         }
-
+        
         self.theModelType = "Data"
+        self.theUserID = None
 
     def syncToCloud(self, aSignal: Signal) -> None:
         theResponse = self.theDatabase.fetchData(aTableName='DuckDB')
@@ -46,6 +47,8 @@ class DataModel(Model):
 
         if self.theDatabase.isConnected():
             print("Successfully connected to Supabase.")
+            theUserInfo = self.theDatabase.getUserInfo()
+            self.theUserID = theUserInfo.user.id
 
     def updateModel(self, aSignal: Signal) -> None:
         if theAction := self.theActionMap.get(aSignal.theItem):
