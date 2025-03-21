@@ -36,6 +36,14 @@ class Items(Enum):
     PASSWORD = auto()
     STAY_SIGNED_IN = auto()
     LOGIN = auto()
+    CREATE = auto()
+
+    # CREATE ACCOUNT VIEW ITEMS
+    USERNAME_CREATION = auto()         
+    PASSWORD_CREATION = auto()         
+    PASSWORD_CREATION_CONFIRM = auto()  
+    EMAIL_CREATION = auto()             
+    CREATE_ACCOUNT = auto()
 
     ABOUT = auto()
     BEGIN_TAKE = auto()
@@ -67,6 +75,7 @@ class ViewState(Enum):
     STATS = auto()
     SESSION = auto()
     SUMMARY = auto()
+    CREATE = auto()
     ALL = auto()
     DEFAULT = auto()
 
@@ -77,6 +86,7 @@ class Actions(Enum):
     LIST_SET  = auto()
     BROWSE_SET = auto()
     LABEL_SET = auto()
+    LABEL_PRESS = auto()
     NONE = auto()
     DEFAULT = auto()
 

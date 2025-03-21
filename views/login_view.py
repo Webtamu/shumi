@@ -1,7 +1,8 @@
 from PyQt6 import uic
-from PyQt6.QtWidgets import QPushButton, QLineEdit, QCheckBox
+from PyQt6.QtWidgets import QPushButton, QLineEdit, QCheckBox, QLabel
 
 from views.view import View
+from ui.labels import ClickableLabel
 from helpers.helpers import Items, Actions, ViewState
 
 class LoginView(View):
@@ -16,6 +17,7 @@ class LoginView(View):
             Items.PASSWORD        : { "instance": self.theWindow.findChild(QLineEdit, "inputPassword"),    "action": Actions.NONE },
             Items.STAY_SIGNED_IN  : { "instance": self.theWindow.findChild(QCheckBox, "boxStaySignedIn"),  "action": Actions.BOX_CHECK },
             Items.LOGIN           : { "instance": self.theWindow.findChild(QPushButton, "btnLogin"),       "action": Actions.BTN_PRESS },
+            Items.CREATE          : { "instance": ClickableLabel(self.theWindow.findChild(QLabel, "lblLogin")),  "action": Actions.LABEL_PRESS },
         }
  
             

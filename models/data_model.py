@@ -57,7 +57,6 @@ class DataModel(Model):
         #self.theDatabase.login(anEmail=theUsername, aPassword=thePassword)
 
         if self.theDatabase.isConnected():
-            print("Successfully connected to Supabase.")
             theUserInfo = self.theDatabase.getUserInfo()
             self.theUserID = theUserInfo.user.id
             aSignal.theNavTag = True

@@ -19,6 +19,7 @@ class Connections:
     def connectItem(anItem: QWidget, aSignal: Signal, aFunction: Callable) -> None:
         theConnectionMap: dict[Actions, Callable] = {
             Actions.BTN_PRESS: Connections.connectButton,
+            Actions.LABEL_PRESS: Connections.connectButton,
             Actions.BOX_CHECK: Connections.connectBox,
             Actions.NONE: lambda *args, **kwargs: None,  # No-op lambda
         }
