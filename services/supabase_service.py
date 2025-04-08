@@ -2,6 +2,7 @@ import supabase
 
 import os
 from dotenv import load_dotenv
+from typing import List, Dict
 
 from helpers.helpers import Colors
 
@@ -51,6 +52,23 @@ class SupabaseService:
     def logout(self) -> None:
         theResponse = self.theClient.auth.sign_out()
         print(f"{Colors.GREEN}Logged out successfully.{Colors.RESET}")
+
+    def upload_unsynced_sessions(self, aSessionRows: List[Dict]) -> List[str]:
+        """
+        Upload unsynced session rows to Supabase.
+        Returns a list of session_ids that were successfully uploaded.
+        """
+        synced_ids: List[str] = []
+
+        for row in aSessionRows:
+            try:
+                response = self.theClient.table("sync_test").insert(row).execute()
+                if response.data:
+                    synced_ids.append(row["session_id"])
+            except Exception as e:
+                print(f"{Colors.YELLOW}Failed to sync session {row.get('session_id')}: {e}{Colors.RESET}")
+
+        return synced_ids
 
         
 

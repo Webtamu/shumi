@@ -97,6 +97,22 @@ class DataModel(Model):
             self.addSession(self.theUserID, self.theThread.theStartTime, self.theThread.theStopTime)
             self.theThread = None
 
+    def syncToCloudTest(self) -> None:
+        """Sync local DuckDB unsynced sessions to Supabase and mark them as synced."""
+        unsynced_sessions = self.theLocalDatabase.collect_unsynced()
+
+        if not unsynced_sessions:
+            print(f"{Colors.YELLOW}No unsynced sessions to upload.{Colors.RESET}")
+            return
+
+        synced_ids = self.theDatabase.upload_unsynced_sessions(unsynced_sessions)
+
+        if synced_ids:
+            self.theLocalDatabase.mark_as_synced(synced_ids)
+            print(f"{Colors.GREEN}Synced {len(synced_ids)} session(s) to Supabase.{Colors.RESET}")
+        else:
+            print(f"{Colors.RED}Failed to sync any sessions.{Colors.RESET}")
+
             
         
             
