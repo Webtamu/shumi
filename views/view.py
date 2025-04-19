@@ -3,8 +3,7 @@ from PyQt6.QtCore import pyqtSignal
 from abc import abstractmethod
 
 from helpers.signals import Signal
-from helpers.helpers import Items, Actions, Colors, ViewState
-from helpers.logger import Logger
+from helpers.helpers import Items, Actions, ViewState
 
 class View(QWidget):  
     theNavSignal = pyqtSignal(Signal)
@@ -25,9 +24,6 @@ class View(QWidget):
 
         theInstance = theItemEntry["instance"]
         self.updateWidget(theInstance, aSignal)
-
-        if aSignal.theDebugTag:
-            Logger.info(f'Updated {aSignal.theItem} on {self.theViewState} to {aSignal.theState}')
         
         if aSignal.theNavTag:
             self.theNavSignal.emit(aSignal)
