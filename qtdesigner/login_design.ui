@@ -117,7 +117,7 @@
      </widget>
     </item>
     <item>
-     <widget class="QLabel" name="lblForgotLogin">
+     <widget class="QLabel" name="lblCantSignIn">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
         <horstretch>0</horstretch>

@@ -32,18 +32,20 @@ class StatusCodes(Enum):
 class Items(Enum):
     
     # LOGIN VIEW ITEMS
-    USERNAME = auto()
-    PASSWORD = auto()
-    STAY_SIGNED_IN = auto()
-    LOGIN = auto()
-    CREATE = auto()
+    LOGIN_USERNAME = auto()
+    LOGIN_PASSWORD = auto()
+    LOGIN_STAY_SIGNED_IN = auto()
+    LOGIN_LOGIN = auto()
+    LOGIN_CREATE_ACCOUNT = auto()
+    LOGIN_CANT_SIGN_IN = auto()
 
     # CREATE ACCOUNT VIEW ITEMS
-    USERNAME_CREATION = auto()         
-    PASSWORD_CREATION = auto()         
-    PASSWORD_CREATION_CONFIRM = auto()  
-    EMAIL_CREATION = auto()             
-    CREATE_ACCOUNT = auto()
+    CREATE_ACCOUNT_USERNAME = auto()         
+    CREATE_ACCOUNT_PASSWORD = auto()         
+    CREATE_ACCOUNT_PASSWORD_CONFIRM = auto()  
+    CREATE_ACCOUNT_EMAIL = auto()             
+    CREATE_ACCOUNT_CREATE = auto()
+    CREATE_ACCOUNT_ALREADY_HAVE_ACCOUNT = auto()
 
     ABOUT = auto()
     BEGIN_TAKE = auto()

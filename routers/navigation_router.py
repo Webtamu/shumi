@@ -38,7 +38,9 @@ class NavigationRouter(QObject):
             Items.START      : ViewState.SESSION,
             Items.STOP       : ViewState.SUMMARY,
             Items.BEGIN_TAKE : ViewState.HOME,
-            Items.LOGIN      : ViewState.HOME,
+            Items.LOGIN_LOGIN      : ViewState.HOME,
+            Items.LOGIN_CREATE_ACCOUNT     : ViewState.CREATE,
+            Items.CREATE_ACCOUNT_ALREADY_HAVE_ACCOUNT : ViewState.LOGIN,
         }
         theDestination = theNavMap.get(aSignal.theItem)
 

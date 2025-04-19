@@ -22,7 +22,7 @@ class DataModel(Model):
 
         self.theDataMap = {
             Items.SYNC       : {"state": False, "text": "Sync"},
-            Items.LOGIN      : {"state": False, "text": "Login"},
+            Items.LOGIN_LOGIN : {"state": False, "text": "Login"},
             Items.START      : {"state": False, "text": "Start Session"},
             Items.STOP       : {"state": False, "text": "Stop Session"},
             Items.TIMER      : {"state": False, "text": str(USER_DEFINED_TIME_PERIOD)},
@@ -30,7 +30,7 @@ class DataModel(Model):
 
         self.theActionMap = {
             Items.SYNC: self.syncToCloud,
-            Items.LOGIN: self.login,
+            Items.LOGIN_LOGIN : self.login,
             Items.START : self.beginTimer,
             Items.STOP  : self.stopTimer,
         }

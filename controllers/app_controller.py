@@ -33,10 +33,10 @@ class ApplicationController(Controller):
     # Reponse from View (Initial Trigger), sending to Model for processing
     def handleViewResponse(self, aSignal: Signal) -> None:
         # Messy... need to find way to refactor this
-        if aSignal.theItem == Items.LOGIN:
+        if aSignal.theItem == Items.LOGIN_LOGIN:
             loginView = self.theViewMap.get(ViewState.LOGIN)
-            theUsername = loginView.theItemMap[Items.USERNAME]["instance"].text()
-            thePassword = loginView.theItemMap[Items.PASSWORD]["instance"].text()
+            theUsername = loginView.theItemMap[Items.LOGIN_USERNAME]["instance"].text()
+            thePassword = loginView.theItemMap[Items.LOGIN_PASSWORD]["instance"].text()
             aSignal.theData = {"username": theUsername, "password": thePassword}
 
         for model in self.theModelList:
