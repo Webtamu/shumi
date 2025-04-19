@@ -19,7 +19,7 @@ class Timer(QThread):
         
 
     def run(self) -> None:
-        self.theStartTime = datetime.datetime.utcnow()
+        self.theStartTime = datetime.datetime.now(datetime.timezone.utc)
         i = self.theTimeLimit
         while i >= 0 and self.isRunning:
             self.theTimerSignal.emit(Signal(theText=str(i), 
@@ -39,6 +39,6 @@ class Timer(QThread):
 
 
     def stop(self):
-        self.theStopTime = datetime.datetime.utcnow()
+        self.theStopTime = datetime.datetime.now(datetime.timezone.utc)
         self.isRunning = False 
 

@@ -39,14 +39,21 @@ class DataModel(Model):
         self.theUserID: str = None
 
     def syncToCloud(self, aSignal: Signal) -> None:
-        theResponse = self.theDatabase.fetchData(aTableName='DuckDB')
-        print(json.dumps(theResponse.data, indent=4))
+        # Check if logged in
+        print(self.theLocalDatabase.fetch_data('session'))
 
-        self.theDatabase.logout()
 
-        theResponse = self.theDatabase.fetchData(aTableName='DuckDB')
-        print(theResponse.data)
+        theUnsyncedRows = self.theLocalDatabase.collect_unsynced()
+        syncedRows = self.theDatabase.upload_unsynced_sessions(theUnsyncedRows)
+        self.theLocalDatabase.mark_as_synced(syncedRows)
+
+        print(self.theLocalDatabase.fetch_data('session'))
+
+
+        
+
     
+
     def login(self, aSignal: Signal) -> None:
 
         theUsername = aSignal.theData.get("username")  

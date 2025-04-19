@@ -27,7 +27,7 @@ class DuckDBService:
             INSERT INTO session (user_id, timestamp_start, timestamp_stop, synced)
             VALUES (?, ?, ?, ?)
             """,
-            (aUserID, aStartTime, aStopTime, synced)
+            (aUserID, aStartTime.isoformat(), aStopTime.isoformat(), synced)
         )
 
 
@@ -38,7 +38,7 @@ class DuckDBService:
     def collect_unsynced(self) -> List[Dict[str, Any]]:
         """Return all unsynced session rows as list of dicts."""
         result = self.con.execute(
-            "SELECT * FROM session WHERE synced = FALSE"
+            "SELECT session_id, user_id, timestamp_start, timestamp_stop FROM session WHERE synced = FALSE"
         ).fetchall()
         cols = [desc[0] for desc in self.con.description]
         return [dict(zip(cols, row)) for row in result]
@@ -56,3 +56,13 @@ class DuckDBService:
             WHERE session_id IN ({placeholders})
         """
         self.con.execute(query, aSessionIDs)
+
+    def fetch_data(self, table_name: str) -> List[Dict[str, Any]]:
+        """Fetch all data from the given table as list of dictionaries."""
+        try:
+            result = self.con.execute(f"SELECT * FROM {table_name}").fetchall()
+            cols = [desc[0] for desc in self.con.description]
+            return [dict(zip(cols, row)) for row in result]
+        except Exception as e:
+            print(f"Data fetch failed: {e}")
+            return []
