@@ -7,6 +7,7 @@ from controllers.controllers import Controller
 from helpers.helpers import Actions, ViewState, Items
 from helpers.signals import Signal
 from helpers.connections import Connections
+from helpers.logger import Logger
 
 class ApplicationController(Controller):
     def __init__(self, aModelList: list[Model], aViewList: list[View]) -> None:
@@ -43,7 +44,7 @@ class ApplicationController(Controller):
             if model.canHandle(aSignal):
                 model.updateModel(aSignal)
                 return
-        print("CANT HANDLE REQUEST") # TODO: make this a status or something later
+        Logger.error("CANT HANDLE REQUEST") # TODO: make this a status or something later
 
     # Response from Model (Compute Response), sending to View for presentation
     def handleModelResponse(self, aSignal: Signal) -> None:

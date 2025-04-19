@@ -1,7 +1,7 @@
 from models.models import Model
 from helpers.signals import Signal
-from helpers.helpers import Items, Colors
-
+from helpers.helpers import Items
+from helpers.logger import Logger
 
 class ApplicationModel(Model):
     '''
@@ -21,7 +21,7 @@ class ApplicationModel(Model):
             Items.CONTACT    : {"state": False, "text": "Contact Us", "nav": False},
             Items.ABOUT      : {"state": False, "text": "About", "nav": False},
             Items.BEGIN_TAKE : {"state": False, "text": "Begin Take", "nav": True},
-            Items.LOGIN_CREATE_ACCOUNT  : {"state": False, "text": "Create Account", "nav": True},
+            Items.LOGIN_CREATE_ACCOUNT  : {"state": False, "text": "Create account", "nav": True},
             Items.CREATE_ACCOUNT_ALREADY_HAVE_ACCOUNT : {"state": False, "text": "Already have an account? Sign in", "nav": True},
         }
 
@@ -46,7 +46,7 @@ class ApplicationModel(Model):
         aSignal.theNavTag = theItemEntry["nav"]
 
         if aSignal.theDebugTag:
-            print(f"{Colors.CYAN}{self.theModelType} Model Handled:{Colors.RESET}", aSignal)
+            Logger.info(f'{self.theModelType} Model Handled: {aSignal}')
         
         self.theModelSignal.emit(aSignal)
 

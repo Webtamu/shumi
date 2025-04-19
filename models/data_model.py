@@ -4,7 +4,8 @@ from services.duckdb_service import DuckDBService
 from services.supabase_service import SupabaseService
 from models.models import Model
 from helpers.signals import Signal
-from helpers.helpers import Items, Colors
+from helpers.helpers import Items
+from helpers.logger import Logger
 from utils.timer import Timer
 
 USER_DEFINED_TIME_PERIOD = 10
@@ -40,19 +41,15 @@ class DataModel(Model):
 
     def syncToCloud(self, aSignal: Signal) -> None:
         # Check if logged in
-        print(self.theLocalDatabase.fetch_data('session'))
+        Logger.debug(self.theLocalDatabase.fetch_data('session'))
 
 
         theUnsyncedRows = self.theLocalDatabase.collect_unsynced()
         syncedRows = self.theDatabase.upload_unsynced_sessions(theUnsyncedRows)
         self.theLocalDatabase.mark_as_synced(syncedRows)
 
-        print(self.theLocalDatabase.fetch_data('session'))
+        Logger.debug(self.theLocalDatabase.fetch_data('session'))
 
-
-        
-
-    
 
     def login(self, aSignal: Signal) -> None:
 
@@ -79,7 +76,8 @@ class DataModel(Model):
             aSignal.theState = theItemEntry["state"]
    
         if aSignal.theDebugTag:
-            print(f"{Colors.CYAN}{self.theModelType} Model Handled:{Colors.RESET}", aSignal)
+            Logger.info(f'{self.theModelType} Model Handled: {aSignal}')
+        
 
         self.theModelSignal.emit(aSignal)
 
@@ -109,16 +107,16 @@ class DataModel(Model):
         unsynced_sessions = self.theLocalDatabase.collect_unsynced()
 
         if not unsynced_sessions:
-            print(f"{Colors.YELLOW}No unsynced sessions to upload.{Colors.RESET}")
+            Logger.info(f'No unsynced sessions to upload.')
             return
 
         synced_ids = self.theDatabase.upload_unsynced_sessions(unsynced_sessions)
 
         if synced_ids:
             self.theLocalDatabase.mark_as_synced(synced_ids)
-            print(f"{Colors.GREEN}Synced {len(synced_ids)} session(s) to Supabase.{Colors.RESET}")
+            Logger.info(f'Synced {len(synced_ids)} session(s) to Supabase.')
         else:
-            print(f"{Colors.RED}Failed to sync any sessions.{Colors.RESET}")
+            Logger.error(f"Failed to sync any sessions.")
 
             
         

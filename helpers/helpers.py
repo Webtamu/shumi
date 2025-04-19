@@ -66,8 +66,6 @@ class Items(Enum):
     TIME = auto()
     TIMER = auto()
     
-
-
 class ViewState(Enum):
     
     HOME = auto()

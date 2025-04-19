@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 from typing import List, Dict
 
 from helpers.helpers import Colors
+from helpers.logger import Logger
 
 class SupabaseService:
     def __init__(self) -> None:
@@ -23,7 +24,7 @@ class SupabaseService:
             response = self.theClient.table('DuckDB').select("*").limit(1).execute()
             return response.data         
         except Exception as e:
-            print(f"Supabase connection test failed: {e}")
+            Logger.error(f"Supabase connection test failed: {e}")
             return False
     
     def fetchData(self, aTableName: str) -> dict:
@@ -31,7 +32,7 @@ class SupabaseService:
             theResponse = self.theClient.table(aTableName).select("*").execute()
             return theResponse
         except Exception as e:
-            print(f"Data fetch failed: {e}")
+            Logger.error(f"Data fetch failed: {e}")
     
     def login(self, anEmail: str, aPassword: str) -> None:
         try:
@@ -41,17 +42,17 @@ class SupabaseService:
                     "password": aPassword
                 }
             )
-            print(f"{Colors.GREEN}Login successful.{Colors.RESET}")
+            Logger.info(f"Login successful.")
             self.theClient.auth.set_session(theResponse.session.access_token, theResponse.session.refresh_token)
         except Exception as e:
-            print(f"{Colors.RED}Login failed: {e}{Colors.RESET}") 
+            Logger.error(f"Login failed: {e}") 
     
     def getUserInfo(self) -> str:
         return self.theClient.auth.get_user()
 
     def logout(self) -> None:
         theResponse = self.theClient.auth.sign_out()
-        print(f"{Colors.GREEN}Logged out successfully.{Colors.RESET}")
+        Logger.info(f"Logged out successfully.")
 
     def upload_unsynced_sessions(self, aSessionRows: List[Dict]) -> List[str]:
         """
@@ -68,7 +69,7 @@ class SupabaseService:
                 if response.data:
                     synced_ids.append(row["session_id"])
             except Exception as e:
-                print(f"{Colors.YELLOW}Failed to sync session {row.get('session_id')}: {e}{Colors.RESET}")
+                Logger.error(f"Failed to sync session {row.get('session_id')}: {e}")
 
         return synced_ids
 

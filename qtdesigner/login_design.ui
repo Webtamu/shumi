@@ -141,7 +141,7 @@
        </sizepolicy>
       </property>
       <property name="text">
-       <string>Create Account</string>
+       <string>Create account</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>

@@ -3,6 +3,8 @@ import os
 from helpers.helpers import Colors
 from typing import List, Dict, Any
 
+from helpers.logger import Logger
+
 class DuckDBService:
     def __init__(self, db_path: str = "local_data.duckdb"):
         """Initialize DuckDB connection."""
@@ -33,7 +35,7 @@ class DuckDBService:
 
         result = self.con.execute("SELECT * FROM session").fetchall()
         for row in result:
-            print(row)
+            Logger.debug(row)
 
     def collect_unsynced(self) -> List[Dict[str, Any]]:
         """Return all unsynced session rows as list of dicts."""
@@ -64,5 +66,5 @@ class DuckDBService:
             cols = [desc[0] for desc in self.con.description]
             return [dict(zip(cols, row)) for row in result]
         except Exception as e:
-            print(f"Data fetch failed: {e}")
+            Logger.error(f"Data fetch failed: {e}")
             return []

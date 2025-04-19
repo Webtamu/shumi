@@ -3,7 +3,8 @@ from PyQt6.QtCore import QObject
 
 from views.view import View  
 from helpers.signals import Signal
-from helpers.helpers import ViewState, Items, Colors
+from helpers.helpers import ViewState, Items
+from helpers.logger import Logger
 
 class NavigationRouter(QObject):
     def __init__(self) -> None:
@@ -48,7 +49,7 @@ class NavigationRouter(QObject):
             return
 
         if aSignal.theDebugTag and theDestination:
-            print(f"{Colors.BRIGHT_YELLOW}Navigating to {theDestination}...{Colors.RESET}")
+            Logger.info(f"Navigating to {theDestination}...")
 
         self.navigateTo(theDestination)
 

@@ -1,7 +1,7 @@
 from models.models import Model
 from helpers.signals import Signal
-from helpers.helpers import Items, Colors, ViewState
-
+from helpers.helpers import Items, ViewState
+from helpers.logger import Logger
 class PreferencesModel(Model):
     '''
     This class houses user preferences data, which needs to be saved and reloaded on app reload
@@ -21,7 +21,7 @@ class PreferencesModel(Model):
         self.theModelType = "Preferences"
 
     def __del__(self):
-        print("Writing preferences data to json!")
+        Logger.info("Writing preferences data to json!")
 
     # Update data store and notify controller
     def updateModel(self, aSignal: Signal) -> None:
@@ -36,7 +36,7 @@ class PreferencesModel(Model):
         aSignal.theSource = ViewState.ALL
 
         if aSignal.theDebugTag:
-            print(f"{Colors.CYAN}{self.theModelType} Model Handled:{Colors.RESET}", aSignal)
+            Logger.info(f'{self.theModelType} Model Handled: {aSignal}')
 
         self.theModelSignal.emit(aSignal)
 

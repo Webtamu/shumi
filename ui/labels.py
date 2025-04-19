@@ -115,9 +115,3 @@ class ClickableLabel(QLabel):
     def setSignal(self, aSignal):
         self.theSignal = aSignal
     
-    # Override show event to ensure proper positioning
-    def showEvent(self, event):
-        super().showEvent(event)
-        # Double check position when showing
-        self.setGeometry(self.original_rect)
-        self.move(self.parent_pos)

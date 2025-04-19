@@ -16,6 +16,8 @@ from views.summary_view import SummaryView
 from controllers.app_controller import ApplicationController
 from routers.navigation_router import NavigationRouter
 
+from helpers.logger import Logger
+
 class App(QApplication):
     def __init__(self, anArgs) -> None:
         super().__init__(anArgs)
@@ -33,4 +35,4 @@ class App(QApplication):
         self.theNavigationRouter.doShow()
 
     def __del__(self):
-        print("Closing Application, saving data!")
+        Logger.info("Closing Application, saving data!")
