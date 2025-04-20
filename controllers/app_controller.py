@@ -37,21 +37,15 @@ class ApplicationController(Controller):
         # Messy... need to find way to refactor this
         if aSignal.theItem == Items.LOGIN_LOGIN:
             theLoginView = self.theViewMap.get(ViewState.LOGIN)
-            theUsername = theLoginView.theItemMap[Items.LOGIN_USERNAME]["instance"].text()
-            thePassword = theLoginView.theItemMap[Items.LOGIN_PASSWORD]["instance"].text()
-            aSignal.theData = {"username": theUsername, "password": thePassword}
-
+            aSignal.theData = {"username": theLoginView.theItemMap[Items.LOGIN_USERNAME]["instance"].text(), 
+                               "password": theLoginView.theItemMap[Items.LOGIN_PASSWORD]["instance"].text()}
         elif aSignal.theItem == Items.CREATE_ACCOUNT_CREATE:
             theCreateView = self.theViewMap.get(ViewState.CREATE)
-            theDesiredUsername = theCreateView.theItemMap[Items.CREATE_ACCOUNT_USERNAME]["instance"].text()
-            theDesiredEmail = theCreateView.theItemMap[Items.CREATE_ACCOUNT_EMAIL]["instance"].text()
-            theDesiredPassword = theCreateView.theItemMap[Items.CREATE_ACCOUNT_PASSWORD]["instance"].text()
-            theDesiredPasswordConfirm = theCreateView.theItemMap[Items.CREATE_ACCOUNT_PASSWORD_CONFIRM]["instance"].text()
-            aSignal.theData = {"user": theDesiredUsername, 
-                               "email": theDesiredEmail, 
-                               "pass": theDesiredPassword, 
-                               "confirm_pass": theDesiredPasswordConfirm}
-
+            aSignal.theData = {"user": theCreateView.theItemMap[Items.CREATE_ACCOUNT_USERNAME]["instance"].text(), 
+                               "email": theCreateView.theItemMap[Items.CREATE_ACCOUNT_EMAIL]["instance"].text(), 
+                               "pass": theCreateView.theItemMap[Items.CREATE_ACCOUNT_PASSWORD]["instance"].text(), 
+                               "confirm_pass": theCreateView.theItemMap[Items.CREATE_ACCOUNT_PASSWORD_CONFIRM]["instance"].text()}
+        
         for model in self.theModelList:
             if model.canHandle(aSignal):
                 model.updateModel(aSignal)
@@ -63,7 +57,6 @@ class ApplicationController(Controller):
         if aSignal.theItem == Items.STOP:
             ...
             
-
         if aSignal.theSource == ViewState.ALL:
             for view in self.theViewMap.values():
                 view.updateView(aSignal)
