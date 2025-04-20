@@ -15,7 +15,7 @@ class CreateView(View):
         self.theItemMap = {
             Items.CREATE_ACCOUNT_USERNAME           : { "instance": self.theWindow.findChild(QLineEdit, "inputUsernameCreation"),    "action": Actions.NONE },
             Items.CREATE_ACCOUNT_PASSWORD           : { "instance": self.theWindow.findChild(QLineEdit, "inputPasswordCreation"),    "action": Actions.NONE },
-            Items.CREATE_ACCOUNT_PASSWORD_CONFIRM   : { "instance": self.theWindow.findChild(QLineEdit, "inputPasswordCreation"),    "action": Actions.NONE },
+            Items.CREATE_ACCOUNT_PASSWORD_CONFIRM   : { "instance": self.theWindow.findChild(QLineEdit, "inputPasswordCreationConfirm"),    "action": Actions.NONE },
             Items.CREATE_ACCOUNT_EMAIL              : { "instance": self.theWindow.findChild(QLineEdit, "inputEmailCreation"),       "action": Actions.NONE },
             Items.CREATE_ACCOUNT_CREATE               : { "instance": self.theWindow.findChild(QPushButton, "btnCreateAccount"),       "action": Actions.BTN_PRESS },
             Items.CREATE_ACCOUNT_ALREADY_HAVE_ACCOUNT : {"instance": ClickableLabel(self.theWindow.findChild(QLabel, "lblAlreadyHaveAccount")), "action": Actions.LABEL_PRESS},

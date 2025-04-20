@@ -27,6 +27,7 @@ class DataModel(Model):
             Items.START      : {"state": False, "text": "Start Session"},
             Items.STOP       : {"state": False, "text": "Stop Session"},
             Items.TIMER      : {"state": False, "text": str(USER_DEFINED_TIME_PERIOD)},
+            Items.CREATE_ACCOUNT_CREATE : {"state": False, "text": "Create Account"},
         }
 
         self.theActionMap = {
@@ -34,11 +35,12 @@ class DataModel(Model):
             Items.LOGIN_LOGIN : self.login,
             Items.START : self.beginTimer,
             Items.STOP  : self.stopTimer,
+            Items.CREATE_ACCOUNT_CREATE : self.createAccount,
         }
         
         self.theModelType = "Data"
         self.theUserID: str = None
-
+    
     def syncToCloud(self, aSignal: Signal) -> None:
         # Check if logged in
         Logger.debug(self.theLocalDatabase.fetch_data('session'))
@@ -50,6 +52,25 @@ class DataModel(Model):
 
         Logger.debug(self.theLocalDatabase.fetch_data('session'))
 
+    def createAccount(self, aSignal: Signal) -> None:
+        theUsername = aSignal.theData.get("user")
+        theEmail = aSignal.theData.get("email")
+        thePassword = aSignal.theData.get("pass")
+        thePasswordConfirm = aSignal.theData.get("confirm_pass")
+        
+        if not theUsername or not theEmail or not thePassword:
+            Logger.error("Account creation failed: Missing required fields")
+            return
+        
+        if thePassword != thePasswordConfirm:
+            Logger.error("Account creation failed: Passwords do not match")
+            return
+        
+        if "@" not in theEmail or "." not in theEmail:
+            Logger.error("Account creation failed: Invalid email format")
+            return
+        
+        self.theDatabase.createAccount(theEmail, thePassword, theUsername)
 
     def login(self, aSignal: Signal) -> None:
 

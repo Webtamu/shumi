@@ -33,12 +33,24 @@ class ApplicationController(Controller):
         
     # Reponse from View (Initial Trigger), sending to Model for processing
     def handleViewResponse(self, aSignal: Signal) -> None:
+
         # Messy... need to find way to refactor this
         if aSignal.theItem == Items.LOGIN_LOGIN:
-            loginView = self.theViewMap.get(ViewState.LOGIN)
-            theUsername = loginView.theItemMap[Items.LOGIN_USERNAME]["instance"].text()
-            thePassword = loginView.theItemMap[Items.LOGIN_PASSWORD]["instance"].text()
+            theLoginView = self.theViewMap.get(ViewState.LOGIN)
+            theUsername = theLoginView.theItemMap[Items.LOGIN_USERNAME]["instance"].text()
+            thePassword = theLoginView.theItemMap[Items.LOGIN_PASSWORD]["instance"].text()
             aSignal.theData = {"username": theUsername, "password": thePassword}
+
+        elif aSignal.theItem == Items.CREATE_ACCOUNT_CREATE:
+            theCreateView = self.theViewMap.get(ViewState.CREATE)
+            theDesiredUsername = theCreateView.theItemMap[Items.CREATE_ACCOUNT_USERNAME]["instance"].text()
+            theDesiredEmail = theCreateView.theItemMap[Items.CREATE_ACCOUNT_EMAIL]["instance"].text()
+            theDesiredPassword = theCreateView.theItemMap[Items.CREATE_ACCOUNT_PASSWORD]["instance"].text()
+            theDesiredPasswordConfirm = theCreateView.theItemMap[Items.CREATE_ACCOUNT_PASSWORD_CONFIRM]["instance"].text()
+            aSignal.theData = {"user": theDesiredUsername, 
+                               "email": theDesiredEmail, 
+                               "pass": theDesiredPassword, 
+                               "confirm_pass": theDesiredPasswordConfirm}
 
         for model in self.theModelList:
             if model.canHandle(aSignal):

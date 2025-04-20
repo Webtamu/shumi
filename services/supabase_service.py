@@ -34,6 +34,19 @@ class SupabaseService:
         except Exception as e:
             Logger.error(f"Data fetch failed: {e}")
     
+    def createAccount(self, anEmail: str, aPassword: str, aUsername: str) -> bool:
+        try:
+            theResponse = self.theClient.auth.sign_up({
+                "email": anEmail,
+                "password": aPassword
+            })
+            if theResponse.user and theResponse.user.id:
+                Logger.info(f"User registered successfully: {anEmail}")
+                return True
+        except Exception as e:
+            Logger.error(f"Account creation failed: {e}")
+        return False
+
     def login(self, anEmail: str, aPassword: str) -> None:
         try:
             theResponse = self.theClient.auth.sign_in_with_password(
