@@ -35,9 +35,7 @@ class DuckDBService:
             (user_id, start_time.isoformat(), stop_time.isoformat(), synced)
         )
 
-        result = self.con.execute("SELECT * FROM session").fetchall()
-        for row in result:
-            Logger.debug(row)
+        self.con.execute("SELECT * FROM session").fetchall()
 
     def collect_unsynced(self) -> List[Dict[str, Any]]:
         """Return all unsynced session rows as list of dicts."""
