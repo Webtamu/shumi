@@ -3,9 +3,7 @@ from ..views import View
 from .controllers import Controller
 from ..helpers import Logger, Connections, Signal, ViewState, Items
 
-from ..extractors.view_extractor import ViewExtractor
-from ..extractors.configs import ITEM_TO_ACTION_KEY
-
+from ..managers.extractor_manager import FIELD_EXTRACTION_MAP, ViewExtractor
 
 class ApplicationController(Controller):
     def __init__(self, model_list: list[Model], view_list: list[View]) -> None:
@@ -13,6 +11,7 @@ class ApplicationController(Controller):
 
         self.model_list: list[Model] = model_list
         self.view_map: dict[ViewState, View] = {}
+        self.extractor = ViewExtractor(view_map=self.view_map)
 
         # Wiring up Model signals to Controller
         for model in self.model_list:
@@ -38,11 +37,8 @@ class ApplicationController(Controller):
     # Response from View (Initial Trigger), sending to Model for processing
     def handle_view_response(self, signal: Signal) -> None:
 
-        extractor = ViewExtractor(view_map=self.view_map)
-
-        action_key = ITEM_TO_ACTION_KEY.get(signal.item)
-        if action_key:
-            signal.data = extractor.extract(action_key)
+        if signal.item in FIELD_EXTRACTION_MAP:
+            signal.data = self.extractor.extract(signal.item)
 
         # Need to figure out why the below doesn't work
         #signal.data = extractor.extract_from_item(signal.item)
