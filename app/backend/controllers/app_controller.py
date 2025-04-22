@@ -13,7 +13,6 @@ class ApplicationController(Controller):
 
         self.model_list: list[Model] = model_list
         self.view_map: dict[ViewState, View] = {}
-        self.extractor = ViewExtractor(view_map=self.view_map)
 
         # Wiring up Model signals to Controller
         for model in self.model_list:
@@ -39,7 +38,15 @@ class ApplicationController(Controller):
     # Response from View (Initial Trigger), sending to Model for processing
     def handle_view_response(self, signal: Signal) -> None:
 
-        signal.data = self.extractor.extract_from_item(signal.item)
+        extractor = ViewExtractor(view_map=self.view_map)
+
+        action_key = ITEM_TO_ACTION_KEY.get(signal.item)
+        if action_key:
+            signal.data = extractor.extract(action_key)
+
+        # Need to figure out why the below doesn't work
+        #signal.data = extractor.extract_from_item(signal.item)
+
 
         for model in self.model_list:
             if model.can_handle(signal):

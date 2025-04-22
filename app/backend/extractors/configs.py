@@ -21,5 +21,5 @@ FIELD_EXTRACTION_MAP = {
 
 ITEM_TO_ACTION_KEY = {
     Items.LOGIN_LOGIN: "login",
-    Items.CREATE_ACCOUNT_CREATE: "create_account"
+    Items.CREATE_ACCOUNT_CREATE: "create_account",
 }
