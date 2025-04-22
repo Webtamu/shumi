@@ -5,52 +5,49 @@ from helpers.helpers import Colors
 
 
 class Logger:
-    _logger = None
+    instance = None
 
     @classmethod
-    def _get_logger(cls):
-        """Get or initialize the logger instance."""
-        if cls._logger is None:
-            # Create logger
-            cls._logger = logging.getLogger('app')
-            cls._logger.setLevel(logging.DEBUG)
+    def get_logger(self):
+        if self.instance is None:
+            # Create singleton logger
+            self.instance = logging.getLogger('app')
+            self.instance.setLevel(logging.DEBUG)
 
-            # Create console handler with a formatter
             handler = logging.StreamHandler(sys.stdout)
             formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s',
                                           datefmt='%Y-%m-%d %H:%M:%S')
             handler.setFormatter(formatter)
-            cls._logger.addHandler(handler)
 
-            # Prevent log propagation to avoid duplicate logs
-            cls._logger.propagate = False
+            self.instance.addHandler(handler)
+            self.instance.propagate = False
 
-        return cls._logger
+        return self.instance
 
     def __str__(self):
         return self.value
 
     @classmethod
-    def debug(cls, message):
+    def debug(self, message):
         """Log a blue debug message."""
-        cls._get_logger().debug(f"{Colors.BLUE}{message}{Colors.RESET}")
+        self.get_logger().debug(f"{Colors.BLUE}{message}{Colors.RESET}")
 
     @classmethod
-    def info(cls, message):
+    def info(self, message):
         """Log a green info message."""
-        cls._get_logger().info(f"{Colors.GREEN}{message}{Colors.RESET}")
+        self.get_logger().info(f"{Colors.GREEN}{message}{Colors.RESET}")
 
     @classmethod
-    def warning(cls, message):
+    def warning(self, message):
         """Log a yellow warning message."""
-        cls._get_logger().warning(f"{Colors.YELLOW}{message}{Colors.RESET}")
+        self.get_logger().warning(f"{Colors.YELLOW}{message}{Colors.RESET}")
 
     @classmethod
-    def error(cls, message):
+    def error(self, message):
         """Log a red error message."""
-        cls._get_logger().error(f"{Colors.RED}{message}{Colors.RESET}")
+        self.get_logger().error(f"{Colors.RED}{message}{Colors.RESET}")
 
     @classmethod
-    def critical(cls, message):
+    def critical(self, message):
         """Log a magenta critical message."""
-        cls._get_logger().critical(f"{Colors.MAGENTA}{message}{Colors.RESET}")
+        self.get_logger().critical(f"{Colors.MAGENTA}{message}{Colors.RESET}")

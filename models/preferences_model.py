@@ -15,22 +15,13 @@ class PreferencesModel(Model):
 
         # TEMP APP DATA STORE
         self.data_map = {
-            Items.DARK_MODE: {"state": False,
-                              "text": "Dark Mode"},
-
-            Items.LANGUAGE: {"state": False,
-                             "text": "Language"},
-
-            Items.TIME: {"state": False,
-                         "text": "Time"},
+            Items.DARK_MODE: {"state": False, "text": "Dark Mode"},
+            Items.LANGUAGE: {"state": False, "text": "Language"},
+            Items.TIME: {"state": False, "text": "Time"},
         }
 
         self.action_map = {}
         self.model_type = "Preferences"
-
-    def __del__(self):
-        """Log message when preferences data is being written to json."""
-        Logger.info("Writing preferences data to json!")
 
     def update_model(self, signal: Signal) -> None:
         """

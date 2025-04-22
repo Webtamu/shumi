@@ -14,49 +14,21 @@ class ApplicationModel(Model):
 
         # TEMP APP DATA STORE
         self.data_map = {
-            Items.HOME: {"state": False,
-                         "text": "Return Home",
-                         "nav": True},
-
-            Items.SETTINGS: {"state": False,
-                             "text": "Settings",
-                             "nav": True},
-
-            Items.PROFILE: {"state": False,
-                            "text": "Profile",
-                            "nav": True},
-
-            Items.STATS: {"state": False,
-                          "text": "Stats",
-                          "nav": True},
-
-            Items.REPORT_BUG: {"state": False,
-                               "text": "Report a Bug",
-                               "nav": False},
-
-            Items.CONTACT: {"state": False,
-                            "text": "Contact Us",
-                            "nav": False},
-
-            Items.ABOUT: {"state": False,
-                          "text": "About",
-                          "nav": False},
-
-            Items.BEGIN_TAKE: {"state": False,
-                               "text": "Begin Take",
-                               "nav": True},
-
-            Items.LOGIN_CREATE_ACCOUNT: {"state": False,
-                                         "text": "Create account",
-                                         "nav": True},
-
-            Items.CREATE_ACCOUNT_ALREADY_HAVE_ACCOUNT: {"state": False,
-                                                        "text": "Already have an account? Sign in",
+            Items.HOME: {"state": False, "text": "Return Home", "nav": True},
+            Items.SETTINGS: {"state": False, "text": "Settings", "nav": True},
+            Items.PROFILE: {"state": False, "text": "Profile", "nav": True},
+            Items.STATS: {"state": False, "text": "Stats", "nav": True},
+            Items.REPORT_BUG: {"state": False, "text": "Report a Bug", "nav": False},
+            Items.CONTACT: {"state": False, "text": "Contact Us", "nav": False},
+            Items.ABOUT: {"state": False, "text": "About", "nav": False},
+            Items.BEGIN_TAKE: {"state": False, "text": "Begin Take", "nav": True},
+            Items.LOGIN_CREATE_ACCOUNT: {"state": False, "text": "Create account", "nav": True},
+            Items.CREATE_ACCOUNT_ALREADY_HAVE_ACCOUNT: {"state": False, "text":
+                                                        "Already have an account? Sign in",
                                                         "nav": True},
         }
 
         self.action_map = {}
-        self.thread = None
         self.model_type = "Application"
 
     # Update data store and notify controller
