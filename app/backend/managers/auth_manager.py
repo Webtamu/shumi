@@ -29,7 +29,9 @@ class AuthManager:
         self.auth_service.create_account(email, password, username)
 
     def login(self, signal: Signal) -> None:
-        self.auth_service.login(email="testuser@gmail.com", password="testpass")
+        # Auth takes email for now, might need to make it interchangeable (login with both email and user)
+        self.auth_service.login(email=signal.data.get("username"), password=signal.data.get("password"))
+        #self.auth_service.login(email="testuser@gmail.com", password="testpass")
 
         if self.auth_service.is_connected():
             user_info = self.auth_service.get_user_info()

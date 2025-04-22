@@ -3,6 +3,9 @@ from ..views import View
 from .controllers import Controller
 from ..helpers import Logger, Connections, Signal, ViewState, Items
 
+from ..extractors.view_extractor import ViewExtractor
+from ..extractors.configs import ITEM_TO_ACTION_KEY
+
 
 class ApplicationController(Controller):
     def __init__(self, model_list: list[Model], view_list: list[View]) -> None:
@@ -34,20 +37,13 @@ class ApplicationController(Controller):
 
     # Response from View (Initial Trigger), sending to Model for processing
     def handle_view_response(self, signal: Signal) -> None:
-        if signal.item == Items.LOGIN_LOGIN:
-            login_view = self.view_map.get(ViewState.LOGIN)
-            signal.data = {
-                "username": login_view.item_map[Items.LOGIN_USERNAME]["instance"].text(),
-                "password": login_view.item_map[Items.LOGIN_PASSWORD]["instance"].text()
-            }
-        elif signal.item == Items.CREATE_ACCOUNT_CREATE:
-            create_view = self.view_map.get(ViewState.CREATE)
-            signal.data = {
-                "user": create_view.item_map[Items.CREATE_ACCOUNT_USERNAME]["instance"].text(),
-                "email": create_view.item_map[Items.CREATE_ACCOUNT_EMAIL]["instance"].text(),
-                "pass": create_view.item_map[Items.CREATE_ACCOUNT_PASSWORD]["instance"].text(),
-                "confirm_pass": create_view.item_map[Items.CREATE_ACCOUNT_PASSWORD_CONFIRM]["instance"].text()
-            }
+
+        extractor = ViewExtractor(view_map=self.view_map)
+
+        action_key = ITEM_TO_ACTION_KEY.get(signal.item)
+        
+        if action_key:
+            signal.data = extractor.extract(action_key)
 
         for model in self.model_list:
             if model.can_handle(signal):
