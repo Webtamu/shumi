@@ -1,0 +1,32 @@
+name: Flake8 Linting Check
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  lint:
+    name: Lint with flake8
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9.13'
+
+      - name: Install flake8
+        run: |
+          python -m pip install --upgrade pip
+          pip install flake8 flake8-pyproject
+
+      - name: Run flake8 linter
+        run: |
+          flake8 .
