@@ -1,56 +1,52 @@
 from PyQt6.QtWidgets import QStackedWidget
 from PyQt6.QtCore import QObject
 
-from views.view import View  
+from views.view import View
 from helpers.signals import Signal
 from helpers.helpers import ViewState, Items
 from helpers.logger import Logger
 
+
 class NavigationRouter(QObject):
     def __init__(self) -> None:
         super().__init__()
-        self.theStackedWidget = QStackedWidget()
-        self.theViewMap: dict[ViewState, int] = {}
-        self.theCounter = 0
-     
-    def addViews(self, aViewList: list[View]):
-        for view in aViewList:
-            self.theStackedWidget.addWidget(view.theWindow)
-            self.theViewMap[view.theViewState] = self.theCounter
-            self.theCounter += 1
-            view.theNavSignal.connect(self.handleNavigation)
+        self.stacked_widget = QStackedWidget()
+        self.view_map: dict[ViewState, int] = {}
+        self.counter = 0
 
-    def navigateTo(self, aViewState: ViewState):
-        if aViewState in self.theViewMap:
-            self.theStackedWidget.setCurrentIndex(self.theViewMap[aViewState])
+    def add_views(self, view_list: list[View]) -> None:
+        for view in view_list:
+            self.stacked_widget.addWidget(view.window)
+            self.view_map[view.view_state] = self.counter
+            self.counter += 1
+            view.nav_signal.connect(self.handle_navigation)
 
-    def getCurrentView(self):
-        return self.theStackedWidget.currentWidget()
+    def navigate_to(self, view_state: ViewState) -> None:
+        if view_state in self.view_map:
+            self.stacked_widget.setCurrentIndex(self.view_map[view_state])
 
-    def doShow(self):
-        self.theStackedWidget.show()
-    
-    def handleNavigation(self, aSignal: Signal) -> None:
-        theNavMap = {
-            Items.SETTINGS   : ViewState.SETTINGS,
-            Items.HOME       : ViewState.HOME,
-            Items.STATS      : ViewState.STATS,
-            Items.PROFILE    : ViewState.PROFILE,
-            Items.START      : ViewState.SESSION,
-            Items.STOP       : ViewState.SUMMARY,
-            Items.BEGIN_TAKE : ViewState.HOME,
-            Items.LOGIN_LOGIN      : ViewState.HOME,
-            Items.LOGIN_CREATE_ACCOUNT     : ViewState.CREATE,
-            Items.CREATE_ACCOUNT_ALREADY_HAVE_ACCOUNT : ViewState.LOGIN,
+    def get_current_view(self) -> View:
+        return self.stacked_widget.currentWidget()
+
+    def do_show(self) -> None:
+        self.stacked_widget.show()
+
+    def handle_navigation(self, signal: Signal) -> None:
+        nav_map = {
+            Items.SETTINGS: ViewState.SETTINGS,
+            Items.HOME: ViewState.HOME,
+            Items.STATS: ViewState.STATS,
+            Items.PROFILE: ViewState.PROFILE,
+            Items.START: ViewState.SESSION,
+            Items.STOP: ViewState.SUMMARY,
+            Items.BEGIN_TAKE: ViewState.HOME,
+            Items.LOGIN_LOGIN: ViewState.HOME,
+            Items.LOGIN_CREATE_ACCOUNT: ViewState.CREATE,
+            Items.CREATE_ACCOUNT_ALREADY_HAVE_ACCOUNT: ViewState.LOGIN,
         }
-        theDestination = theNavMap.get(aSignal.theItem)
+        destination = nav_map.get(signal.item)
 
-        if not theDestination:
+        if not destination:
             return
 
-        if aSignal.theDebugTag and theDestination:
-            Logger.info(f"Navigating to {theDestination}...")
-
-        self.navigateTo(theDestination)
-
-
+        self.navigate_to(destination)

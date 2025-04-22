@@ -3,22 +3,23 @@ from typing import Optional
 
 from helpers.helpers import Items, Actions, ViewState, Colors
 
+
 @dataclass
-class Signal():
-    theActionType: Actions = Actions.DEFAULT
-    theItem: Items = Items.DEFAULT
-    theState: Optional[bool] = None  
-    theText: Optional[str] = None
-    theData: dict = None
-    theSource: ViewState = ViewState.DEFAULT
-    theDebugTag: bool = True
-    theNavTag: bool = False
+class Signal:
+    action: Actions = Actions.DEFAULT
+    item: Items = Items.DEFAULT
+    state: Optional[bool] = None
+    text: Optional[str] = None
+    data: dict = None
+    source: ViewState = ViewState.DEFAULT
+    debug: bool = True
+    nav: bool = False
 
     def __str__(self):
-        return (f"ActionType={Colors.CYAN}{self.theActionType}{Colors.RESET}, "
-                f"Item={Colors.CYAN}{self.theItem}{Colors.RESET}, "
-                f"State={Colors.CYAN}{self.theState}{Colors.RESET}, "
-                f"Text={Colors.CYAN}'{self.theText}'{Colors.RESET}, "
-                f"Data={Colors.CYAN}'{self.theData}'{Colors.RESET}, "
-                f"Source={Colors.CYAN}{self.theSource}{Colors.RESET}, "
-                f"Nav={Colors.CYAN}{self.theNavTag}{Colors.RESET}")  
+        return (f"ActionType={Colors.CYAN}{self.action}{Colors.RESET}, "
+                f"Item={Colors.CYAN}{self.item}{Colors.RESET}, "
+                f"State={Colors.CYAN}{self.state}{Colors.RESET}, "
+                f"Text={Colors.CYAN}'{self.text}'{Colors.RESET}, "
+                f"Data={Colors.CYAN}'{self.data}'{Colors.RESET}, "
+                f"Source={Colors.CYAN}{self.source}{Colors.RESET}, "
+                f"Nav={Colors.CYAN}{self.nav}{Colors.RESET}")

@@ -11,134 +11,145 @@ from utils.timer import Timer
 USER_DEFINED_TIME_PERIOD = 10
 
 class DataModel(Model):
-    '''
-    This class houses table data, which is local storage that can be synced to cloud.
-    '''
+    """
+    This class houses table data, which is local storage that can be synced to the cloud.
+    """
 
     def __init__(self) -> None:
         super().__init__()
-        
-        self.theDatabase = SupabaseService()
-        self.theLocalDatabase = DuckDBService()
 
-        self.theDataMap = {
-            Items.SYNC       : {"state": False, "text": "Sync"},
-            Items.LOGIN_LOGIN : {"state": False, "text": "Login"},
-            Items.START      : {"state": False, "text": "Start Session"},
-            Items.STOP       : {"state": False, "text": "Stop Session"},
-            Items.TIMER      : {"state": False, "text": str(USER_DEFINED_TIME_PERIOD)},
-            Items.CREATE_ACCOUNT_CREATE : {"state": False, "text": "Create Account"},
+        self.database = SupabaseService()
+        self.local_database = DuckDBService()
+
+        self.data_map = {
+            Items.SYNC: {"state": False, "text": "Sync"},
+            Items.LOGIN_LOGIN: {"state": False, "text": "Login"},
+            Items.START: {"state": False, "text": "Start Session"},
+            Items.STOP: {"state": False, "text": "Stop Session"},
+            Items.TIMER: {"state": False, "text": str(USER_DEFINED_TIME_PERIOD)},
+            Items.CREATE_ACCOUNT_CREATE: {"state": False, "text": "Create Account"},
         }
 
-        self.theActionMap = {
-            Items.SYNC: self.syncToCloud,
-            Items.LOGIN_LOGIN : self.login,
-            Items.START : self.beginTimer,
-            Items.STOP  : self.stopTimer,
-            Items.CREATE_ACCOUNT_CREATE : self.createAccount,
+        self.action_map = {
+            Items.SYNC: self.sync_to_cloud,
+            Items.LOGIN_LOGIN: self.login,
+            Items.START: self.begin_timer,
+            Items.STOP: self.stop_timer,
+            Items.CREATE_ACCOUNT_CREATE: self.create_account,
         }
-        
-        self.theModelType = "Data"
-        self.theUserID: str = None
-    
-    def syncToCloud(self, aSignal: Signal) -> None:
-        # Check if logged in
-        Logger.debug(self.theLocalDatabase.fetch_data('session'))
 
+        self.model_type = "Data"
+        self.user_id: str = None
+        self.thread = None
 
-        theUnsyncedRows = self.theLocalDatabase.collect_unsynced()
-        syncedRows = self.theDatabase.upload_unsynced_sessions(theUnsyncedRows)
-        self.theLocalDatabase.mark_as_synced(syncedRows)
+    def sync_to_cloud(self, signal: Signal) -> None:
+        """
+        Sync unsynced data from the local database to the cloud.
+        """
+        Logger.debug(self.local_database.fetch_data('session'))
 
-        Logger.debug(self.theLocalDatabase.fetch_data('session'))
+        unsynced_rows = self.local_database.collect_unsynced()
+        synced_rows = self.database.upload_unsynced_sessions(unsynced_rows)
+        self.local_database.mark_as_synced(synced_rows)
 
-    def createAccount(self, aSignal: Signal) -> None:
-        theUsername = aSignal.theData.get("user")
-        theEmail = aSignal.theData.get("email")
-        thePassword = aSignal.theData.get("pass")
-        thePasswordConfirm = aSignal.theData.get("confirm_pass")
-        
-        if not theUsername or not theEmail or not thePassword:
+        Logger.debug(self.local_database.fetch_data('session'))
+
+    def create_account(self, signal: Signal) -> None:
+        """
+        Create a new account if the provided data is valid.
+        """
+        username = signal.data.get("user")
+        email = signal.data.get("email")
+        password = signal.data.get("pass")
+        password_confirm = signal.data.get("confirm_pass")
+
+        if not username or not email or not password:
             Logger.error("Account creation failed: Missing required fields")
             return
-        
-        if thePassword != thePasswordConfirm:
+
+        if password != password_confirm:
             Logger.error("Account creation failed: Passwords do not match")
             return
-        
-        if "@" not in theEmail or "." not in theEmail:
+
+        if "@" not in email or "." not in email:
             Logger.error("Account creation failed: Invalid email format")
             return
-        
-        self.theDatabase.createAccount(theEmail, thePassword, theUsername)
 
-    def login(self, aSignal: Signal) -> None:
+        self.database.create_account(email, password, username)
 
-        theUsername = aSignal.theData.get("username")  
-        thePassword = aSignal.theData.get("password")
+    def login(self, signal: Signal) -> None:
+        """
+        Handle the login process for the user.
+        """
+        username = signal.data.get("username")
+        password = signal.data.get("password")
 
         # TODO: Auto-login
-        self.theDatabase.login(anEmail="testuser@gmail.com", aPassword="testpass")
-        #self.theDatabase.login(anEmail=theUsername, aPassword=thePassword)
+        self.database.login(email="testuser@gmail.com", password="testpass")
+        #self.database.login(email=username, password=password)
 
-        if self.theDatabase.isConnected():
-            theUserInfo = self.theDatabase.getUserInfo()
-            self.theUserID = theUserInfo.user.id
-            aSignal.theNavTag = True
+        if self.database.is_connected():
+            user_info = self.database.get_user_info()
+            self.user_id = user_info.user.id
+            signal.nav = True
 
-    def updateModel(self, aSignal: Signal) -> None:
-        if theAction := self.theActionMap.get(aSignal.theItem):
-            theAction(aSignal)
+    def update_model(self, signal: Signal) -> None:
+        """
+        Update the model based on the given signal.
+        """
+        if action := self.action_map.get(signal.item):
+            action(signal)
 
-        theItemEntry = self.theDataMap[aSignal.theItem]
-        if aSignal.theItem != Items.TIMER:  # Don't overwrite dynamic text (like timer)
-            theItemEntry["state"] = not theItemEntry["state"]
-            aSignal.theText = theItemEntry["text"]
-            aSignal.theState = theItemEntry["state"]
-   
-        if aSignal.theDebugTag:
-            Logger.info(f'{self.theModelType} Model Handled: {aSignal}')
-        
+        item_entry = self.data_map[signal.item]
+        if signal.item != Items.TIMER:  # Don't overwrite dynamic text (like timer)
+            item_entry["state"] = not item_entry["state"]
+            signal.text = item_entry["text"]
+            signal.state = item_entry["state"]
 
-        self.theModelSignal.emit(aSignal)
+        if signal.debug:
+            Logger.info(f'{self.model_type} Model Handled: {signal}')
 
+        self.model_signal.emit(signal)
 
-    def addSession(self, aUserID, aStartTime, aStopTime) -> None:
-        # Get session info from supabase session
+    def add_session(self, user_id, start_time, stop_time) -> None:
+        """
+        Add a new session to the local database.
+        """
+        self.local_database.insert_data(user_id, start_time, stop_time)
 
-        self.theLocalDatabase.insert_data(aUserID, aStartTime, aStopTime)
+    def begin_timer(self, signal: Signal) -> None:
+        """
+        Begin the timer and start tracking the session.
+        """
+        signal.nav = True
+        self.thread = Timer(USER_DEFINED_TIME_PERIOD)
+        self.thread.timer_signal.connect(self.update_model)
+        self.thread.start()
 
-        return
+    def stop_timer(self, signal: Signal) -> None:
+        """
+        Stop the timer and save the session data.
+        """
+        signal.nav = True
+        if self.thread:
+            self.thread.stop()
+            self.add_session(self.user_id, self.thread.start_time, self.thread.stop_time)
+            self.thread = None
 
-    def beginTimer(self, aSignal: Signal) -> None:
-        aSignal.theNavTag = True
-        self.theThread = Timer(USER_DEFINED_TIME_PERIOD)
-        self.theThread.theTimerSignal.connect(self.updateModel)
-        self.theThread.start()
-    
-    def stopTimer(self, aSignal: Signal) -> None:
-        aSignal.theNavTag = True
-        if self.theThread:
-            self.theThread.stop()
-            self.addSession(self.theUserID, self.theThread.theStartTime, self.theThread.theStopTime)
-            self.theThread = None
-
-    def syncToCloudTest(self) -> None:
-        """Sync local DuckDB unsynced sessions to Supabase and mark them as synced."""
-        unsynced_sessions = self.theLocalDatabase.collect_unsynced()
+    def sync_to_cloud_test(self) -> None:
+        """
+        Sync local DuckDB unsynced sessions to Supabase and mark them as synced.
+        """
+        unsynced_sessions = self.local_database.collect_unsynced()
 
         if not unsynced_sessions:
             Logger.info(f'No unsynced sessions to upload.')
             return
 
-        synced_ids = self.theDatabase.upload_unsynced_sessions(unsynced_sessions)
+        synced_ids = self.database.upload_unsynced_sessions(unsynced_sessions)
 
         if synced_ids:
-            self.theLocalDatabase.mark_as_synced(synced_ids)
+            self.local_database.mark_as_synced(synced_ids)
             Logger.info(f'Synced {len(synced_ids)} session(s) to Supabase.')
         else:
             Logger.error(f"Failed to sync any sessions.")
-
-            
-        
-            

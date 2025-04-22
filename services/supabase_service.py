@@ -1,5 +1,4 @@
 import supabase
-
 import os
 from dotenv import load_dotenv
 from typing import List, Dict
@@ -7,84 +6,81 @@ from typing import List, Dict
 from helpers.helpers import Colors
 from helpers.logger import Logger
 
+
 class SupabaseService:
     def __init__(self) -> None:
         load_dotenv()
 
-        theURL: str = os.getenv("SUPABASE_URL")
-        theKey: str = os.getenv("SUPABASE_KEY")
+        url: str = os.getenv("SUPABASE_URL")
+        key: str = os.getenv("SUPABASE_KEY")
 
-        if not theURL or not theKey:
+        if not url or not key:
             raise ValueError("Supabase URL or Key is missing in environment variables.")
 
-        self.theClient: supabase.Client = supabase.create_client(theURL, theKey)
+        self.client: supabase.Client = supabase.create_client(url, key)
 
-    def isConnected(self) -> bool:
+    def is_connected(self) -> bool:
         try:
-            response = self.theClient.table('DuckDB').select("*").limit(1).execute()
-            return response.data         
+            response = self.client.table('DuckDB').select("*").limit(1).execute()
+            return bool(response.data)
         except Exception as e:
             Logger.error(f"Supabase connection test failed: {e}")
             return False
-    
-    def fetchData(self, aTableName: str) -> dict:
+
+    def fetch_data(self, table_name: str) -> dict:
         try:
-            theResponse = self.theClient.table(aTableName).select("*").execute()
-            return theResponse
+            response = self.client.table(table_name).select("*").execute()
+            return response
         except Exception as e:
             Logger.error(f"Data fetch failed: {e}")
-    
-    def createAccount(self, anEmail: str, aPassword: str, aUsername: str) -> bool:
+            return {}
+
+    def create_account(self, email: str, password: str, username: str) -> bool:
         try:
-            theResponse = self.theClient.auth.sign_up({
-                "email": anEmail,
-                "password": aPassword
+            response = self.client.auth.sign_up({
+                "email": email,
+                "password": password
             })
-            if theResponse.user and theResponse.user.id:
-                Logger.info(f"User registered successfully: {anEmail}")
+            if response.user and response.user.id:
+                Logger.info(f"User registered successfully: {email}")
                 return True
         except Exception as e:
             Logger.error(f"Account creation failed: {e}")
         return False
 
-    def login(self, anEmail: str, aPassword: str) -> None:
+    def login(self, email: str, password: str) -> None:
         try:
-            theResponse = self.theClient.auth.sign_in_with_password(
-                {
-                    "email": anEmail,
-                    "password": aPassword
-                }
-            )
-            Logger.info(f"Login successful.")
-            self.theClient.auth.set_session(theResponse.session.access_token, theResponse.session.refresh_token)
+            response = self.client.auth.sign_in_with_password({
+                "email": email,
+                "password": password
+            })
+            Logger.info("Login successful.")
+            self.client.auth.set_session(response.session.access_token, response.session.refresh_token)
         except Exception as e:
-            Logger.error(f"Login failed: {e}") 
-    
-    def getUserInfo(self) -> str:
-        return self.theClient.auth.get_user()
+            Logger.error(f"Login failed: {e}")
+
+    def get_user_info(self) -> str:
+        return self.client.auth.get_user()
 
     def logout(self) -> None:
-        theResponse = self.theClient.auth.sign_out()
-        Logger.info(f"Logged out successfully.")
+        self.client.auth.sign_out()
+        Logger.info("Logged out successfully.")
 
-    def upload_unsynced_sessions(self, aSessionRows: List[Dict]) -> List[str]:
+    def upload_unsynced_sessions(self, session_rows: List[Dict]) -> List[str]:
         """
         Upload unsynced session rows to Supabase.
         Returns a list of session_ids that were successfully uploaded.
         """
         synced_ids: List[str] = []
 
-        for row in aSessionRows:
+        for row in session_rows:
             try:
                 row["timestamp_start"] = row["timestamp_start"].isoformat()
                 row["timestamp_stop"] = row["timestamp_stop"].isoformat()
-                response = self.theClient.table("sync_test").insert(row).execute()
+                response = self.client.table("sync_test").insert(row).execute()
                 if response.data:
                     synced_ids.append(row["session_id"])
             except Exception as e:
                 Logger.error(f"Failed to sync session {row.get('session_id')}: {e}")
 
         return synced_ids
-
-        
-

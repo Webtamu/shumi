@@ -2,42 +2,46 @@ from models.models import Model
 from helpers.signals import Signal
 from helpers.helpers import Items, ViewState
 from helpers.logger import Logger
+
+
 class PreferencesModel(Model):
-    '''
-    This class houses user preferences data, which needs to be saved and reloaded on app reload
-    '''
+    """
+    This class houses user preferences data, which needs to be saved and 
+    reloaded on app reload.
+    """
 
     def __init__(self) -> None:
         super().__init__()
 
         # TEMP APP DATA STORE
-        self.theDataMap = {
-            Items.DARK_MODE : { "state" : False, "text": "Dark Mode"},
-            Items.LANGUAGE  : { "state" : False, "text": "Language" },
-            Items.TIME      : { "state" : False, "text": "Time" }
+        self.data_map = {
+            Items.DARK_MODE: {"state": False, "text": "Dark Mode"},
+            Items.LANGUAGE: {"state": False, "text": "Language"},
+            Items.TIME: {"state": False, "text": "Time"},
         }
 
-        self.theActionMap = {}
-        self.theModelType = "Preferences"
+        self.action_map = {}
+        self.model_type = "Preferences"
 
     def __del__(self):
+        """Log message when preferences data is being written to json."""
         Logger.info("Writing preferences data to json!")
 
-    # Update data store and notify controller
-    def updateModel(self, aSignal: Signal) -> None:
-        if theAction := self.theActionMap.get(aSignal.theItem):
-            theAction()
+    def update_model(self, signal: Signal) -> None:
+        """
+        Update the model based on the provided signal and notify the controller.
+        """
+        if action := self.action_map.get(signal.item):
+            action()
 
-        theItemEntry = self.theDataMap[aSignal.theItem]
-        theItemEntry["state"] = not theItemEntry["state"]
+        item_entry = self.data_map[signal.item]
+        item_entry["state"] = not item_entry["state"]
 
-        aSignal.theText = theItemEntry["text"]
-        aSignal.theState = theItemEntry["state"]
-        aSignal.theSource = ViewState.ALL
+        signal.text = item_entry["text"]
+        signal.state = item_entry["state"]
+        signal.source = ViewState.ALL
 
-        if aSignal.theDebugTag:
-            Logger.info(f'{self.theModelType} Model Handled: {aSignal}')
+        if signal.debug:
+            Logger.info(f'{self.model_type} Model Handled: {signal}')
 
-        self.theModelSignal.emit(aSignal)
-
-
+        self.model_signal.emit(signal)

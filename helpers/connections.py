@@ -6,36 +6,36 @@ from ui.labels import ClickableLabel  # Import the ClickableLabel class
 
 class Connections:
     @staticmethod
-    def connectButton(aSignal: Signal, anItem: QWidget, aFunction: Callable) -> None:
-        anItem.clicked.connect(lambda _: aFunction(aSignal))
+    def connect_button(signal: Signal, widget: QWidget, function: Callable) -> None:
+        widget.clicked.connect(lambda _: function(signal))
     
     @staticmethod
-    def connectBox(aSignal: Signal, anItem: QWidget, aFunction: Callable) -> None:
-        anItem.stateChanged.connect(lambda _: aFunction(aSignal))
+    def connect_box(signal: Signal, widget: QWidget, function: Callable) -> None:
+        widget.stateChanged.connect(lambda _: function(signal))
     
     @staticmethod
-    def connectLabel(aSignal: Signal, anItem: ClickableLabel, aFunction: Callable) -> None:
+    def connect_label(signal: Signal, label: ClickableLabel, function: Callable) -> None:
         # For ClickableLabel, set the signal and connect its custom clicked signal
-        anItem.setSignal(aSignal)
-        anItem.clicked.connect(aFunction)  # ClickableLabel emits the Signal object directly
+        label.set_signal(signal)
+        label.clicked.connect(function)  # ClickableLabel emits the Signal object directly
     
     @staticmethod
-    def connectItem(anItem: QWidget, aSignal: Signal, aFunction: Callable) -> None:
+    def connect_item(widget: QWidget, signal: Signal, function: Callable) -> None:
         # Different connection methods based on item type and action type
-        if isinstance(anItem, ClickableLabel) and aSignal.theActionType == Actions.LABEL_PRESS:
-            Connections.connectLabel(aSignal=aSignal, anItem=anItem, aFunction=aFunction)
+        if isinstance(widget, ClickableLabel) and signal.action == Actions.LABEL_PRESS:
+            Connections.connect_label(signal=signal, label=widget, function=function)
             return
         
         # Use the standard connection map for other widget types
-        theConnectionMap: dict[Actions, Callable] = {
-            Actions.BTN_PRESS: Connections.connectButton,
-            Actions.LABEL_PRESS: Connections.connectButton,  # Still keep for backward compatibility
-            Actions.BOX_CHECK: Connections.connectBox,
+        connection_map: dict[Actions, Callable] = {
+            Actions.BTN_PRESS: Connections.connect_button,
+            Actions.LABEL_PRESS: Connections.connect_button,  # Still keep for backward compatibility
+            Actions.BOX_CHECK: Connections.connect_box,
             Actions.NONE: lambda *args, **kwargs: None,  # No-op lambda
         }
         
-        theActionType = aSignal.theActionType
-        if theActionType not in theConnectionMap:
-            raise ValueError(f"Action '{theActionType}' is not defined in connection map.")
+        action = signal.action
+        if action not in connection_map:
+            raise ValueError(f"Action '{action}' is not defined in connection map.")
         
-        theConnectionMap[theActionType](aSignal=aSignal, anItem=anItem, aFunction=aFunction)
+        connection_map[action](signal=signal, widget=widget, function=function)

@@ -17,22 +17,38 @@ from controllers.app_controller import ApplicationController
 from routers.navigation_router import NavigationRouter
 
 from helpers.logger import Logger
+from helpers.helpers import ViewState
 
 class App(QApplication):
-    def __init__(self, anArgs) -> None:
-        super().__init__(anArgs)
-        self.theModelList = [ApplicationModel(), PreferencesModel(), DataModel()]
-        self.theViewList = [LoginView(), CreateView(), HomeView(), SettingsView(), StatsView(), ProfileView(), SessionView(), SummaryView()]
-        self.theApplicationController = ApplicationController(self.theModelList, self.theViewList)
+    def __init__(self, args) -> None:
+        super().__init__(args)
+        self.model_list = [
+            ApplicationModel(),
+            PreferencesModel(),
+            DataModel()
+        ]
+        self.view_list = [
+            LoginView(),
+            CreateView(),
+            HomeView(),
+            SettingsView(),
+            StatsView(),
+            ProfileView(),
+            SessionView(),
+            SummaryView()
+        ]
+        self.application_controller = ApplicationController(
+            model_list=self.model_list,
+            view_list=self.view_list
+        )
 
-        self.theNavigationRouter = NavigationRouter()
-        self.initializeViews()
-        
+        self.navigation_router = NavigationRouter()
+        self.initialize_views()
 
-    def initializeViews(self):
-        self.theNavigationRouter.addViews(self.theViewList)
-        self.theNavigationRouter.theStackedWidget.setCurrentIndex(0)
-        self.theNavigationRouter.doShow()
+    def initialize_views(self):
+        self.navigation_router.add_views(self.view_list)
+        self.navigation_router.navigate_to(ViewState.LOGIN)
+        self.navigation_router.do_show()
 
     def __del__(self):
         Logger.info("Closing Application, saving data!")

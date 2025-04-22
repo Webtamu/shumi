@@ -5,59 +5,59 @@ from abc import abstractmethod
 from helpers.signals import Signal
 from helpers.helpers import Items, Actions, ViewState
 
-class View(QWidget):  
-    theNavSignal = pyqtSignal(Signal)
+
+class View(QWidget):
+    nav_signal = pyqtSignal(Signal)
 
     @abstractmethod
     def __init__(self) -> None:
-        self.theViewState = ViewState.DEFAULT
-        self.theWindow = None
-        super().__init__() 
+        self.view_state = ViewState.DEFAULT
+        self.window = None
+        self.item_map = {}
+        super().__init__()
 
-    def updateView(self, aSignal: Signal) -> None:
-        if aSignal.theItem == Items.DARK_MODE:
-            self.toggleDarkMode(aSignal)
+    def update_view(self, signal: Signal) -> None:
+        if signal.item == Items.DARK_MODE:
+            self.toggle_dark_mode(signal)
 
-        theItemEntry = self.theItemMap.get(aSignal.theItem)
-        if not theItemEntry:
-            return  # Early exit if item not found
+        item_entry = self.item_map.get(signal.item)
+        if not item_entry:
+            return
 
-        theInstance = theItemEntry["instance"]
-        self.updateWidget(theInstance, aSignal)
-        
-        if aSignal.theNavTag:
-            self.theNavSignal.emit(aSignal)
+        instance = item_entry["instance"]
+        self.update_widget(instance, signal)
 
+        if signal.nav:
+            self.nav_signal.emit(signal)
 
-    def updateWidget(self, anItem: QWidget, aSignal: Signal) -> None:
-        self.theActionMap = {
-            Actions.BTN_PRESS: self.updateButton,
-            Actions.BOX_CHECK: self.updateBox,
-            Actions.LABEL_SET: self.updateLabel
+    def update_widget(self, item: QWidget, signal: Signal) -> None:
+        self.action_map = {
+            Actions.BTN_PRESS: self.update_button,
+            Actions.BOX_CHECK: self.update_box,
+            Actions.LABEL_SET: self.update_label
         }
 
-        if theAction := self.theActionMap.get(aSignal.theActionType):
-            theAction(anItem, aSignal)
+        if action := self.action_map.get(signal.action):
+            action(item, signal)
 
-    def toggleDarkMode(self, aSignal: Signal) -> None:
-        if aSignal.theState: 
-            with open("resources/dark_mode.qss", "r") as file:
-                self.theWindow.setStyleSheet(file.read())
-        else:
-            with open("resources/light_mode.qss", "r") as file:
-                self.theWindow.setStyleSheet(file.read())
-    
-    def initializeStyle(self) -> None:
+    def toggle_dark_mode(self, signal: Signal) -> None:
+        stylesheet_path = (
+            "resources/dark_mode.qss" if signal.state else "resources/light_mode.qss"
+        )
+        with open(stylesheet_path, "r") as file:
+            self.window.setStyleSheet(file.read())
+
+    def initialize_style(self) -> None:
         with open("resources/light_mode.qss", "r") as file:
-                self.theWindow.setStyleSheet(file.read())
+            self.window.setStyleSheet(file.read())
 
-    def updateButton(self, anItem: QWidget, aSignal: Signal) -> None:
-        anItem.setChecked(aSignal.theState)
-        anItem.setText(aSignal.theText)
+    def update_button(self, item: QWidget, signal: Signal) -> None:
+        item.setChecked(signal.state)
+        item.setText(signal.text)
 
-    def updateBox(self, anItem: QWidget, aSignal: Signal) -> None:
-        anItem.setChecked(aSignal.theState)
-        anItem.setText(aSignal.theText)
+    def update_box(self, item: QWidget, signal: Signal) -> None:
+        item.setChecked(signal.state)
+        item.setText(signal.text)
 
-    def updateLabel(self, anItem: QWidget, aSignal: Signal) -> None:
-        anItem.setText(aSignal.theText)
+    def update_label(self, item: QWidget, signal: Signal) -> None:
+        item.setText(signal.text)

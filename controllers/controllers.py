@@ -9,15 +9,15 @@ from helpers.helpers import Items
 class Controller(QObject):
 
     @abstractmethod
-    def __init__(self, aModel: Model, aView: View) -> None:
+    def __init__(self, model: Model, view: View) -> None:
         super().__init__()
 
-    # Reponse from View (Initial Trigger), sending to Model for processing  
+    # Response from View (Initial Trigger), sending to Model for processing  
     @abstractmethod
-    def handleViewResponse(self, anItemName: Items) -> None:
+    def handle_view_response(self, item_name: Items) -> None:
         pass
 
     # Response from Model (Compute Response), sending to View for presentation
     @abstractmethod
-    def handleModelResponse(self, aSignal: Signal) -> None:
+    def handle_model_response(self, signal: Signal) -> None:
         pass

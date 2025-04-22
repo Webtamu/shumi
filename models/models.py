@@ -6,20 +6,29 @@ from helpers.helpers import Items
 from helpers.signals import Signal
 
 class Model(QObject):
+    """
+    Abstract base class for all models in the application.
+    Models handle data and notify controllers of changes via signals.
+    """
 
-    theModelSignal = pyqtSignal(Signal)
+    model_signal = pyqtSignal(Signal)
 
     @abstractmethod
     def __init__(self) -> None:
         super().__init__()
-        self.theDataMap = {}
-        self.theActionMap = {}
-        self.theModelType = None
+        self.data_map = {}
+        self.action_map = {}
+        self.model_type = None
 
-    def canHandle(self, aSignal: Signal) -> bool:
-        return (aSignal.theItem in self.theDataMap)
+    def can_handle(self, signal: Signal) -> bool:
+        """
+        Check if the model can handle the given signal.
+        """
+        return signal.item in self.data_map
 
-    # Update data store and notify controller
     @abstractmethod
-    def updateModel(self, aSignal: Signal) -> None:
+    def update_model(self, signal: Signal) -> None:
+        """
+        Update the model with the given signal.
+        """
         ...

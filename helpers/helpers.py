@@ -1,7 +1,7 @@
 from enum import Enum, auto
 
 class StatusCodes(Enum):
-
+    # Core-related error codes
     CORE_OK = 1000  
     CORE_INVALID_INPUT = 1001  
     CORE_DB_FAILURE = 1002  
@@ -10,18 +10,21 @@ class StatusCodes(Enum):
     CORE_DATA_SYNC_ERROR = 1005  
     CORE_PRACTICE_LOG_ERROR = 1006  
 
+    # Side-related error codes
     SIDE_PET_DEATH = 2000  
     SIDE_NOTIFICATION_FAILURE = 2001  
     SIDE_METRONOME_ERROR = 2002  
     SIDE_HOSTAGE_MODE_LOCK = 2003  
     SIDE_TIKTOK_REDIRECTION = 2004  
 
+    # Storage-related error codes
     STORAGE_SAVE_ERROR = 3000  
     STORAGE_LOAD_ERROR = 3001  
     STORAGE_CLOUD_SYNC_ERROR = 3002  
     STORAGE_EXPORT_ERROR = 3003  
     STORAGE_IMPORT_ERROR = 3004  
 
+    # Authentication-related error codes
     AUTH_LOGIN_FAILED = 4000  
     AUTH_PERMISSION_DENIED = 4001  
     AI_PET_UNRESPONSIVE = 4002  
@@ -30,7 +33,6 @@ class StatusCodes(Enum):
     SOCIAL_FRIEND_SYNC_ERROR = 4005
 
 class Items(Enum):
-    
     # LOGIN VIEW ITEMS
     LOGIN_USERNAME = auto()
     LOGIN_PASSWORD = auto()
@@ -65,9 +67,8 @@ class Items(Enum):
     SYNC = auto()
     TIME = auto()
     TIMER = auto()
-    
+
 class ViewState(Enum):
-    
     HOME = auto()
     LOGIN = auto()
     SETTINGS = auto()
@@ -80,10 +81,9 @@ class ViewState(Enum):
     DEFAULT = auto()
 
 class Actions(Enum):
-
     BTN_PRESS = auto()
     BOX_CHECK = auto()
-    LIST_SET  = auto()
+    LIST_SET = auto()
     BROWSE_SET = auto()
     LABEL_SET = auto()
     LABEL_PRESS = auto()
@@ -91,7 +91,6 @@ class Actions(Enum):
     DEFAULT = auto()
 
 class Colors(Enum):
-
     RESET = "\033[0m"
     YELLOW = "\033[33m"
     BRIGHT_YELLOW = "\033[93m"
