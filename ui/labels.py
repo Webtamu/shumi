@@ -10,15 +10,12 @@ class ClickableLabel(QLabel):
     def __init__(self, original_label: QLabel = None, signal: Signal = None):
         if not original_label:
             raise ValueError("Original label must be provided")
-        
         parent = original_label.parent()
         super().__init__(parent)
 
         self.theSignal = signal
         self.setCursor(Qt.CursorShape.PointingHandCursor)  # Change cursor to indicate clickable
-        
         self.layout = parent.layout() if parent and parent.layout() else None
-        
         # Copy properties from original label
         self._copy_label_properties(original_label)
 

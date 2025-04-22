@@ -3,7 +3,6 @@ import os
 from dotenv import load_dotenv
 from typing import List, Dict
 
-from helpers.helpers import Colors
 from helpers.logger import Logger
 
 
@@ -55,7 +54,8 @@ class SupabaseService:
                 "password": password
             })
             Logger.info("Login successful.")
-            self.client.auth.set_session(response.session.access_token, response.session.refresh_token)
+            self.client.auth.set_session(response.session.access_token,
+                                         response.session.refresh_token)
         except Exception as e:
             Logger.error(f"Login failed: {e}")
 

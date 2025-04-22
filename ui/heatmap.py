@@ -1,6 +1,5 @@
-from PyQt6.QtWidgets import QVBoxLayout, QWidget
-import pandas as pd
-import os
+from PyQt6.QtWidgets import QWidget
+
 
 class Heatmap(QWidget):
     def __init__(self) -> None:

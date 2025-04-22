@@ -1,5 +1,3 @@
-import json
-
 from services.duckdb_service import DuckDBService
 from services.supabase_service import SupabaseService
 from models.models import Model
@@ -10,9 +8,10 @@ from utils.timer import Timer
 
 USER_DEFINED_TIME_PERIOD = 10
 
+
 class DataModel(Model):
     """
-    This class houses table data, which is local storage that can be synced to the cloud.
+    This class houses local storage that can be synced to cloud.
     """
 
     def __init__(self) -> None:
@@ -22,12 +21,23 @@ class DataModel(Model):
         self.local_database = DuckDBService()
 
         self.data_map = {
-            Items.SYNC: {"state": False, "text": "Sync"},
-            Items.LOGIN_LOGIN: {"state": False, "text": "Login"},
-            Items.START: {"state": False, "text": "Start Session"},
-            Items.STOP: {"state": False, "text": "Stop Session"},
-            Items.TIMER: {"state": False, "text": str(USER_DEFINED_TIME_PERIOD)},
-            Items.CREATE_ACCOUNT_CREATE: {"state": False, "text": "Create Account"},
+            Items.SYNC: {"state": False,
+                         "text": "Sync"},
+
+            Items.LOGIN_LOGIN: {"state": False,
+                                "text": "Login"},
+
+            Items.START: {"state": False,
+                          "text": "Start Session"},
+
+            Items.STOP: {"state": False,
+                         "text": "Stop Session"},
+
+            Items.TIMER: {"state": False,
+                          "text": str(USER_DEFINED_TIME_PERIOD)},
+
+            Items.CREATE_ACCOUNT_CREATE: {"state": False,
+                                          "text": "Create account"},
         }
 
         self.action_map = {
@@ -81,12 +91,11 @@ class DataModel(Model):
         """
         Handle the login process for the user.
         """
-        username = signal.data.get("username")
-        password = signal.data.get("password")
-
+        # username = signal.data.get("username")
+        # password = signal.data.get("password")
+        # self.database.login(email=username, password=password)
         # TODO: Auto-login
         self.database.login(email="testuser@gmail.com", password="testpass")
-        #self.database.login(email=username, password=password)
 
         if self.database.is_connected():
             user_info = self.database.get_user_info()
@@ -101,7 +110,7 @@ class DataModel(Model):
             action(signal)
 
         item_entry = self.data_map[signal.item]
-        if signal.item != Items.TIMER:  # Don't overwrite dynamic text (like timer)
+        if signal.item != Items.TIMER:  # Don't overwrite dynamic text
             item_entry["state"] = not item_entry["state"]
             signal.text = item_entry["text"]
             signal.state = item_entry["state"]
@@ -133,17 +142,19 @@ class DataModel(Model):
         signal.nav = True
         if self.thread:
             self.thread.stop()
-            self.add_session(self.user_id, self.thread.start_time, self.thread.stop_time)
+            self.add_session(self.user_id,
+                             self.thread.start_time,
+                             self.thread.stop_time)
             self.thread = None
 
     def sync_to_cloud_test(self) -> None:
         """
-        Sync local DuckDB unsynced sessions to Supabase and mark them as synced.
+        Sync local DuckDB unsynced sessions to Supabase.
         """
         unsynced_sessions = self.local_database.collect_unsynced()
 
         if not unsynced_sessions:
-            Logger.info(f'No unsynced sessions to upload.')
+            Logger.info('No unsynced sessions to upload.')
             return
 
         synced_ids = self.database.upload_unsynced_sessions(unsynced_sessions)
@@ -152,4 +163,4 @@ class DataModel(Model):
             self.local_database.mark_as_synced(synced_ids)
             Logger.info(f'Synced {len(synced_ids)} session(s) to Supabase.')
         else:
-            Logger.error(f"Failed to sync any sessions.")
+            Logger.error('Failed to sync any sessions.')

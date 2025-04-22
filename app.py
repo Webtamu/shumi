@@ -19,6 +19,7 @@ from routers.navigation_router import NavigationRouter
 from helpers.logger import Logger
 from helpers.helpers import ViewState
 
+
 class App(QApplication):
     def __init__(self, args) -> None:
         super().__init__(args)

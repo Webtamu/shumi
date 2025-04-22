@@ -1,6 +1,4 @@
 import duckdb
-import os
-from helpers.helpers import Colors
 from typing import List, Dict, Any
 
 from helpers.logger import Logger
@@ -22,7 +20,12 @@ class DuckDBService:
             '''
         )
 
-    def insert_data(self, user_id: str, start_time: Any, stop_time: Any, synced: bool = False) -> None:
+    def insert_data(self,
+                    user_id: str,
+                    start_time: Any,
+                    stop_time: Any,
+                    synced: bool = False) -> None:
+
         """Insert data into local DuckDB."""
         self.con.execute(
             """

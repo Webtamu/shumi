@@ -1,10 +1,7 @@
-from PyQt6.QtWidgets import QWidget
-from typing import Callable
-
-from models.models import Model  
-from views.view import View  
+from models.models import Model
+from views.view import View
 from controllers.controllers import Controller
-from helpers.helpers import Actions, ViewState, Items
+from helpers.helpers import ViewState, Items
 from helpers.signals import Signal
 from helpers.connections import Connections
 from helpers.logger import Logger
@@ -30,11 +27,13 @@ class ApplicationController(Controller):
     def connect_items(self, view: View) -> None:
         for item_name, item_data in view.item_map.items():
             signal = Signal(
-                item=item_name, 
-                source=view.view_state, 
+                item=item_name,
+                source=view.view_state,
                 action=item_data["action"]
             )
-            Connections.connect_item(widget=item_data["instance"], signal=signal, function=self.handle_view_response)
+            Connections.connect_item(widget=item_data["instance"],
+                                     signal=signal,
+                                     function=self.handle_view_response)
 
     # Response from View (Initial Trigger), sending to Model for processing
     def handle_view_response(self, signal: Signal) -> None:
@@ -57,7 +56,7 @@ class ApplicationController(Controller):
             if model.can_handle(signal):
                 model.update_model(signal)
                 return
-        Logger.error(f"Cannot handle request: {signal.item}")  
+        Logger.error(f"Cannot handle request: {signal.item}")
 
     # Response from Model (Compute Response), sending to View for presentation
     def handle_model_response(self, signal: Signal) -> None:

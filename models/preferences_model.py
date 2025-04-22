@@ -6,7 +6,7 @@ from helpers.logger import Logger
 
 class PreferencesModel(Model):
     """
-    This class houses user preferences data, which needs to be saved and 
+    This class houses user preferences data, which needs to be saved and
     reloaded on app reload.
     """
 
@@ -15,9 +15,14 @@ class PreferencesModel(Model):
 
         # TEMP APP DATA STORE
         self.data_map = {
-            Items.DARK_MODE: {"state": False, "text": "Dark Mode"},
-            Items.LANGUAGE: {"state": False, "text": "Language"},
-            Items.TIME: {"state": False, "text": "Time"},
+            Items.DARK_MODE: {"state": False,
+                              "text": "Dark Mode"},
+
+            Items.LANGUAGE: {"state": False,
+                             "text": "Language"},
+
+            Items.TIME: {"state": False,
+                         "text": "Time"},
         }
 
         self.action_map = {}
@@ -29,7 +34,7 @@ class PreferencesModel(Model):
 
     def update_model(self, signal: Signal) -> None:
         """
-        Update the model based on the provided signal and notify the controller.
+        Update the model based on the provided signal and notify controller.
         """
         if action := self.action_map.get(signal.item):
             action()

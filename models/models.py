@@ -2,8 +2,8 @@ from PyQt6.QtCore import QObject
 from PyQt6.QtCore import pyqtSignal
 from abc import abstractmethod
 
-from helpers.helpers import Items
 from helpers.signals import Signal
+
 
 class Model(QObject):
     """

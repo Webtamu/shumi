@@ -4,7 +4,6 @@ from PyQt6.QtCore import QObject
 from views.view import View
 from helpers.signals import Signal
 from helpers.helpers import ViewState, Items
-from helpers.logger import Logger
 
 
 class NavigationRouter(QObject):
