@@ -1,4 +1,4 @@
-from ..helpers.enums import Items, ViewState 
+from ..helpers import Items, ViewState
 
 FIELD_EXTRACTION_MAP = {
     Items.LOGIN_LOGIN: {
@@ -19,23 +19,21 @@ FIELD_EXTRACTION_MAP = {
     }
 }
 
-class ViewExtractor:
+
+class ExtractorManager:
     def __init__(self, view_map):
         self.view_map = view_map
 
-
-    def extract(self, action):
-        config = FIELD_EXTRACTION_MAP.get(action)
-        
-        view = self.view_map.get(config["view"])
-        if not view:
-            raise ValueError(f"View not found for action: {action}")
-
+    def extract(self, item: Items) -> dict:
         extracted = {}
+        config = FIELD_EXTRACTION_MAP.get(item, None)
+        if not config:
+            return extracted
+
+        view = self.view_map.get(config["view"])
+
         for field_name, item_enum in config["fields"].items():
             widget = view.item_map[item_enum]["instance"]
             extracted[field_name] = widget.text()
 
         return extracted
-
-

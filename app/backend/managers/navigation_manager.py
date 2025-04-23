@@ -5,7 +5,7 @@ from ..views import View
 from ..helpers import Signal, ViewState, Items
 
 
-class NavigationRouter(QObject):
+class NavigationManager(QObject):
     def __init__(self) -> None:
         super().__init__()
         self.stacked_widget = QStackedWidget()

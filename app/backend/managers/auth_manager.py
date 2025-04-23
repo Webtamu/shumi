@@ -31,10 +31,9 @@ class AuthManager:
     def login(self, signal: Signal) -> None:
         # Auth takes email for now, might need to make it interchangeable (login with both email and user)
         self.auth_service.login(email=signal.data.get("username"), password=signal.data.get("password"))
-        #self.auth_service.login(email="testuser@gmail.com", password="testpass")
+        # self.auth_service.login(email="testuser@gmail.com", password="testpass")
 
         if self.auth_service.is_connected():
             user_info = self.auth_service.get_user_info()
-            # Update the context instead of local storage
             self.context.user_id = user_info.user.id
             signal.nav = True

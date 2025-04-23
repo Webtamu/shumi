@@ -32,7 +32,3 @@ class SyncManager:
         Sync cloud data to local DuckDB.
         """
         return
-
-
-
-

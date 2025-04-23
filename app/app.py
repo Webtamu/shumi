@@ -14,7 +14,7 @@ from .backend.views import (
 )
 
 from .backend.controllers.app_controller import ApplicationController
-from .backend.routers.navigation_router import NavigationRouter
+from .backend.managers.navigation_manager import NavigationManager
 
 from .backend.helpers.logger import Logger
 from .backend.helpers.enums import ViewState
@@ -43,13 +43,13 @@ class App(QApplication):
             view_list=self.view_list
         )
 
-        self.navigation_router = NavigationRouter()
+        self.navigation_manager = NavigationManager()
         self.initialize_views()
 
     def initialize_views(self):
-        self.navigation_router.add_views(self.view_list)
-        self.navigation_router.navigate_to(ViewState.LOGIN)
-        self.navigation_router.do_show()
+        self.navigation_manager.add_views(self.view_list)
+        self.navigation_manager.navigate_to(ViewState.LOGIN)
+        self.navigation_manager.do_show()
 
     def __del__(self):
         Logger.info("Closing Application, saving data!")
