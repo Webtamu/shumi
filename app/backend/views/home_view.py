@@ -1,5 +1,5 @@
 from PyQt6 import uic
-from PyQt6.QtWidgets import QPushButton
+from PyQt6.QtWidgets import QPushButton, QLabel
 
 from ..views import View
 from ..helpers import Items, Actions, ViewState
@@ -28,5 +28,9 @@ class HomeView(View):
             Items.STATS: {
                 "instance": self.window.findChild(QPushButton, "btnStats"),
                 "action": Actions.BTN_PRESS
+            },
+            Items.HOME_WELCOME: {
+                "instance": self.window.findChild(QLabel, "lblWelcome"),
+                "action": Actions.NONE
             },
         }

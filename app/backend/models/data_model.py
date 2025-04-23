@@ -2,7 +2,7 @@ from ..services import DuckDBService, SupabaseService
 from ..managers import ContextManager, SyncManager, SessionManager, AuthManager
 
 from .models import Model
-from ..helpers import Signal, Logger, Items
+from ..helpers import Signal, Logger, Items, Actions
 
 USER_DEFINED_TIME_PERIOD = 10
 
@@ -25,6 +25,7 @@ class DataModel(Model):
                                               callback=self.update_model,
                                               context=self.context_manager)
         self.auth_manager = AuthManager(auth_service=self.cloud_database,
+                                        callback=self.update_model,
                                         context=self.context_manager)
 
         self.data_map = {
@@ -34,6 +35,7 @@ class DataModel(Model):
             Items.STOP: {"state": False, "text": "Stop Session"},
             Items.TIMER: {"state": False, "text": str(USER_DEFINED_TIME_PERIOD)},
             Items.CREATE_ACCOUNT_CREATE: {"state": False, "text": "Create account"},
+            Items.HOME_WELCOME: {"state": False, "text": "Welcome, User - Let's practice some Instrument today!"},
         }
 
         self.action_map = {
@@ -54,7 +56,7 @@ class DataModel(Model):
             action(signal)
 
         item_entry = self.data_map[signal.item]
-        if signal.item != Items.TIMER:  # Don't overwrite dynamic text
+        if signal.action != Actions.LABEL_SET:  # Don't overwrite dynamic text
             item_entry["state"] = not item_entry["state"]
             signal.text = item_entry["text"]
             signal.state = item_entry["state"]

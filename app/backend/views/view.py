@@ -13,6 +13,11 @@ class View(QWidget):
         self.view_state = ViewState.DEFAULT
         self.window = None
         self.item_map = {}
+        self.action_map = {
+            Actions.BTN_PRESS: self.update_button,
+            Actions.BOX_CHECK: self.update_box,
+            Actions.LABEL_SET: self.update_label
+        }
         super().__init__()
 
     def update_view(self, signal: Signal) -> None:
@@ -23,21 +28,11 @@ class View(QWidget):
         if not item_entry:
             return
 
-        instance = item_entry["instance"]
-        self.update_widget(instance, signal)
+        if action := self.action_map.get(signal.action):
+            action(item_entry["instance"], signal)
 
         if signal.nav:
             self.nav_signal.emit(signal)
-
-    def update_widget(self, item: QWidget, signal: Signal) -> None:
-        self.action_map = {
-            Actions.BTN_PRESS: self.update_button,
-            Actions.BOX_CHECK: self.update_box,
-            Actions.LABEL_SET: self.update_label
-        }
-
-        if action := self.action_map.get(signal.action):
-            action(item, signal)
 
     def toggle_dark_mode(self, signal: Signal) -> None:
         stylesheet_path = (

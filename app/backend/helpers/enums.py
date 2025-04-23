@@ -51,6 +51,9 @@ class Items(Enum):
     CREATE_ACCOUNT_CREATE = auto()
     CREATE_ACCOUNT_ALREADY_HAVE_ACCOUNT = auto()
 
+    # HOME VIEW ITEMS
+    HOME_WELCOME = auto()
+
     ABOUT = auto()
     BEGIN_TAKE = auto()
     CONTACT = auto()
