@@ -86,4 +86,3 @@ class AuthManager:
                                 source=ViewState.PROFILE,
                             )
             self.callback(profile_email_signal)
-
