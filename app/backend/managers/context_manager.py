@@ -10,3 +10,4 @@ class ContextManager:
         if not hasattr(self, 'initialized'):
             self.initialized = True
             self.user_id = None
+            self.username = None

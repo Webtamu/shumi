@@ -29,23 +29,24 @@ class AuthManager:
             Logger.error("Account creation failed: Invalid email format")
             return
 
-        self.auth_service.create_account(email, password, username)
+        self.auth_service.create_account(email=email, password=password, username=username)
 
     def login(self, signal: Signal) -> None:
         # Auth takes email for now, might need to make it interchangeable (login with both email and user)
-        # self.auth_service.login(email=signal.data.get("username"), password=signal.data.get("password"))
-        self.auth_service.login(email="testuser@gmail.com", password="testpass")
+        self.auth_service.login(email=signal.data.get("username"), password=signal.data.get("password"))
+        # self.auth_service.login(email="testuser@gmail.com", password="testpass")
 
         if self.auth_service.is_connected():
             user_info = self.auth_service.get_user_info()
             self.context.user_id = user_info.user.id
+            self.context.username = user_info.user.user_metadata.get("full_name")
             signal.nav = True
 
-        # Need to callback and update dependent items, ducktape solution for now
-        welcome_signal = Signal(
-                            item=Items.HOME_WELCOME,
-                            text=f"Welcome, {self.context.user_id} - Let's practice some Instrument today!",
-                            action=Actions.LABEL_SET,
-                            source=ViewState.HOME,
-                        )
-        self.callback(welcome_signal)
+            # Need to callback and update dependent items, ducktape solution for now
+            welcome_signal = Signal(
+                                item=Items.HOME_WELCOME,
+                                text=f"Welcome, {self.context.username} - Let's practice some Instrument today!",
+                                action=Actions.LABEL_SET,
+                                source=ViewState.HOME,
+                            )
+            self.callback(welcome_signal)

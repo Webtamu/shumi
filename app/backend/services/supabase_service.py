@@ -38,7 +38,12 @@ class SupabaseService:
         try:
             response = self.client.auth.sign_up({
                 "email": email,
-                "password": password
+                "password": password,
+                "options": {
+                    "data": {
+                        "full_name": username
+                    }
+                }
             })
             if response.user and response.user.id:
                 Logger.info(f"User registered successfully: {email}")
