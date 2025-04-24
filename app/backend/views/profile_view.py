@@ -1,5 +1,5 @@
 from PyQt6 import uic
-from PyQt6.QtWidgets import QPushButton
+from PyQt6.QtWidgets import QPushButton, QLabel
 
 from ..views import View
 from ..helpers import Items, Actions, ViewState
@@ -28,5 +28,13 @@ class ProfileView(View):
             Items.STATS: {
                 "instance": self.window.findChild(QPushButton, "btnStats"),
                 "action": Actions.BTN_PRESS
+            },
+            Items.PROFILE_USERNAME: {
+                "instance": self.window.findChild(QLabel, "lblUsername"),
+                "action": Actions.NONE
+            },
+            Items.PROFILE_EMAIL: {
+                "instance": self.window.findChild(QLabel, "lblEmail"),
+                "action": Actions.NONE
             },
         }

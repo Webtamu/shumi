@@ -35,7 +35,13 @@ class DataModel(Model):
             Items.STOP: {"state": False, "text": "Stop Session"},
             Items.TIMER: {"state": False, "text": str(USER_DEFINED_TIME_PERIOD)},
             Items.CREATE_ACCOUNT_CREATE: {"state": False, "text": "Create account"},
-            Items.HOME_WELCOME: {"state": False, "text": "Welcome, User - Let's practice some Instrument today!"},
+            Items.HOME_WELCOME: {"state": False, "text": ""},
+            Items.HOME_CURRENT_STREAK: {"state": False, "text": ""},
+            Items.HOME_DAILY_AVERAGE: {"state": False, "text": ""},
+            Items.HOME_HIGHEST_STREAK: {"state": False, "text": ""},
+            Items.PROFILE_EMAIL: {"state": False, "text": ""},
+            Items.PROFILE_USERNAME: {"state": False, "text": ""},
+            Items.PROFILE_USERNAME: {"state": False, "text": ""},
         }
 
         self.action_map = {

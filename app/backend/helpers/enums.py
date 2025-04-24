@@ -53,6 +53,13 @@ class Items(Enum):
 
     # HOME VIEW ITEMS
     HOME_WELCOME = auto()
+    HOME_CURRENT_STREAK = auto()
+    HOME_HIGHEST_STREAK = auto()
+    HOME_DAILY_AVERAGE = auto()
+
+    # PROFILE VIEW ITEMS
+    PROFILE_USERNAME = auto()
+    PROFILE_EMAIL = auto()
 
     ABOUT = auto()
     BEGIN_TAKE = auto()

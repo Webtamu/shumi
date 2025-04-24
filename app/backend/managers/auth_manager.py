@@ -40,6 +40,7 @@ class AuthManager:
             user_info = self.auth_service.get_user_info()
             self.context.user_id = user_info.user.id
             self.context.username = user_info.user.user_metadata.get("full_name")
+            self.context.email = user_info.user.user_metadata.get("email")
             signal.nav = True
 
             # Need to callback and update dependent items, ducktape solution for now
@@ -50,3 +51,39 @@ class AuthManager:
                                 source=ViewState.HOME,
                             )
             self.callback(welcome_signal)
+            welcome_signal = Signal(
+                                item=Items.HOME_CURRENT_STREAK,
+                                text=f"Current Streak: {1} day",
+                                action=Actions.LABEL_SET,
+                                source=ViewState.HOME,
+                            )
+            self.callback(welcome_signal)
+            welcome_signal = Signal(
+                                item=Items.HOME_HIGHEST_STREAK,
+                                text=f"Highest Streak: {2} days",
+                                action=Actions.LABEL_SET,
+                                source=ViewState.HOME,
+                            )
+            self.callback(welcome_signal)
+            welcome_signal = Signal(
+                                item=Items.HOME_DAILY_AVERAGE,
+                                text=f"Daily Average: {3} hours",
+                                action=Actions.LABEL_SET,
+                                source=ViewState.HOME,
+                            )
+            self.callback(welcome_signal)
+            profile_username_signal = Signal(
+                                item=Items.PROFILE_USERNAME,
+                                text=f"{self.context.username}",
+                                action=Actions.LABEL_SET,
+                                source=ViewState.PROFILE,
+                            )
+            self.callback(profile_username_signal)
+            profile_email_signal = Signal(
+                                item=Items.PROFILE_EMAIL,
+                                text=f"{self.context.email}",
+                                action=Actions.LABEL_SET,
+                                source=ViewState.PROFILE,
+                            )
+            self.callback(profile_email_signal)
+

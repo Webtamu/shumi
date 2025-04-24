@@ -117,26 +117,26 @@
          </property>
          <layout class="QHBoxLayout" name="horizontalLayout_2">
           <item>
-           <widget class="QLabel" name="label">
+           <widget class="QLabel" name="lblCurrentStreak">
             <property name="frameShape">
              <enum>QFrame::NoFrame</enum>
             </property>
             <property name="text">
-             <string>Current Streak</string>
+             <string>Current Streak: 0</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QLabel" name="label_2">
+           <widget class="QLabel" name="lblHighestStreak">
             <property name="text">
-             <string>Personal Best</string>
+             <string>Highest Streak: 0</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QLabel" name="label_3">
+           <widget class="QLabel" name="lblDailyAverage">
             <property name="text">
-             <string>Daily Average</string>
+             <string>Daily Average: 0</string>
             </property>
            </widget>
           </item>

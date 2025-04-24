@@ -33,4 +33,16 @@ class HomeView(View):
                 "instance": self.window.findChild(QLabel, "lblWelcome"),
                 "action": Actions.NONE
             },
+            Items.HOME_CURRENT_STREAK: {
+                "instance": self.window.findChild(QLabel, "lblCurrentStreak"),
+                "action": Actions.NONE
+            },
+            Items.HOME_HIGHEST_STREAK: {
+                "instance": self.window.findChild(QLabel, "lblHighestStreak"),
+                "action": Actions.NONE
+            },
+            Items.HOME_DAILY_AVERAGE: {
+                "instance": self.window.findChild(QLabel, "lblDailyAverage"),
+                "action": Actions.NONE
+            },
         }

@@ -11,3 +11,4 @@ class ContextManager:
             self.initialized = True
             self.user_id = None
             self.username = None
+            self.email = None
