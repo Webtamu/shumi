@@ -1,8 +1,10 @@
+from PyQt6.QtCore import QSettings
 from ..helpers import Logger, Signal, Items, Actions, ViewState
 from ..services import SupabaseService
 from ..managers import ContextManager
 
 from typing import Callable
+import datetime
 
 
 class AuthManager:
@@ -31,16 +33,61 @@ class AuthManager:
 
         self.auth_service.create_account(email=email, password=password, username=username)
 
+    def save_auth_token(self, access_token: str, refresh_token: str) -> None:
+        settings = QSettings("Shumi", "Auth")
+        settings.setValue("access_token", access_token)
+        settings.setValue("refresh_token", refresh_token)
+        settings.setValue("last_login", datetime.datetime.now().isoformat())
+        Logger.info("Auth tokens saved successfully.")
+
+    def get_auth_token(self) -> dict:
+        settings = QSettings("Shumi", "Auth")
+        access_token = settings.value("access_token", defaultValue=None)
+        refresh_token = settings.value("refresh_token", defaultValue=None)
+        last_login = settings.value("last_login", defaultValue=None)
+
+        if all([access_token, refresh_token, last_login]):
+            return {
+                "access_token": access_token,
+                "refresh_token": refresh_token,
+                "last_login": last_login
+            }
+        else:
+            Logger.error("Auth tokens are missing or incomplete.")
+            return {}
+
+    def clean_auth_token(self) -> None:
+        settings = QSettings("Shumi", "Auth")
+        settings.remove("access_token")
+        settings.remove("refresh_token")
+        settings.remove("last_login")
+        Logger.info("Auth tokens cleaned successfully.")
+
     def login(self, signal: Signal) -> None:
         # Auth takes email for now, might need to make it interchangeable (login with both email and user)
-        self.auth_service.login(email=signal.data.get("username"), password=signal.data.get("password"))
-        # self.auth_service.login(email="testuser@gmail.com", password="testpass")
+        creds = self.get_auth_token()
+        if creds:
+            access_token = creds.get("access_token")
+            refresh_token = creds.get("refresh_token")
+            self.auth_service.client.auth.set_session(access_token, refresh_token)
+            Logger.info("Auto-signing in!")
+        else:
+            Logger.error("No previous auth tokens found, please log in with credentials.")
+            response = self.auth_service.login(email=signal.data.get("username"), password=signal.data.get("password"))
 
         if self.auth_service.is_connected():
             user_info = self.auth_service.get_user_info()
             self.context.user_id = user_info.user.id
             self.context.username = user_info.user.user_metadata.get("full_name")
             self.context.email = user_info.user.user_metadata.get("email")
+            stay_signed_in = signal.data.get("stay_signed_in")
+
+            if stay_signed_in:
+                self.save_auth_token(
+                    access_token=response.session.access_token,
+                    refresh_token=response.session.refresh_token
+                )
+
             signal.nav = True
 
             # Need to callback and update dependent items, ducktape solution for now

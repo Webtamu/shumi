@@ -4,17 +4,18 @@ FIELD_EXTRACTION_MAP = {
     Items.LOGIN_LOGIN: {
         "view": ViewState.LOGIN,
         "fields": {
-            "username": Items.LOGIN_USERNAME,
-            "password": Items.LOGIN_PASSWORD
+            "username": {"item": Items.LOGIN_USERNAME, "type": "text"},
+            "password": {"item": Items.LOGIN_PASSWORD,  "type": "text"},
+            "stay_signed_in": {"item": Items.LOGIN_STAY_SIGNED_IN, "type": "checkbox"}
         }
     },
     Items.CREATE_ACCOUNT_CREATE: {
         "view": ViewState.CREATE,
         "fields": {
-            "user": Items.CREATE_ACCOUNT_USERNAME,
-            "email": Items.CREATE_ACCOUNT_EMAIL,
-            "pass": Items.CREATE_ACCOUNT_PASSWORD,
-            "confirm_pass": Items.CREATE_ACCOUNT_PASSWORD_CONFIRM
+            "user": {"item": Items.CREATE_ACCOUNT_USERNAME, "type": "text"},
+            "email": {"item": Items.CREATE_ACCOUNT_EMAIL, "type": "text"},
+            "pass": {"item": Items.CREATE_ACCOUNT_PASSWORD, "type": "text"},
+            "confirm_pass": {"item": Items.CREATE_ACCOUNT_PASSWORD_CONFIRM, "type": "text"},
         }
     }
 }
@@ -32,8 +33,17 @@ class ExtractorManager:
 
         view = self.view_map.get(config["view"])
 
-        for field_name, item_enum in config["fields"].items():
+        for field_name, field_config in config["fields"].items():
+            item_enum = field_config["item"]
+            field_type = field_config["type"]
+
+            if item_enum not in view.item_map:
+                continue
+
             widget = view.item_map[item_enum]["instance"]
-            extracted[field_name] = widget.text()
+            if field_type == "text":
+                extracted[field_name] = widget.text()
+            elif field_type == "checkbox":
+                extracted[field_name] = widget.isChecked()
 
         return extracted

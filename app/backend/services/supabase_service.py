@@ -52,7 +52,7 @@ class SupabaseService:
             Logger.error(f"Account creation failed: {e}")
         return False
 
-    def login(self, email: str, password: str) -> None:
+    def login(self, email: str, password: str) -> dict:
         try:
             response = self.client.auth.sign_in_with_password({
                 "email": email,
@@ -61,6 +61,7 @@ class SupabaseService:
             Logger.info("Login successful.")
             self.client.auth.set_session(response.session.access_token,
                                          response.session.refresh_token)
+            return response
         except Exception as e:
             Logger.error(f"Login failed: {e}")
 
