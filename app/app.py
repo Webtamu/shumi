@@ -13,11 +13,11 @@ from .backend.views import (
     SummaryView,
 )
 
-from .backend.controllers.app_controller import ApplicationController
-from .backend.managers.navigation_manager import NavigationManager
+from .backend.controllers import ApplicationController
+from .backend.managers import NavigationManager
 
-from .backend.helpers.logger import Logger
-from .backend.helpers.enums import ViewState
+from .backend.helpers import Logger
+from .backend.helpers import ViewState
 
 
 class App(QApplication):
