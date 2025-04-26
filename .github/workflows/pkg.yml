@@ -46,7 +46,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip wheel
           pip install pytest pytest-qt
-          pip install -r requirements.txt
+          pip install -r actual.txt
     
       # Run tests using pytest instead of running the full app
       - name: Test with pytest
