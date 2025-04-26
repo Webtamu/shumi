@@ -9,18 +9,19 @@ USER_DEFINED_TIME_PERIOD = 10
 class SessionManager:
     def __init__(self, local_database: DuckDBService, callback: Callable, context: ContextManager):
         self.local_database = local_database
-        self.timer = None
         self.callback = callback
         self.context = context
+        self.timer = Timer(USER_DEFINED_TIME_PERIOD)
+        self.timer.timer_signal.connect(self.callback)
+        self.timer.start()
 
     def add_session(self, user_id, start_time, stop_time) -> None:
         self.local_database.insert_data(user_id, start_time, stop_time)
 
     def begin_timer(self, signal: Signal) -> None:
         signal.nav = True
-        self.timer = Timer(USER_DEFINED_TIME_PERIOD)
-        self.timer.timer_signal.connect(self.callback)
-        self.timer.start()
+        if self.timer:
+            self.timer.start_timer(USER_DEFINED_TIME_PERIOD)
 
     def stop_timer(self, signal: Signal) -> None:
         signal.nav = True
@@ -29,13 +30,12 @@ class SessionManager:
             self.add_session(self.context.user_id,
                              self.timer.start_time,
                              self.timer.stop_time)
-            self.timer = None
             streak = self.local_database.get_current_streak(self.context.user_id, "UTC")
             Logger.debug(f"Streak calculated as {streak}")
             welcome_signal = Signal(
-                                item=Items.HOME_CURRENT_STREAK,
-                                text=f"Current Streak: {streak} day",
-                                action=Actions.LABEL_SET,
-                                source=ViewState.HOME,
-                            )
+                item=Items.HOME_CURRENT_STREAK,
+                text=f"Current Streak: {streak} day",
+                action=Actions.LABEL_SET,
+                source=ViewState.HOME,
+            )
             self.callback(welcome_signal)
