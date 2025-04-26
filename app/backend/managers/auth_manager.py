@@ -15,7 +15,7 @@ class AuthManager:
         self.auth_service = auth_service
         self.context = context
         self.callback = callback
-        self.login(Signal())  # Attempt auto-login on initialization
+        #self.login(Signal())  # Attempt auto-login on initialization
 
     def create_account(self, signal: Signal) -> None:
         username = signal.data.get("user")
