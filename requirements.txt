@@ -6,3 +6,5 @@ python-dotenv
 flake8
 flake8-pyproject
 pytz
+pytest
+pytest-qt

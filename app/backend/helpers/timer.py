@@ -59,11 +59,11 @@ class Timer(QThread):
         self.stop_time = None
         self.wait_condition.wakeAll()  # Wake up run() if sleeping
         self.mutex.unlock()
-        
+
     def stop(self) -> None:
         self.mutex.lock()
         self.is_running = False
         self.mutex.unlock()
-        
+
         self.wait_condition.wakeAll()
         self.stop_time = datetime.datetime.now(datetime.timezone.utc)
