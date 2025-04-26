@@ -39,3 +39,14 @@ class LoginView(View):
                 "action": Actions.LABEL_PRESS
             },
         }
+
+        # REFACTOR
+        username_field = self.item_map[Items.LOGIN_USERNAME]["instance"]
+        password_field = self.item_map[Items.LOGIN_PASSWORD]["instance"]
+        login_button = self.item_map[Items.LOGIN_LOGIN]["instance"]
+
+        login_button.setDefault(True)
+
+        # Catch Enter key inside input fields
+        username_field.returnPressed.connect(login_button.click)
+        password_field.returnPressed.connect(login_button.click)
