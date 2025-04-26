@@ -2,7 +2,7 @@ from PyQt6.QtWidgets import QStackedWidget
 from PyQt6.QtCore import QObject
 
 from ..views import View
-from ..helpers import Signal, ViewState, Items, Logger
+from ..helpers import Signal, ViewState, Items
 
 
 class NavigationManager(QObject):

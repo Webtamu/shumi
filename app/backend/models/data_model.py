@@ -30,7 +30,7 @@ class DataModel(Model):
             Items.PROFILE_USERNAME: {"state": False, "text": ""},
             Items.PROFILE_LOGOUT: {"state": False, "text": "Logout"},
         }
-        
+
         self.model_type = "Data"
 
         self.local_database = DuckDBService()

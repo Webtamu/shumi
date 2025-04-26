@@ -59,7 +59,7 @@ class DuckDBService:
             WHERE session_id IN ({placeholders})
         """
         self.con.execute(query, session_ids)
-    
+
     def get_current_streak(self, user_id: str, timezone_str: str = 'UTC') -> int:
         """
         Calculate user's current daily streak based on their timezone.
