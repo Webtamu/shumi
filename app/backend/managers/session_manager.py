@@ -1,4 +1,4 @@
-from ..helpers import Timer, Signal
+from ..helpers import Timer, Signal, Items, Actions, ViewState, Logger
 from ..services import DuckDBService
 from ..managers import ContextManager
 from typing import Callable
@@ -30,3 +30,12 @@ class SessionManager:
                              self.timer.start_time,
                              self.timer.stop_time)
             self.timer = None
+            streak = self.local_database.get_current_streak(self.context.user_id, "UTC")
+            Logger.debug(f"Streak calculated as {streak}")
+            welcome_signal = Signal(
+                                item=Items.HOME_CURRENT_STREAK,
+                                text=f"Current Streak: {streak} day",
+                                action=Actions.LABEL_SET,
+                                source=ViewState.HOME,
+                            )
+            self.callback(welcome_signal)

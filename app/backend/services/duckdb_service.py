@@ -1,4 +1,6 @@
 import duckdb
+import pytz
+from datetime import datetime, timedelta
 from typing import List, Dict, Any
 
 from ..helpers import Logger
@@ -57,6 +59,49 @@ class DuckDBService:
             WHERE session_id IN ({placeholders})
         """
         self.con.execute(query, session_ids)
+    
+    def get_current_streak(self, user_id: str, timezone_str: str = 'UTC') -> int:
+        """
+        Calculate user's current daily streak based on their timezone.
+
+        Args:
+            user_id (str): The ID of the user.
+            timezone_str (str): Timezone like 'Asia/Tokyo', 'America/Los_Angeles'.
+
+        Returns:
+            int: Number of consecutive days user has activity including today.
+        """
+        try:
+            tz = pytz.timezone(timezone_str)
+
+            # Fetch all session start timestamps for the user
+            rows = self.con.execute(
+                """
+                SELECT timestamp_start FROM session
+                WHERE user_id = ?
+                ORDER BY timestamp_start DESC
+                """, (user_id,)
+            ).fetchall()
+
+            # Convert timestamps to dates in the user's time zone
+            date_set = set()
+            for row in rows:
+                utc_time = row[0].replace(tzinfo=pytz.utc)
+                local_date = utc_time.astimezone(tz).date()
+                date_set.add(local_date)
+
+            # Check streak backwards from today
+            today = datetime.now(tz).date()
+            streak = 0
+            while today in date_set:
+                streak += 1
+                today -= timedelta(days=1)
+
+            return streak
+
+        except Exception as e:
+            Logger.error(f"Failed to calculate streak: {e}")
+            return 0
 
     def fetch_data(self, table_name: str) -> List[Dict[str, Any]]:
         """Fetch all data from the given table as list of dictionaries."""

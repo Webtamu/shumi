@@ -100,7 +100,7 @@ class AuthManager:
             self.callback(welcome_signal)
             welcome_signal = Signal(
                                 item=Items.HOME_CURRENT_STREAK,
-                                text=f"Current Streak: {1} day",
+                                text=f"Current Streak: {0} day",
                                 action=Actions.LABEL_SET,
                                 source=ViewState.HOME,
                             )
