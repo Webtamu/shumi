@@ -60,6 +60,7 @@ class Items(Enum):
     # PROFILE VIEW ITEMS
     PROFILE_USERNAME = auto()
     PROFILE_EMAIL = auto()
+    PROFILE_LOGOUT = auto()
 
     ABOUT = auto()
     BEGIN_TAKE = auto()

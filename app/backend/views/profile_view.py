@@ -29,6 +29,10 @@ class ProfileView(View):
                 "instance": self.window.findChild(QPushButton, "btnStats"),
                 "action": Actions.BTN_PRESS
             },
+            Items.PROFILE_LOGOUT: {
+                "instance": self.window.findChild(QPushButton, "btnLogout"),
+                "action": Actions.BTN_PRESS
+            },
             Items.PROFILE_USERNAME: {
                 "instance": self.window.findChild(QLabel, "lblUsername"),
                 "action": Actions.NONE

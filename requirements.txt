@@ -1,6 +1,8 @@
-PyQt6
+pyqt6
+pyqt6-tools
 supabase
 duckdb
-dotenv
+python-dotenv
 flake8
 flake8-pyproject
+pytz

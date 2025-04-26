@@ -16,6 +16,7 @@ class PreferencesModel(Model):
             Items.DARK_MODE: {"state": False, "text": "Dark Mode"},
             Items.LANGUAGE: {"state": False, "text": "Language"},
             Items.TIME: {"state": False, "text": "Time"},
+            Items.LOGIN_STAY_SIGNED_IN: {"state": False, "text": "Stay signed in"},
         }
 
         self.action_map = {}

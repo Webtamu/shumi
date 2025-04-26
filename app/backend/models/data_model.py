@@ -14,20 +14,6 @@ class DataModel(Model):
 
     def __init__(self) -> None:
         super().__init__()
-        self.local_database = DuckDBService()
-        self.cloud_database = SupabaseService()
-
-        self.context_manager = ContextManager()
-        self.sync_manager = SyncManager(local_database=self.local_database,
-                                        cloud_database=self.cloud_database,
-                                        context=self.context_manager)
-        self.session_manager = SessionManager(local_database=self.local_database,
-                                              callback=self.update_model,
-                                              context=self.context_manager)
-        self.auth_manager = AuthManager(auth_service=self.cloud_database,
-                                        callback=self.update_model,
-                                        context=self.context_manager)
-
         self.data_map = {
             Items.SYNC: {"state": False, "text": "Sync"},
             Items.LOGIN_LOGIN: {"state": False, "text": "Login"},
@@ -42,17 +28,33 @@ class DataModel(Model):
             Items.PROFILE_EMAIL: {"state": False, "text": ""},
             Items.PROFILE_USERNAME: {"state": False, "text": ""},
             Items.PROFILE_USERNAME: {"state": False, "text": ""},
+            Items.PROFILE_LOGOUT: {"state": False, "text": "Logout"},
         }
+        
+        self.model_type = "Data"
+
+        self.local_database = DuckDBService()
+        self.cloud_database = SupabaseService()
+
+        self.context_manager = ContextManager()
+        self.sync_manager = SyncManager(local_database=self.local_database,
+                                        cloud_database=self.cloud_database,
+                                        context=self.context_manager)
+        self.session_manager = SessionManager(local_database=self.local_database,
+                                              callback=self.update_model,
+                                              context=self.context_manager)
+        self.auth_manager = AuthManager(auth_service=self.cloud_database,
+                                        callback=self.update_model,
+                                        context=self.context_manager)
 
         self.action_map = {
             Items.SYNC: self.sync_manager.sync_to_cloud,
             Items.LOGIN_LOGIN: self.auth_manager.login,
+            Items.PROFILE_LOGOUT: self.auth_manager.logout,
             Items.START: self.session_manager.begin_timer,
             Items.STOP: self.session_manager.stop_timer,
             Items.CREATE_ACCOUNT_CREATE: self.auth_manager.create_account,
         }
-
-        self.model_type = "Data"
 
     def update_model(self, signal: Signal) -> None:
         """

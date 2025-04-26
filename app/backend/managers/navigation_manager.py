@@ -2,7 +2,7 @@ from PyQt6.QtWidgets import QStackedWidget
 from PyQt6.QtCore import QObject
 
 from ..views import View
-from ..helpers import Signal, ViewState, Items
+from ..helpers import Signal, ViewState, Items, Logger
 
 
 class NavigationManager(QObject):
@@ -39,6 +39,7 @@ class NavigationManager(QObject):
             Items.STOP: ViewState.SUMMARY,
             Items.BEGIN_TAKE: ViewState.HOME,
             Items.LOGIN_LOGIN: ViewState.HOME,
+            Items.PROFILE_LOGOUT: ViewState.LOGIN,
             Items.LOGIN_CREATE_ACCOUNT: ViewState.CREATE,
             Items.CREATE_ACCOUNT_ALREADY_HAVE_ACCOUNT: ViewState.LOGIN,
         }
