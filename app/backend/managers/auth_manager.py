@@ -1,5 +1,5 @@
 from PyQt6.QtCore import QSettings
-from ..helpers import Logger, Signal, Items, Actions, ViewState
+from ..helpers import Logger, Signal
 from ..services import SupabaseService
 from ..managers import ContextManager
 
@@ -102,50 +102,8 @@ class AuthManager:
             self.context.user_id = user_info.user.id
             self.context.username = user_info.user.user_metadata.get("full_name")
             self.context.email = user_info.user.user_metadata.get("email")
-            signal.nav = True
+            self.context.refresh_fields()
 
-            # Need to callback and update dependent items, ducktape solution for now
-            welcome_signal = Signal(
-                                item=Items.HOME_WELCOME,
-                                text=f"Welcome, {self.context.username} - Let's practice some Instrument today!",
-                                action=Actions.LABEL_SET,
-                                source=ViewState.HOME,
-                            )
-            self.callback(welcome_signal)
-            current_streak_signal = Signal(
-                                item=Items.HOME_CURRENT_STREAK,
-                                text=f"Current Streak: {0} day",
-                                action=Actions.LABEL_SET,
-                                source=ViewState.HOME,
-                            )
-            self.callback(current_streak_signal)
-            highest_streak_signal = Signal(
-                                item=Items.HOME_HIGHEST_STREAK,
-                                text=f"Highest Streak: {2} days",
-                                action=Actions.LABEL_SET,
-                                source=ViewState.HOME,
-                            )
-            self.callback(highest_streak_signal)
-            daily_average_signal = Signal(
-                                item=Items.HOME_DAILY_AVERAGE,
-                                text=f"Daily Average: {3} hours",
-                                action=Actions.LABEL_SET,
-                                source=ViewState.HOME,
-                            )
-            self.callback(daily_average_signal)
-            profile_username_signal = Signal(
-                                item=Items.PROFILE_USERNAME,
-                                text=f"{self.context.username}",
-                                action=Actions.LABEL_SET,
-                                source=ViewState.PROFILE,
-                            )
-            self.callback(profile_username_signal)
-            profile_email_signal = Signal(
-                                item=Items.PROFILE_EMAIL,
-                                text=f"{self.context.email}",
-                                action=Actions.LABEL_SET,
-                                source=ViewState.PROFILE,
-                            )
-            self.callback(profile_email_signal)
+            signal.nav = True
         else:
             signal.nav = False
