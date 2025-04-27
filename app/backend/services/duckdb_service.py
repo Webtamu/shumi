@@ -96,7 +96,7 @@ class DuckDBService:
             while today in date_set:
                 streak += 1
                 today -= timedelta(days=1)
-
+            Logger.debug(f"Streak calculated as {streak}")
             return streak
 
         except Exception as e:
