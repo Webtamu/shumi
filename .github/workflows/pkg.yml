@@ -50,7 +50,6 @@ jobs:
             libegl1-mesa \
             libegl1-mesa-dev \
             libgl1-mesa-dev \
-            libgl1-mesa-glx \
             libgles2-mesa-dev \
             libglvnd-dev \
             libglx-dev \
@@ -89,7 +88,6 @@ jobs:
       - name: Install project dependencies
         run: |
           python -m pip install --no-cache-dir pyqt6==6.5.0
-          python -m pip install --no-cache-dir pyqt6-tools
           python -m pip install --no-cache-dir -r requirements.txt
         
       # Run compilation test
