@@ -85,5 +85,5 @@ jobs:
           python -m pip install --no-cache-dir -r requirements.txt
         
       # Run compilation test
-      - name: Test compilation
-        run: pytest tests/test_compilation.py -v
+      - name: Compile test
+        run: pytest tests/test_compile.py -v
