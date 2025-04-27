@@ -1,4 +1,4 @@
-name: PyQt Project CI
+name: Distro Compile Test
 
 on:
   push:
@@ -30,7 +30,7 @@ jobs:
           cache: 'pip'
       
       # Ubuntu-specific setup
-      - name: Install Qt dependencies (Ubuntu)
+      - name: Install Qt and OpenGL dependencies (Ubuntu)
         if: runner.os == 'Linux'
         run: |
           sudo apt-get update
@@ -41,12 +41,20 @@ jobs:
             libxcb-keysyms1 \
             libxcb-randr0 \
             libxcb-render-util0 \
-            libxcb-xinerama0 \
             libxcb-cursor0 \
             libxcb-sync1 \
             libxcb-xkb1 \
             libxkbcommon-x11-0 \
-            libxcb-shape0
+            libxcb-shape0 \
+            libegl1 \
+            libegl1-mesa \
+            libegl1-mesa-dev \
+            libgl1-mesa-dev \
+            libgl1-mesa-glx \
+            libgles2-mesa-dev \
+            libglvnd-dev \
+            libglx-dev \
+            libglapi-mesa
           # Start virtual display for GUI testing
           sudo apt-get install -y xvfb
           Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
