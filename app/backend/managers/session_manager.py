@@ -32,4 +32,3 @@ class SessionManager:
                              self.timer.stop_time)
             self.context.current_streak = self.local_database.get_current_streak(self.context.user_id, "UTC")
             self.context.refresh_fields()
-
