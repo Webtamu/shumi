@@ -3,7 +3,7 @@ from PyQt6.QtWidgets import QPushButton, QLineEdit, QLabel
 
 from ..views import View
 from ..helpers import Items, Actions, ViewState
-from ..ui import ClickableLabel
+from ..ui import ClickableLabel, PasswordLineEdit
 
 
 class CreateView(View):
@@ -19,11 +19,11 @@ class CreateView(View):
                 "action": Actions.NONE
             },
             Items.CREATE_ACCOUNT_PASSWORD: {
-                "instance": self.window.findChild(QLineEdit, "inputPasswordCreation"),
+                "instance": PasswordLineEdit(self.window.findChild(QLineEdit, "inputPasswordCreation")),
                 "action": Actions.NONE
             },
             Items.CREATE_ACCOUNT_PASSWORD_CONFIRM: {
-                "instance": self.window.findChild(QLineEdit, "inputPasswordCreationConfirm"),
+                "instance": PasswordLineEdit(self.window.findChild(QLineEdit, "inputPasswordCreationConfirm")),
                 "action": Actions.NONE
             },
             Items.CREATE_ACCOUNT_EMAIL: {
@@ -35,9 +35,7 @@ class CreateView(View):
                 "action": Actions.BTN_PRESS
             },
             Items.CREATE_ACCOUNT_ALREADY_HAVE_ACCOUNT: {
-                "instance": ClickableLabel(
-                    self.window.findChild(QLabel, "lblAlreadyHaveAccount")
-                ),
+                "instance": ClickableLabel(self.window.findChild(QLabel, "lblAlreadyHaveAccount")),
                 "action": Actions.LABEL_PRESS
             },
         }

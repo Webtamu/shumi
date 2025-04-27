@@ -2,7 +2,7 @@ from PyQt6 import uic
 from PyQt6.QtWidgets import QPushButton, QLineEdit, QCheckBox, QLabel
 
 from ..views import View
-from ..ui import ClickableLabel
+from ..ui import ClickableLabel, PasswordLineEdit
 from ..helpers import Items, Actions, ViewState
 
 
@@ -19,7 +19,7 @@ class LoginView(View):
                 "action": Actions.NONE
             },
             Items.LOGIN_PASSWORD: {
-                "instance": self.window.findChild(QLineEdit, "inputPassword"),
+                "instance": PasswordLineEdit(self.window.findChild(QLineEdit, "inputPassword")),
                 "action": Actions.NONE
             },
             Items.LOGIN_STAY_SIGNED_IN: {
