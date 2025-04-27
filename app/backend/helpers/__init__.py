@@ -1,4 +1,4 @@
-from .enums import Items, ViewState, Actions, StatusCodes
+from .enums import Items, KeyAction, ViewState, Actions, StatusCodes
 from .colors import Colors
 from .signals import Signal
 from .logger import Logger
@@ -9,6 +9,7 @@ __all__ = [
     "Connections",
     "Logger",
     "Signal",
+    "KeyAction",
     "Items",
     "ViewState",
     "Actions",

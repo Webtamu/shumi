@@ -1,4 +1,5 @@
 from enum import Enum, auto
+from PyQt6.QtCore import Qt
 
 
 class StatusCodes(Enum):
@@ -32,6 +33,13 @@ class StatusCodes(Enum):
     AI_AGENT_FAILURE = 4003
     SOCIAL_POST_FAILURE = 4004
     SOCIAL_FRIEND_SYNC_ERROR = 4005
+
+
+class KeyAction(Enum):
+    PRESS_ENTER = Qt.Key.Key_Return
+    PRESS_ESCAPE = Qt.Key.Key_Escape
+    PRESS_TAB = Qt.Key.Key_Tab
+    PRESS_S = Qt.Key.Key_S
 
 
 class Items(Enum):

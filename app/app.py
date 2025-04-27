@@ -14,10 +14,8 @@ from .backend.views import (
 )
 
 from .backend.controllers import ApplicationController
-from .backend.managers import NavigationManager
-
-from .backend.helpers import Logger
-from .backend.helpers import ViewState
+from .backend.managers import NavigationManager, KeybindManager
+from .backend.helpers import Logger, ViewState, Items, KeyAction
 
 
 class App(QApplication):
@@ -28,6 +26,9 @@ class App(QApplication):
             PreferencesModel(),
             DataModel()
         ]
+
+        self.initialize_keybinds()
+
         self.view_list = [
             LoginView(),
             CreateView(),
@@ -44,12 +45,19 @@ class App(QApplication):
         )
 
         self.navigation_manager = NavigationManager()
+
         self.initialize_views()
 
     def initialize_views(self):
-        self.navigation_manager.add_views(self.view_list)
+        for view in self.view_list:
+            self.navigation_manager.add_view(view)
+            KeybindManager.activate_keybinds(view)
         self.navigation_manager.navigate_to(ViewState.LOGIN)
         self.navigation_manager.do_show()
+
+    def initialize_keybinds(self):
+        KeybindManager.add_keybind(ViewState.LOGIN, KeyAction.PRESS_ENTER, Items.LOGIN_LOGIN)
+        KeybindManager.add_keybind(ViewState.HOME, KeyAction.PRESS_S, Items.SETTINGS)
 
     def __del__(self):
         Logger.info("Closing Application, saving data!")
