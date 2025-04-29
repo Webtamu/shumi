@@ -1,16 +1,12 @@
 from ..helpers import Signal, Items, Actions, ViewState
+from ..services import DuckDBService
 from typing import Callable
 
 
 class ContextManager:
     _instance = None
 
-    def __new__(cls):
-        if not cls._instance:
-            cls._instance = super(ContextManager, cls).__new__(cls)
-        return cls._instance
-
-    def __init__(self):
+    def __init__(self, local_database: DuckDBService, callback: Callable):
         if not hasattr(self, 'initialized'):
             self.initialized = True
 
@@ -25,23 +21,17 @@ class ContextManager:
             self.daily_average = 0  # Example: in hours
 
             # Callback for sending updates
-            self.callback = None
-            self.local_database = None
+            self.callback = callback
+            self.local_database = local_database
 
     def update_fields(self, field_dict: dict):
         for key, value in field_dict.items():
             setattr(self, key, value)
-        self._refresh_fields()
+        self.refresh_fields()
 
     def update_stats(self):
         self.current_streak = self.local_database.get_current_streak(self.user_id, "UTC")
-        self._refresh_fields()
-
-    def set_callback(self, callback: Callable):
-        self.callback = callback
-    
-    def set_local(self, local_database):
-        self.local_database = local_database
+        self.refresh_fields()
 
     def generate_field_signals(self) -> list[Signal]:
         """
@@ -86,7 +76,7 @@ class ContextManager:
             ),
         ]
 
-    def _refresh_fields(self):
+    def refresh_fields(self):
         """
         Send updated signals to the UI through the callback.
         """
