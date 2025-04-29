@@ -20,10 +20,10 @@ class SupabaseService:
 
     def is_connected(self) -> bool:
         try:
-            response = self.client.table('DuckDB').select("*").limit(1).execute()
-            return bool(response.data)
+            user = self.client.auth.get_user()
+            return user is not None
         except Exception as e:
-            Logger.error(f"Supabase connection test failed: {e}")
+            Logger.error(f"Auth check failed: {e}")
             return False
 
     def fetch_data(self, table_name: str) -> dict:
