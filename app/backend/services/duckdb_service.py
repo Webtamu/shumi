@@ -102,7 +102,7 @@ class DuckDBService:
         except Exception as e:
             Logger.error(f"Failed to calculate streak: {e}")
             return 0
-        
+
     def get_highest_streak(self, user_id: str, timezone_str: str = 'UTC') -> int:
         """
         Calculate the highest streak the user ever achieved.
@@ -154,7 +154,7 @@ class DuckDBService:
         except Exception as e:
             Logger.error(f"Failed to calculate highest streak: {e}")
             return 0
-        
+
     def get_average_session_minutes(self, user_id: str) -> float:
         """
         Calculate average session duration in hours.

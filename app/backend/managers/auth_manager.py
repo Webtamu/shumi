@@ -105,6 +105,7 @@ class AuthManager:
                 "email": user_info.user.user_metadata.get("email")
             })
             self.context.update_stats()
+            self.context.refresh_fields()
 
             signal.nav = True
         else:

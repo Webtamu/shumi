@@ -30,7 +30,6 @@ class SessionManager:
             self.add_session(self.context.user_id,
                              self.timer.start_time,
                              self.timer.stop_time)
-            # self.context.update_fields({
-            #     "current_streak": self.local_database.get_current_streak(self.context.user_id, "UTC")
-            # })
+
             self.context.update_stats()
+            self.context.refresh_fields()
