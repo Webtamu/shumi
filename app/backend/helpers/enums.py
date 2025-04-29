@@ -70,20 +70,25 @@ class Items(Enum):
     PROFILE_EMAIL = auto()
     PROFILE_LOGOUT = auto()
 
-    ABOUT = auto()
-    BEGIN_TAKE = auto()
-    CONTACT = auto()
+    # SETTINGS VIEW ITEMS
     DARK_MODE = auto()
-    DEFAULT = auto()
-    HOME = auto()
+    SETTINGS_PATH = auto()
+    SETTINGS_PATH_SELECTED = auto()
+    REPORT_BUG = auto()
+    ABOUT = auto()
+    CONTACT = auto()
     LANGUAGE = auto()
 
+    BEGIN_TAKE = auto()
+    DEFAULT = auto()
+
+    # NAVIGATION ITEMS
+    HOME = auto()
     PROFILE = auto()
-    REPORT_BUG = auto()
     SETTINGS = auto()
-    START = auto()
     STATS = auto()
 
+    START = auto()
     STOP = auto()
     SYNC = auto()
     TIME = auto()

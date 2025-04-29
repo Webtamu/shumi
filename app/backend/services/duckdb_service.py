@@ -188,7 +188,7 @@ class DuckDBService:
             if session_count == 0:
                 return 0.0
 
-            average_minutes = total_duration.total_seconds() / 60 / session_count
+            average_minutes = round(total_duration.total_seconds() / 60 / session_count, 2)
             Logger.debug(f"Average session minutes calculated as {average_minutes:.2f}")
             return average_minutes
 

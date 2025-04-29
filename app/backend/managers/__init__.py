@@ -5,6 +5,7 @@ from .sync_manager import SyncManager
 from .navigation_manager import NavigationManager
 from .extractor_manager import ExtractorManager
 from .keybind_manager import KeybindManager
+from .storage_manager import StorageManager
 
 __all__ = [
     "AuthManager",
@@ -14,4 +15,5 @@ __all__ = [
     "NavigationManager",
     "ExtractorManager",
     "KeybindManager",
+    "StorageManager",
 ]

@@ -1,5 +1,5 @@
 from PyQt6 import uic
-from PyQt6.QtWidgets import QPushButton, QCheckBox
+from PyQt6.QtWidgets import QPushButton, QCheckBox, QToolButton, QLabel
 
 from ..views import View
 from ..helpers import Items, Actions, ViewState
@@ -28,6 +28,14 @@ class SettingsView(View):
             Items.STATS: {
                 "instance": self.window.findChild(QPushButton, "btnStats"),
                 "action": Actions.BTN_PRESS
+            },
+            Items.SETTINGS_PATH: {
+                "instance": self.window.findChild(QToolButton, "toolButton"),
+                "action": Actions.BTN_PRESS
+            },
+            Items.SETTINGS_PATH_SELECTED: {
+                "instance": self.window.findChild(QLabel, "lblPathSelected"),
+                "action": Actions.NONE
             },
             Items.REPORT_BUG: {
                 "instance": self.window.findChild(QPushButton, "btnBug"),

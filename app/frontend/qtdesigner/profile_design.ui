@@ -130,19 +130,20 @@
          </property>
          <layout class="QHBoxLayout" name="horizontalLayout_5">
           <item>
-           <widget class="QLabel" name="lblUsername">
-            <property name="text">
-             <string>&lt;name&gt;</string>
-            </property>
-           </widget>
-          </item>
-          <item>
            <widget class="QLabel" name="label_7">
             <property name="text">
              <string>Username:</string>
             </property>
            </widget>
           </item>
+          <item>
+           <widget class="QLabel" name="lblUsername">
+            <property name="text">
+             <string>&lt;name&gt;</string>
+            </property>
+           </widget>
+          </item>
+          
           <item>
            <widget class="QPushButton" name="btnChangeUsername">
             <property name="text">
