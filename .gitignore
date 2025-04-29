@@ -10,4 +10,6 @@ ui/__pycache__/*
 .env
 local_data.duckdb
 local_data.duckdb.wal
+study_sessions.duckdb
+study_sessions.duckdb.wal
 .dev

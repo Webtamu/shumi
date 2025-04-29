@@ -7,7 +7,7 @@ from ..helpers import Logger
 
 
 class DuckDBService:
-    def __init__(self, db_path: str = "local_data.duckdb") -> None:
+    def __init__(self, db_path: str = "study_sessions.duckdb") -> None:
         """Initialize DuckDB connection."""
         self.con = duckdb.connect(db_path)
         self.con.execute(

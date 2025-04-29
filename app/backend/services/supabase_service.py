@@ -83,7 +83,7 @@ class SupabaseService:
             try:
                 row["timestamp_start"] = row["timestamp_start"].isoformat()
                 row["timestamp_stop"] = row["timestamp_stop"].isoformat()
-                response = self.client.table("sync_test").insert(row).execute()
+                response = self.client.table("study_sessions").insert(row).execute()
                 if response.data:
                     synced_ids.append(row["session_id"])
             except Exception as e:
