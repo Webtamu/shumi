@@ -102,6 +102,99 @@ class DuckDBService:
         except Exception as e:
             Logger.error(f"Failed to calculate streak: {e}")
             return 0
+        
+    def get_highest_streak(self, user_id: str, timezone_str: str = 'UTC') -> int:
+        """
+        Calculate the highest streak the user ever achieved.
+
+        Args:
+            user_id (str): The ID of the user.
+            timezone_str (str): Timezone like 'Asia/Tokyo', 'America/Los_Angeles'.
+
+        Returns:
+            int: Highest streak achieved.
+        """
+        try:
+            tz = pytz.timezone(timezone_str)
+
+            rows = self.con.execute(
+                """
+                SELECT timestamp_start FROM session
+                WHERE user_id = ?
+                ORDER BY timestamp_start ASC
+                """, (user_id,)
+            ).fetchall()
+
+            if not rows:
+                return 0
+
+            date_list = []
+            for row in rows:
+                utc_time = row[0].replace(tzinfo=pytz.utc)
+                local_date = utc_time.astimezone(tz).date()
+                date_list.append(local_date)
+
+            if not date_list:
+                return 0
+
+            date_list = sorted(set(date_list))
+            highest_streak = 1
+            current_streak = 1
+
+            for i in range(1, len(date_list)):
+                if (date_list[i] - date_list[i - 1]).days == 1:
+                    current_streak += 1
+                    highest_streak = max(highest_streak, current_streak)
+                else:
+                    current_streak = 1
+
+            Logger.debug(f"Highest streak calculated as {highest_streak}")
+            return highest_streak
+
+        except Exception as e:
+            Logger.error(f"Failed to calculate highest streak: {e}")
+            return 0
+        
+    def get_average_session_minutes(self, user_id: str) -> float:
+        """
+        Calculate average session duration in hours.
+
+        Args:
+            user_id (str): The ID of the user.
+
+        Returns:
+            float: Average hours per session.
+        """
+        try:
+            rows = self.con.execute(
+                """
+                SELECT timestamp_start, timestamp_stop FROM session
+                WHERE user_id = ?
+                """, (user_id,)
+            ).fetchall()
+
+            if not rows:
+                return 0.0
+
+            total_duration = timedelta(0)
+            session_count = 0
+
+            for start, stop in rows:
+                if start and stop:
+                    duration = stop - start
+                    total_duration += duration
+                    session_count += 1
+
+            if session_count == 0:
+                return 0.0
+
+            average_minutes = total_duration.total_seconds() / 60 / session_count
+            Logger.debug(f"Average session minutes calculated as {average_minutes:.2f}")
+            return average_minutes
+
+        except Exception as e:
+            Logger.error(f"Failed to calculate average session time: {e}")
+            return 0.0
 
     def fetch_data(self, table_name: str) -> List[Dict[str, Any]]:
         """Fetch all data from the given table as list of dictionaries."""

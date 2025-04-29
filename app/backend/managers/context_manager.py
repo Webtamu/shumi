@@ -22,7 +22,7 @@ class ContextManager:
             # Stats fields
             self.current_streak = 0
             self.highest_streak = 0
-            self.daily_average = 0  # Example: in hours
+            self.daily_average = 0  # In minutes
 
             # Callback for sending updates
             self.callback = None
@@ -35,6 +35,8 @@ class ContextManager:
 
     def update_stats(self):
         self.current_streak = self.local_database.get_current_streak(self.user_id, "UTC")
+        self.highest_streak = self.local_database.get_highest_streak(self.user_id, "UTC")
+        self.daily_average = self.local_database.get_average_session_minutes(self.user_id)
         self._refresh_fields()
 
     def set_callback(self, callback: Callable):
@@ -68,7 +70,7 @@ class ContextManager:
             ),
             Signal(
                 item=Items.HOME_DAILY_AVERAGE,
-                text=f"Daily Average: {self.daily_average} hours",
+                text=f"Daily Average: {self.daily_average} minutes",
                 action=Actions.LABEL_SET,
                 source=ViewState.HOME,
             ),
