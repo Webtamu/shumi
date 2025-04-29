@@ -2,6 +2,7 @@ from .models import Model
 from ..helpers import Logger, Items, ViewState, Signal, Actions
 from ..managers import StorageManager
 
+
 class PreferencesModel(Model):
     """
     This class houses user preferences data, which needs to be saved and
