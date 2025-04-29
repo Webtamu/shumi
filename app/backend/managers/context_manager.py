@@ -26,14 +26,22 @@ class ContextManager:
 
             # Callback for sending updates
             self.callback = None
+            self.local_database = None
 
     def update_fields(self, field_dict: dict):
         for key, value in field_dict.items():
             setattr(self, key, value)
         self._refresh_fields()
 
+    def update_stats(self):
+        self.current_streak = self.local_database.get_current_streak(self.user_id, "UTC")
+        self._refresh_fields()
+
     def set_callback(self, callback: Callable):
         self.callback = callback
+    
+    def set_local(self, local_database):
+        self.local_database = local_database
 
     def generate_field_signals(self) -> list[Signal]:
         """

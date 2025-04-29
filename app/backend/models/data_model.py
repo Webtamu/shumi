@@ -38,6 +38,7 @@ class DataModel(Model):
 
         self.context_manager = ContextManager()
         self.context_manager.set_callback(self.update_model)
+        self.context_manager.set_local(self.local_database)
         self.sync_manager = SyncManager(local_database=self.local_database,
                                         cloud_database=self.cloud_database,
                                         context=self.context_manager)
