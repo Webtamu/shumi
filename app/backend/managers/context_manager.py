@@ -27,6 +27,11 @@ class ContextManager:
             # Callback for sending updates
             self.callback = None
 
+    def update_fields(self, field_dict: dict):
+        for key, value in field_dict.items():
+            setattr(self, key, value)
+        self._refresh_fields()
+
     def set_callback(self, callback: Callable):
         self.callback = callback
 
@@ -73,7 +78,7 @@ class ContextManager:
             ),
         ]
 
-    def refresh_fields(self):
+    def _refresh_fields(self):
         """
         Send updated signals to the UI through the callback.
         """

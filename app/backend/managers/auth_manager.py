@@ -99,10 +99,11 @@ class AuthManager:
 
         if self.auth_service.is_connected():
             user_info = self.auth_service.get_user_info()
-            self.context.user_id = user_info.user.id
-            self.context.username = user_info.user.user_metadata.get("full_name")
-            self.context.email = user_info.user.user_metadata.get("email")
-            self.context.refresh_fields()
+            self.context.update_fields({
+                "user_id": user_info.user.id,
+                "username": user_info.user.user_metadata.get("full_name"),
+                "email": user_info.user.user_metadata.get("email")
+            })
 
             signal.nav = True
         else:
