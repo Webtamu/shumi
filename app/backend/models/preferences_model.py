@@ -24,18 +24,18 @@ class PreferencesModel(Model):
         self.storage_manager = StorageManager()
 
         self.action_map = {
-            Items.SETTINGS_PATH: self.storage_manager.select_directory
+            Items.SETTINGS_PATH: self.storage_manager.select_directory,
+            Items.DARK_MODE: self.storage_manager.set_dark_mode,
         }
 
     def update_model(self, signal: Signal) -> None:
-        if action := self.action_map.get(signal.item):
-            action(signal)
-
         item_entry = self.data_map[signal.item]
-        if signal.action != Actions.LABEL_SET:
-            item_entry["state"] = not item_entry["state"]
+        if signal.action != Actions.LABEL_SET and signal.source != ViewState.ALL:
+            if action := self.action_map.get(signal.item):
+                action(signal)
+
+            item_entry["state"] = signal.state
             signal.text = item_entry["text"]
-            signal.state = item_entry["state"]
             signal.source = ViewState.ALL
 
         if signal.debug:

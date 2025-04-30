@@ -8,14 +8,18 @@ from ..core.eventbus import event_bus
 QSETTINGS_ORG = "WEBTAMU"
 QSETTINGS_APP = "SHUMI"
 QSETTINGS_STORAGE_KEY = "storage_directory"
+QSETTINGS_DARK_MODE_KEY = "dark_mode"
 
 
 class StorageManager:
     def __init__(self):
         self.settings = QSettings(QSETTINGS_ORG, QSETTINGS_APP)
         self.current_path = self.settings.value(QSETTINGS_STORAGE_KEY, defaultValue="")
+        self.dark_mode: bool = self.settings.value(QSETTINGS_DARK_MODE_KEY, defaultValue=False, type=bool)
         if self.current_path:
             self.update_path()
+        if self.dark_mode:
+            self.update_dark_mode()
 
     def select_directory(self, signal=None):
         dir_path = QFileDialog.getExistingDirectory(None, "Select Storage Directory", self.current_path or "")
@@ -32,6 +36,16 @@ class StorageManager:
             )
         event_bus.publish(path_signal)
 
+    def update_dark_mode(self) -> None:
+        dark_mode_signal = Signal(
+                item=Items.DARK_MODE,
+                text="Dark Mode",
+                action=Actions.BOX_CHECK,
+                source=ViewState.ALL,
+                state=self.dark_mode
+                )
+        event_bus.publish(dark_mode_signal)
+
     def get_directory(self):
         return self.current_path
 
@@ -39,3 +53,7 @@ class StorageManager:
         if os.path.isdir(path):
             self.current_path = path
             self.settings.setValue(QSETTINGS_STORAGE_KEY, path)
+
+    def set_dark_mode(self, signal: Signal) -> None:
+        self.dark_mode = signal.state
+        self.settings.setValue(QSETTINGS_DARK_MODE_KEY, self.dark_mode)

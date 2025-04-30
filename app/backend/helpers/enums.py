@@ -106,6 +106,7 @@ class ViewState(Enum):
     CREATE = auto()
     ALL = auto()
     DEFAULT = auto()
+    NONE = auto()
 
 
 class Actions(Enum):

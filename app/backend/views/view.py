@@ -50,8 +50,10 @@ class View(QWidget):
         item.setText(signal.text)
 
     def update_box(self, item: QWidget, signal: Signal) -> None:
+        was_blocked = item.blockSignals(True)
         item.setChecked(signal.state)
         item.setText(signal.text)
+        item.blockSignals(was_blocked)
 
     def update_label(self, item: QWidget, signal: Signal) -> None:
         item.setText(signal.text)

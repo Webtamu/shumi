@@ -11,7 +11,17 @@ class Connections:
 
     @staticmethod
     def connect_box(signal: Signal, widget: QWidget, function: Callable) -> None:
-        widget.stateChanged.connect(lambda _: function(signal))
+        widget.stateChanged.connect(
+            lambda state: function(Signal(
+                item=signal.item,
+                action=signal.action,
+                text=signal.text,
+                source=signal.source,
+                state=bool(state),  # crucial
+                nav=signal.nav,
+                debug=signal.debug
+            ))
+        )
 
     @staticmethod
     def connect_label(signal: Signal, widget: ClickableLabel, function: Callable) -> None:
