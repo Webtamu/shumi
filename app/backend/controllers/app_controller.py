@@ -16,9 +16,7 @@ class ApplicationController(Controller):
         self.extractor = ExtractorManager(view_map=self.view_map)
 
         # QTimer to poll the event bus every 100ms
-        self.event_poll_timer = QTimer()
-        self.event_poll_timer.timeout.connect(self.dispatch_queued_signals)
-        self.event_poll_timer.start(100)
+        self.setup_event_polling()
 
         # Wiring up Model signals to Controller
         for model in self.model_list:
@@ -29,41 +27,38 @@ class ApplicationController(Controller):
             self.connect_items(view)
             self.view_map[view.view_state] = view
 
+    def setup_event_polling(self, interval_ms: int = 100) -> None:
+        self.event_poll_timer = QTimer()
+        self.event_poll_timer.timeout.connect(self.dispatch_queued_signals)
+        self.event_poll_timer.start(interval_ms)
+
     def dispatch_queued_signals(self) -> None:
         while event_bus.has_signals():
             signal = event_bus.get_next_signal()
-            if signal:
-                for model in self.model_list:
-                    if model.can_handle(signal):
-                        model.update_model(signal)
-                        break
+            if signal and not self.route_to_model(signal):
+                Logger.error(f"No model could handle signal: {signal.item}")
+
+    def route_to_model(self, signal: Signal) -> bool:
+        for model in self.model_list:
+            if model.can_handle(signal):
+                model.update_model(signal)
+                return True
+        return False
 
     # Connect items based on action types
     def connect_items(self, view: View) -> None:
-        for item_name, item_data in view.item_map.items():
-            signal = Signal(
-                item=item_name,
-                source=view.view_state,
-                action=item_data["action"]
-            )
-            Connections.connect_item(widget=item_data["instance"],
-                                     signal=signal,
-                                     function=self.handle_view_response)
+        for name, data in view.item_map.items():
+            signal = Signal(item=name, source=view.view_state, action=data["action"])
+            Connections.connect_item(data["instance"], signal, self.handle_view_response)
 
     # Response from View (Initial Trigger), sending to Model for processing
     def handle_view_response(self, signal: Signal) -> None:
         signal.data = self.extractor.extract(signal.item)
-        for model in self.model_list:
-            if model.can_handle(signal):
-                model.update_model(signal)
-                return
-        Logger.error(f"Cannot handle request: {signal.item}")
+        if signal and not self.route_to_model(signal):
+            Logger.error(f"No model could handle signal: {signal.item}")
 
     # Response from Model (Compute Response), sending to View for presentation
     def handle_model_response(self, signal: Signal) -> None:
-        if signal.source == ViewState.ALL:
-            for view in self.view_map.values():
-                view.update_view(signal)
-        else:
-            view_source = self.view_map[signal.source]
-            view_source.update_view(signal)
+        targets = self.view_map.values() if signal.source == ViewState.ALL else [self.view_map[signal.source]]
+        for view in targets:
+            view.update_view(signal)
