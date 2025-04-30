@@ -1,9 +1,10 @@
+from PyQt6.QtCore import QTimer
 from ..models import Model
 from ..views import View
 from .controllers import Controller
 from ..helpers import Logger, Connections, Signal, ViewState
-
 from ..managers import ExtractorManager
+from ..core.eventbus import event_bus
 
 
 class ApplicationController(Controller):
@@ -14,6 +15,11 @@ class ApplicationController(Controller):
         self.view_map: dict[ViewState, View] = {}
         self.extractor = ExtractorManager(view_map=self.view_map)
 
+        # QTimer to poll the event bus every 100ms
+        self.event_poll_timer = QTimer()
+        self.event_poll_timer.timeout.connect(self.dispatch_queued_signals)
+        self.event_poll_timer.start(100)
+
         # Wiring up Model signals to Controller
         for model in self.model_list:
             model.model_signal.connect(self.handle_model_response)
@@ -22,6 +28,15 @@ class ApplicationController(Controller):
         for view in view_list:
             self.connect_items(view)
             self.view_map[view.view_state] = view
+
+    def dispatch_queued_signals(self) -> None:
+        while event_bus.has_signals():
+            signal = event_bus.get_next_signal()
+            if signal:
+                for model in self.model_list:
+                    if model.can_handle(signal):
+                        model.update_model(signal)
+                        break
 
     # Connect items based on action types
     def connect_items(self, view: View) -> None:

@@ -36,16 +36,13 @@ class DataModel(Model):
         self.local_database = DuckDBService()
         self.cloud_database = SupabaseService()
 
-        self.context_manager = ContextManager(local_database=self.local_database,
-                                              callback=self.update_model)
+        self.context_manager = ContextManager(local_database=self.local_database)
         self.sync_manager = SyncManager(local_database=self.local_database,
                                         cloud_database=self.cloud_database,
                                         context=self.context_manager)
         self.session_manager = SessionManager(local_database=self.local_database,
-                                              callback=self.update_model,
                                               context=self.context_manager)
         self.auth_manager = AuthManager(auth_service=self.cloud_database,
-                                        callback=self.update_model,
                                         context=self.context_manager)
 
         self.action_map = {

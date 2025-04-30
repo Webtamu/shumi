@@ -2,8 +2,6 @@ from PyQt6.QtCore import QSettings
 from ..helpers import Logger, Signal
 from ..services import SupabaseService
 from ..managers import ContextManager
-
-from typing import Callable
 import datetime
 
 QSETTINGS_ORG = "WEBTAMU"
@@ -11,11 +9,10 @@ QSETTINGS_APP = "SHUMI"
 
 
 class AuthManager:
-    def __init__(self, auth_service: SupabaseService, callback: Callable, context: ContextManager):
+    def __init__(self, auth_service: SupabaseService, context: ContextManager):
         self.auth_service = auth_service
         self.context = context
-        self.callback = callback
-        # self.login(Signal())  # Attempt auto-login on initialization
+        # self.login()  # Attempt auto-login on initialization
 
     def create_account(self, signal: Signal) -> None:
         username = signal.data.get("user")

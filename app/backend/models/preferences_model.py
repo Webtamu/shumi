@@ -11,8 +11,7 @@ class PreferencesModel(Model):
 
     def __init__(self) -> None:
         super().__init__()
-
-        # TEMP APP DATA STORE
+        self.model_type = "Preferences"
         self.data_map = {
             Items.DARK_MODE: {"state": False, "text": "Dark Mode"},
             Items.LANGUAGE: {"state": False, "text": "Language"},
@@ -22,13 +21,11 @@ class PreferencesModel(Model):
             Items.SETTINGS_PATH_SELECTED: {"state": False, "text": ""},
         }
 
-        self.storage_manager = StorageManager(callback=self.update_model)
+        self.storage_manager = StorageManager()
 
         self.action_map = {
             Items.SETTINGS_PATH: self.storage_manager.select_directory
         }
-
-        self.model_type = "Preferences"
 
     def update_model(self, signal: Signal) -> None:
         if action := self.action_map.get(signal.item):

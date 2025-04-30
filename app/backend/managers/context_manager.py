@@ -1,11 +1,10 @@
 from ..helpers import Signal, Items, Actions, ViewState
 from ..services import DuckDBService
-from typing import Callable
+from ..core.eventbus import event_bus
 
 
 class ContextManager:
-
-    def __init__(self, local_database: DuckDBService, callback: Callable):
+    def __init__(self, local_database: DuckDBService = None):
         # User-related context
         self.user_id = None
         self.username = None
@@ -15,18 +14,12 @@ class ContextManager:
         self.current_streak = 0
         self.highest_streak = 0
         self.daily_average = 0  # In minutes
-
-        # Callback for sending updates
-        self.callback = callback
         self.local_database = local_database
 
     def refresh_fields(self):
-        if not self.callback:
-            raise Exception("Callback not set in ContextManager")
-
         signals = self.generate_field_signals()
         for signal in signals:
-            self.callback(signal)
+            event_bus.publish(signal)
 
     def update_fields(self, field_dict: dict):
         for key, value in field_dict.items():
