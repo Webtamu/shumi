@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>721</width>
-    <height>1000</height>
+    <height>891</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -64,13 +64,6 @@
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_4">
        <item>
-        <widget class="QLabel" name="label_13">
-         <property name="text">
-          <string>Stats Page</string>
-         </property>
-        </widget>
-       </item>
-       <item>
         <widget class="QFrame" name="frame_3">
          <property name="frameShape">
           <enum>QFrame::Box</enum>
@@ -89,37 +82,7 @@
             </property>
             <layout class="QVBoxLayout" name="verticalLayout">
              <item>
-              <widget class="QLabel" name="label_12">
-               <property name="text">
-                <string>Malnourished, you can do better!</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QFrame" name="frame_7">
-               <property name="frameShape">
-                <enum>QFrame::StyledPanel</enum>
-               </property>
-               <property name="frameShadow">
-                <enum>QFrame::Raised</enum>
-               </property>
-               <layout class="QHBoxLayout" name="horizontalLayout_3">
-                <item>
-                 <widget class="QLabel" name="label">
-                  <property name="text">
-                   <string>Pet Health</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QProgressBar" name="progressBar">
-                  <property name="value">
-                   <number>24</number>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </widget>
+              <widget class="QWebEngineView" name="graphTest" native="true"/>
              </item>
             </layout>
            </widget>
@@ -267,7 +230,7 @@
      <x>0</x>
      <y>0</y>
      <width>721</width>
-     <height>22</height>
+     <height>36</height>
     </rect>
    </property>
   </widget>

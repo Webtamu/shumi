@@ -7,6 +7,7 @@
         body {
             font-family: sans-serif;
             margin: 20px;
+            overflow: hidden;
         }
         .bar:hover {
             opacity: 0.8;
@@ -23,18 +24,18 @@
     </style>
 </head>
 <body>
-    <h2>D3.js Bar Chart (PyQt Integration)</h2>
     <button onclick="updateData()">Update Data</button>
-    <svg id="chart" width="800" height="400"></svg>
+    <svg id="chart"></svg>
     <div id="tooltip" class="tooltip" style="display: none;"></div>
 
     <script src="d3.v7.min.js"></script>
     <script>
         const svg = d3.select("#chart");
-        const width = +svg.attr("width");
-        const height = +svg.attr("height");
-        const margin = { top: 30, right: 30, bottom: 40, left: 50 };
+        let width = window.innerWidth - 40; // Subtracting some margin for padding
+        let height = window.innerHeight - 200; // Subtracting space for text and buttons
+        svg.attr("width", width).attr("height", height);
 
+        const margin = { top: 30, right: 30, bottom: 40, left: 50 };
         const xScale = d3.scaleBand().padding(0.1).range([margin.left, width - margin.right]);
         const yScale = d3.scaleLinear().range([height - margin.bottom, margin.top]);
         const colorScale = d3.scaleSequential(d3.interpolateBlues);
@@ -51,6 +52,11 @@
         let data = generateDummyData();
 
         function render(data) {
+            // Update scales with new width and height
+            xScale.range([margin.left, width - margin.right]);
+            height = Math.max(200, window.innerHeight - 200)
+            yScale.range([height - margin.bottom, margin.top]);
+
             xScale.domain(data.map(d => d.hour));
             const maxVal = d3.max(data, d => d.value);
             yScale.domain([0, maxVal]);
@@ -115,6 +121,19 @@
             data = generateDummyData();
             render(data);
         }
+
+        // Re-render the chart when the window is resized
+        window.addEventListener("resize", () => {
+            width = window.innerWidth - 40; // Adjust width
+            height = Math.max(200, window.innerHeight - 200);
+
+            svg.attr("width", width).attr("height", height); // Update SVG size
+
+            xScale.range([margin.left, width - margin.right]);
+            yScale.range([height - margin.bottom, margin.top]);
+
+            render(data); // Re-render the chart with new dimensions
+        });
 
         render(data);
     </script>

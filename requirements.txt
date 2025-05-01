@@ -7,3 +7,4 @@ flake8-pyproject
 pytz
 pytest
 pytest-qt
+PyQt6-WebEngine

@@ -1,9 +1,12 @@
 from PyQt6 import uic
-from PyQt6.QtWidgets import QPushButton
+from PyQt6.QtWidgets import QPushButton, QWidget, QVBoxLayout, QSizePolicy
+from PyQt6.QtCore import QUrl
+from PyQt6.QtWebEngineWidgets import QWebEngineView
 
 from ..views import View
 from ..helpers import Items, Actions, ViewState
 
+import os
 
 class StatsView(View):
     def __init__(self) -> None:
@@ -11,6 +14,15 @@ class StatsView(View):
         self.view_state = ViewState.STATS
         self.window = uic.loadUi("app/frontend/qtdesigner/stats_design.ui")
         self.initialize_style()
+
+        html_path = os.path.abspath("app/frontend/experiments/index.html")
+        self.webEngineView = self.window.findChild(QWebEngineView, "graphTest")
+        self.webEngineView.setUrl(QUrl.fromLocalFile(html_path))
+
+        # Make sure the QWebEngineView fills the layout
+        size_policy = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+        self.webEngineView.setSizePolicy(size_policy)
+
 
         self.item_map = {
             Items.HOME: {
