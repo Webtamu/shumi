@@ -46,8 +46,7 @@ class View(QWidget):
             self.window.setStyleSheet(file.read())
 
     def update_button(self, item: QWidget, signal: Signal) -> None:
-        item.setChecked(signal.state)
-        item.setText(signal.text)
+        pass
 
     def update_box(self, item: QWidget, signal: Signal) -> None:
         was_blocked = item.blockSignals(True)

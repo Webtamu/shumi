@@ -17,6 +17,12 @@ FIELD_EXTRACTION_MAP = {
             "pass": {"item": Items.CREATE_ACCOUNT_PASSWORD, "type": "text"},
             "confirm_pass": {"item": Items.CREATE_ACCOUNT_PASSWORD_CONFIRM, "type": "text"},
         }
+    },
+    Items.BEGIN_TAKE: {
+        "view": ViewState.SUMMARY,
+        "fields": {
+            "notes": {"item": Items.SUMMARY_NOTES, "type": "edit_text"},
+        }
     }
 }
 
@@ -45,5 +51,7 @@ class ExtractorManager:
                 extracted[field_name] = widget.text()
             elif field_type == "checkbox":
                 extracted[field_name] = widget.isChecked()
+            elif field_type == "edit_text":
+                extracted[field_name] = widget.toPlainText()
 
         return extracted

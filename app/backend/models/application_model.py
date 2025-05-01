@@ -16,10 +16,9 @@ class ApplicationModel(Model):
             Items.SETTINGS: {"state": False, "text": "Settings", "nav": True},
             Items.PROFILE: {"state": False, "text": "Profile", "nav": True},
             Items.STATS: {"state": False, "text": "Stats", "nav": True},
-            Items.REPORT_BUG: {"state": False, "text": "Report a Bug", "nav": False},
-            Items.CONTACT: {"state": False, "text": "Contact Us", "nav": False},
-            Items.ABOUT: {"state": False, "text": "About", "nav": False},
-            Items.BEGIN_TAKE: {"state": False, "text": "Begin Take", "nav": True},
+            Items.REPORT_BUG: {"state": False, "text": "Report a Bug", },
+            Items.CONTACT: {"state": False, "text": "Contact Us", },
+            Items.ABOUT: {"state": False, "text": "About", },
             Items.LOGIN_CREATE_ACCOUNT: {"state": False, "text": "Create account", "nav": True},
             Items.CREATE_ACCOUNT_ALREADY_HAVE_ACCOUNT: {"state": False, "text":
                                                         "Already have an account? Sign in",
@@ -39,7 +38,7 @@ class ApplicationModel(Model):
         item_entry["state"] = not item_entry["state"]
         signal.text = item_entry["text"]
         signal.state = item_entry["state"]
-        signal.nav = item_entry["nav"]
+        signal.nav = item_entry.get("nav", False)
 
         if signal.debug:
             Logger.info(f'{self.model_type} Model Handled: {signal}')

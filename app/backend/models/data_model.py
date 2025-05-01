@@ -15,20 +15,21 @@ class DataModel(Model):
     def __init__(self) -> None:
         super().__init__()
         self.data_map = {
-            Items.SYNC: {"state": False, "text": "Sync"},
-            Items.LOGIN_LOGIN: {"state": False, "text": "Login"},
-            Items.START: {"state": False, "text": "Start Session"},
-            Items.STOP: {"state": False, "text": "Stop Session"},
-            Items.TIMER: {"state": False, "text": str(USER_DEFINED_TIME_PERIOD)},
-            Items.CREATE_ACCOUNT_CREATE: {"state": False, "text": "Create account"},
-            Items.HOME_WELCOME: {"state": False, "text": ""},
-            Items.HOME_CURRENT_STREAK: {"state": False, "text": ""},
-            Items.HOME_DAILY_AVERAGE: {"state": False, "text": ""},
-            Items.HOME_HIGHEST_STREAK: {"state": False, "text": ""},
-            Items.PROFILE_EMAIL: {"state": False, "text": ""},
-            Items.PROFILE_USERNAME: {"state": False, "text": ""},
-            Items.PROFILE_USERNAME: {"state": False, "text": ""},
-            Items.PROFILE_LOGOUT: {"state": False, "text": "Logout"},
+            Items.SYNC: {"state": False, "text": "Sync", },
+            Items.LOGIN_LOGIN: {"state": False, "text": "Login", "nav": True},
+            Items.START: {"state": False, "text": "Start Session", "nav": True},
+            Items.STOP: {"state": False, "text": "Stop Session", "nav": True},
+            Items.BEGIN_TAKE: {"state": False, "text": "Begin Take", "nav": True},
+            Items.TIMER: {"state": False, "text": str(USER_DEFINED_TIME_PERIOD), },
+            Items.CREATE_ACCOUNT_CREATE: {"state": False, "text": "Create account", },
+            Items.HOME_WELCOME: {"state": False, "text": "", },
+            Items.HOME_CURRENT_STREAK: {"state": False, "text": "", },
+            Items.HOME_DAILY_AVERAGE: {"state": False, "text": "", },
+            Items.HOME_HIGHEST_STREAK: {"state": False, "text": "", },
+            Items.PROFILE_EMAIL: {"state": False, "text": "", },
+            Items.PROFILE_USERNAME: {"state": False, "text": "", },
+            Items.PROFILE_USERNAME: {"state": False, "text": "", },
+            Items.PROFILE_LOGOUT: {"state": False, "text": "Logout", },
         }
 
         self.model_type = "Data"
@@ -51,6 +52,7 @@ class DataModel(Model):
             Items.PROFILE_LOGOUT: self.auth_manager.logout,
             Items.START: self.session_manager.begin_timer,
             Items.STOP: self.session_manager.stop_timer,
+            Items.BEGIN_TAKE: self.session_manager.save_session_notes,
             Items.CREATE_ACCOUNT_CREATE: self.auth_manager.create_account,
         }
 
@@ -66,6 +68,7 @@ class DataModel(Model):
             item_entry["state"] = not item_entry["state"]
             signal.text = item_entry["text"]
             signal.state = item_entry["state"]
+            signal.nav = item_entry.get("nav", False)
 
         if signal.debug:
             Logger.info(f'{self.model_type} Model Handled: {signal}')

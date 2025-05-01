@@ -51,7 +51,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QPlainTextEdit" name="plainTextEdit"/>
+        <widget class="QPlainTextEdit" name="editNotes"/>
        </item>
        <item>
         <widget class="QLabel" name="label_5">

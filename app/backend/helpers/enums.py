@@ -82,6 +82,9 @@ class Items(Enum):
     BEGIN_TAKE = auto()
     DEFAULT = auto()
 
+    # SUMMARY VIEW ITEMS
+    SUMMARY_NOTES = auto()
+
     # NAVIGATION ITEMS
     HOME = auto()
     PROFILE = auto()
