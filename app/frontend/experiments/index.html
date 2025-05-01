@@ -4,10 +4,13 @@
     <meta charset="UTF-8">
     <title>D3 Bar Chart Demo</title>
     <style>
-        body {
-            font-family: sans-serif;
-            margin: 20px;
+        html, body {
+            margin: 0;
+            padding: 0;
             overflow: hidden;
+            height: 100%;
+            width: 100%;
+            font-family: sans-serif;
         }
         .bar:hover {
             opacity: 0.8;
@@ -21,6 +24,17 @@
             border-radius: 4px;
             font-size: 12px;
         }
+        #chart {
+            display: block;
+            width: 100vw;
+            height: 100vh;
+        }
+        button {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 10;
+        }
     </style>
 </head>
 <body>
@@ -31,8 +45,8 @@
     <script src="d3.v7.min.js"></script>
     <script>
         const svg = d3.select("#chart");
-        let width = window.innerWidth - 40; // Subtracting some margin for padding
-        let height = window.innerHeight - 200; // Subtracting space for text and buttons
+        let width = window.innerWidth;
+        let height = window.innerHeight;
         svg.attr("width", width).attr("height", height);
 
         const margin = { top: 30, right: 30, bottom: 40, left: 50 };
@@ -52,9 +66,7 @@
         let data = generateDummyData();
 
         function render(data) {
-            // Update scales with new width and height
             xScale.range([margin.left, width - margin.right]);
-            height = Math.max(200, window.innerHeight - 200)
             yScale.range([height - margin.bottom, margin.top]);
 
             xScale.domain(data.map(d => d.hour));
@@ -62,7 +74,6 @@
             yScale.domain([0, maxVal]);
             colorScale.domain([0, maxVal]);
 
-            // Axes
             svg.selectAll(".x-axis").data([null]).join("g")
                 .attr("class", "x-axis")
                 .attr("transform", `translate(0,${height - margin.bottom})`)
@@ -75,7 +86,6 @@
                 .transition()
                 .call(d3.axisLeft(yScale));
 
-            // Bars
             const bars = svg.selectAll(".bar").data(data, d => d.hour);
 
             bars.join(
@@ -83,8 +93,8 @@
                     .attr("class", "bar")
                     .attr("x", d => xScale(d.hour))
                     .attr("width", xScale.bandwidth())
-                    .attr("y", yScale(0))
-                    .attr("height", 0)
+                    .attr("y", d => yScale(d.value))
+                    .attr("height", d => Math.max(0, yScale(0) - yScale(d.value))) // Clamp the height to a minimum of 0
                     .attr("fill", d => colorScale(d.value))
                     .on("mousemove", (event, d) => {
                         tooltip
@@ -97,7 +107,7 @@
                     .transition()
                     .duration(800)
                     .attr("y", d => yScale(d.value))
-                    .attr("height", d => yScale(0) - yScale(d.value)),
+                    .attr("height", d => Math.max(0, yScale(0) - yScale(d.value))), // Clamp the height to a minimum of 0
 
                 update => update
                     .transition()
@@ -105,7 +115,7 @@
                     .attr("x", d => xScale(d.hour))
                     .attr("width", xScale.bandwidth())
                     .attr("y", d => yScale(d.value))
-                    .attr("height", d => yScale(0) - yScale(d.value))
+                    .attr("height", d => Math.max(0, yScale(0) - yScale(d.value))) // Clamp the height to a minimum of 0
                     .attr("fill", d => colorScale(d.value)),
 
                 exit => exit
@@ -122,17 +132,13 @@
             render(data);
         }
 
-        // Re-render the chart when the window is resized
         window.addEventListener("resize", () => {
-            width = window.innerWidth - 40; // Adjust width
-            height = Math.max(200, window.innerHeight - 200);
-
-            svg.attr("width", width).attr("height", height); // Update SVG size
-
+            width = window.innerWidth;
+            height = window.innerHeight;
+            svg.attr("width", width).attr("height", height);
             xScale.range([margin.left, width - margin.right]);
             yScale.range([height - margin.bottom, margin.top]);
-
-            render(data); // Re-render the chart with new dimensions
+            render(data);
         });
 
         render(data);
