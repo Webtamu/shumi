@@ -10,6 +10,7 @@ class NavigationManager(QObject):
     def __init__(self) -> None:
         super().__init__()
         self.stacked_widget = QStackedWidget()
+        self.stacked_widget.setWindowTitle(APPLICATION_NAME)
         self.view_map: dict[ViewState, int] = {}
         self.counter = 0
 
@@ -23,11 +24,7 @@ class NavigationManager(QObject):
         if view_state in self.view_map:
             self.stacked_widget.setCurrentIndex(self.view_map[view_state])
 
-    def get_current_view(self) -> View:
-        return self.stacked_widget.currentWidget()
-
     def do_show(self) -> None:
-        self.stacked_widget.setWindowTitle(APPLICATION_NAME)
         self.stacked_widget.show()
 
     def handle_navigation(self, signal: Signal) -> None:

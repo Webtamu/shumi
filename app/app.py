@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import QApplication
 
+from .backend.core import ApplicationController
 from .backend.models import ApplicationModel, PreferencesModel, DataModel
-
 from .backend.views import (
     LoginView,
     CreateView,
@@ -12,8 +12,6 @@ from .backend.views import (
     SessionView,
     SummaryView,
 )
-
-from .backend.controllers import ApplicationController
 from .backend.managers import NavigationManager, KeybindManager
 from .backend.helpers import Logger, ViewState, Items, KeyAction
 

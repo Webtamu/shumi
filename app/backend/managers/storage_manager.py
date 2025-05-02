@@ -9,7 +9,7 @@ from ..core.settings import get_settings, QSETTINGS_STORAGE_KEY, QSETTINGS_DARK_
 class StorageManager:
     def __init__(self):
         self.settings = get_settings()
-        self.current_path = self.settings.value(QSETTINGS_STORAGE_KEY, defaultValue="")
+        self.current_path: str = self.settings.value(QSETTINGS_STORAGE_KEY, defaultValue="")
         self.dark_mode: bool = self.settings.value(QSETTINGS_DARK_MODE_KEY, defaultValue=False, type=bool)
         if self.current_path:
             self.update_path()

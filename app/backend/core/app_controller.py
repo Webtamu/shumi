@@ -1,16 +1,14 @@
-from PyQt6.QtCore import QTimer
+from PyQt6.QtCore import QTimer, QObject
 from ..models import Model
 from ..views import View
-from .controllers import Controller
 from ..helpers import Logger, Connections, Signal, ViewState
 from ..managers import ExtractorManager
-from ..core.eventbus import event_bus
+from .eventbus import event_bus
 
 
-class ApplicationController(Controller):
+class ApplicationController(QObject):
     def __init__(self, model_list: list[Model], view_list: list[View]) -> None:
-        super().__init__(model_list, view_list)
-
+        super().__init__()
         self.model_list: list[Model] = model_list
         self.view_map: dict[ViewState, View] = {}
         self.extractor = ExtractorManager(view_map=self.view_map)

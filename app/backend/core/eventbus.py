@@ -1,4 +1,3 @@
-# core/event_bus.py
 from queue import Queue, Empty
 from ..helpers import Signal
 

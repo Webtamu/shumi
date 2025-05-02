@@ -1,7 +1,7 @@
 from ..helpers import Logger, Signal
 from ..services import SupabaseService
 from ..core.context import app_context
-from ..core.settings import get_settings
+from ..core.settings import get_settings, QSETTINGS_ACCESS_TOKEN, QSETTINGS_REFRESH_TOKEN, QSETTINGS_LAST_LOGIN
 import datetime
 
 
@@ -48,31 +48,31 @@ class AuthManager:
                                          )
 
     def save_auth_token(self, access_token: str, refresh_token: str) -> None:
-        self.settings.setValue("access_token", access_token)
-        self.settings.setValue("refresh_token", refresh_token)
-        self.settings.setValue("last_login", datetime.datetime.now().isoformat())
+        self.settings.setValue(QSETTINGS_ACCESS_TOKEN, access_token)
+        self.settings.setValue(QSETTINGS_REFRESH_TOKEN, refresh_token)
+        self.settings.setValue(QSETTINGS_LAST_LOGIN, datetime.datetime.now().isoformat())
         Logger.info("Auth tokens saved successfully.")
 
     def get_auth_token(self) -> dict:
         settings = get_settings()
-        access_token = settings.value("access_token", defaultValue=None)
-        refresh_token = settings.value("refresh_token", defaultValue=None)
-        last_login = settings.value("last_login", defaultValue=None)
+        access_token = settings.value(QSETTINGS_ACCESS_TOKEN, defaultValue=None)
+        refresh_token = settings.value(QSETTINGS_REFRESH_TOKEN, defaultValue=None)
+        last_login = settings.value(QSETTINGS_LAST_LOGIN, defaultValue=None)
 
-        if all([access_token, refresh_token, last_login]):
-            return {
-                "access_token": access_token,
-                "refresh_token": refresh_token,
-                "last_login": last_login
-            }
-        else:
+        if not all([access_token, refresh_token, last_login]):
             Logger.error("Auth tokens are missing or incomplete.")
             return {}
 
+        return {
+            "access_token": access_token,
+            "refresh_token": refresh_token,
+            "last_login": last_login
+        }
+
     def clean_auth_token(self) -> None:
-        self.settings.remove("access_token")
-        self.settings.remove("refresh_token")
-        self.settings.remove("last_login")
+        self.settings.remove(QSETTINGS_ACCESS_TOKEN)
+        self.settings.remove(QSETTINGS_REFRESH_TOKEN)
+        self.settings.remove(QSETTINGS_LAST_LOGIN)
         Logger.info("Auth tokens cleaned successfully.")
 
     def attempt_token_login(self) -> bool:

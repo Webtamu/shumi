@@ -1,4 +1,3 @@
-# core/event_bus.py
 from dataclasses import dataclass
 
 

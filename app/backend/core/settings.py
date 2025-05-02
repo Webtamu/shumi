@@ -6,6 +6,9 @@ QSETTINGS_APP = "SHUMI"
 USER_DEFINED_TIME_PERIOD = 10
 QSETTINGS_STORAGE_KEY = "storage_directory"
 QSETTINGS_DARK_MODE_KEY = "dark_mode"
+QSETTINGS_ACCESS_TOKEN = "access_token"
+QSETTINGS_REFRESH_TOKEN = "refresh_token"
+QSETTINGS_LAST_LOGIN = "last_login"
 
 
 def get_settings() -> QSettings:
