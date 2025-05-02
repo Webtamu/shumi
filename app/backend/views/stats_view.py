@@ -1,5 +1,5 @@
 from PyQt6 import uic
-from PyQt6.QtWidgets import QPushButton, QWidget, QVBoxLayout, QSizePolicy
+from PyQt6.QtWidgets import QPushButton, QSizePolicy
 from PyQt6.QtCore import QUrl
 from PyQt6.QtWebEngineWidgets import QWebEngineView
 
@@ -7,6 +7,7 @@ from ..views import View
 from ..helpers import Items, Actions, ViewState
 
 import os
+
 
 class StatsView(View):
     def __init__(self) -> None:
@@ -22,7 +23,6 @@ class StatsView(View):
         # Make sure the QWebEngineView fills the layout
         size_policy = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         self.webEngineView.setSizePolicy(size_policy)
-
 
         self.item_map = {
             Items.HOME: {

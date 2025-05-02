@@ -1,7 +1,7 @@
 from PyQt6.QtCore import QSettings
 from ..helpers import Logger, Signal
 from ..services import SupabaseService
-from ..managers import ContextManager
+from ..core.context import app_context
 import datetime
 
 QSETTINGS_ORG = "WEBTAMU"
@@ -9,9 +9,8 @@ QSETTINGS_APP = "SHUMI"
 
 
 class AuthManager:
-    def __init__(self, auth_service: SupabaseService, context: ContextManager):
+    def __init__(self, auth_service: SupabaseService):
         self.auth_service = auth_service
-        self.context = context
         # self.login()  # Attempt auto-login on initialization
 
     def create_account(self, signal: Signal) -> None:
@@ -96,14 +95,9 @@ class AuthManager:
 
         if self.auth_service.is_connected():
             user_info = self.auth_service.get_user_info()
-            self.context.update_fields({
-                "user_id": user_info.user.id,
-                "username": user_info.user.user_metadata.get("full_name"),
-                "email": user_info.user.user_metadata.get("email")
-            })
-            self.context.update_stats()
-            self.context.refresh_fields()
-
+            app_context.user_id = user_info.user.id
+            app_context.username = user_info.user.user_metadata.get("full_name")
+            app_context.email = user_info.user.user_metadata.get("email")
             signal.nav = True
         else:
             signal.nav = False

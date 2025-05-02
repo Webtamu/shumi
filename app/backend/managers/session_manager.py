@@ -1,8 +1,8 @@
 from PyQt6.QtCore import QSettings
 from ..helpers import Timer, Signal
 from ..services import DuckDBService
-from ..managers import ContextManager
 from ..core.eventbus import event_bus
+from ..core.context import app_context
 import os
 
 # TODO: Move to config file
@@ -13,9 +13,8 @@ QSETTINGS_STORAGE_KEY = "storage_directory"
 
 
 class SessionManager:
-    def __init__(self, local_database: DuckDBService, context: ContextManager):
+    def __init__(self, local_database: DuckDBService):
         self.local_database = local_database
-        self.context = context
         self.timer = Timer(USER_DEFINED_TIME_PERIOD)
         self.timer.timer_signal.connect(event_bus.publish)
         self.timer.start()
@@ -30,12 +29,9 @@ class SessionManager:
     def stop_timer(self, signal: Signal) -> None:
         if self.timer:
             self.timer.stop()
-            self.add_session(self.context.user_id,
+            self.add_session(app_context.user_id,
                              self.timer.start_time,
                              self.timer.stop_time)
-
-            self.context.update_stats()
-            self.context.refresh_fields()
 
     def save_session_notes(self, signal: Signal) -> None:
         self.settings = QSettings(QSETTINGS_ORG, QSETTINGS_APP)

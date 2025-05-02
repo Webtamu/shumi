@@ -1,5 +1,5 @@
 from ..services import DuckDBService, SupabaseService
-from ..managers import ContextManager, SyncManager, SessionManager, AuthManager
+from ..managers import SyncManager, SessionManager, AuthManager
 
 from .models import Model
 from ..helpers import Signal, Logger, Items, Actions
@@ -37,31 +37,32 @@ class DataModel(Model):
         self.local_database = DuckDBService()
         self.cloud_database = SupabaseService()
 
-        self.context_manager = ContextManager(local_database=self.local_database)
         self.sync_manager = SyncManager(local_database=self.local_database,
-                                        cloud_database=self.cloud_database,
-                                        context=self.context_manager)
-        self.session_manager = SessionManager(local_database=self.local_database,
-                                              context=self.context_manager)
-        self.auth_manager = AuthManager(auth_service=self.cloud_database,
-                                        context=self.context_manager)
+                                        cloud_database=self.cloud_database)
+        self.session_manager = SessionManager(local_database=self.local_database)
+        self.auth_manager = AuthManager(auth_service=self.cloud_database)
 
         self.action_map = {
-            Items.SYNC: self.sync_manager.sync_to_cloud,
-            Items.LOGIN_LOGIN: self.auth_manager.login,
-            Items.PROFILE_LOGOUT: self.auth_manager.logout,
-            Items.START: self.session_manager.begin_timer,
-            Items.STOP: self.session_manager.stop_timer,
-            Items.BEGIN_TAKE: self.session_manager.save_session_notes,
-            Items.CREATE_ACCOUNT_CREATE: self.auth_manager.create_account,
+            Items.SYNC: [self.sync_manager.sync_to_cloud],
+            Items.LOGIN_LOGIN: [self.auth_manager.login,
+                                self.sync_manager.update_streak_stats,
+                                self.sync_manager.refresh_fields],
+            Items.PROFILE_LOGOUT: [self.auth_manager.logout],
+            Items.START: [self.session_manager.begin_timer],
+            Items.STOP: [self.session_manager.stop_timer,
+                         self.sync_manager.update_streak_stats,
+                         self.sync_manager.refresh_fields],
+            Items.BEGIN_TAKE: [self.session_manager.save_session_notes],
+            Items.CREATE_ACCOUNT_CREATE: [self.auth_manager.create_account],
         }
 
     def update_model(self, signal: Signal) -> None:
         """
         Update the model based on the given signal.
         """
-        if action := self.action_map.get(signal.item):
-            action(signal)
+        if actions := self.action_map.get(signal.item):
+            for action in actions:
+                action(signal)
 
         item_entry = self.data_map[signal.item]
         if signal.action != Actions.LABEL_SET:  # Don't overwrite dynamic text
