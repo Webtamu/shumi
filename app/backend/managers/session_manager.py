@@ -1,15 +1,9 @@
-from PyQt6.QtCore import QSettings
 from ..helpers import Timer, Signal
 from ..services import DuckDBService
 from ..core.eventbus import event_bus
 from ..core.context import app_context
+from ..core.settings import get_settings, QSETTINGS_STORAGE_KEY, USER_DEFINED_TIME_PERIOD
 import os
-
-# TODO: Move to config file
-USER_DEFINED_TIME_PERIOD = 10
-QSETTINGS_ORG = "WEBTAMU"
-QSETTINGS_APP = "SHUMI"
-QSETTINGS_STORAGE_KEY = "storage_directory"
 
 
 class SessionManager:
@@ -17,6 +11,7 @@ class SessionManager:
         self.local_database = local_database
         self.timer = Timer(USER_DEFINED_TIME_PERIOD)
         self.timer.timer_signal.connect(event_bus.publish)
+        self.settings = get_settings()
         self.timer.start()
 
     def add_session(self, user_id, start_time, stop_time) -> None:
@@ -34,14 +29,13 @@ class SessionManager:
                              self.timer.stop_time)
 
     def save_session_notes(self, signal: Signal) -> None:
-        self.settings = QSettings(QSETTINGS_ORG, QSETTINGS_APP)
-        self.current_path = self.settings.value(QSETTINGS_STORAGE_KEY, defaultValue="")
+        current_path = self.settings.value(QSETTINGS_STORAGE_KEY, defaultValue="")
         notes = signal.data.get("notes")
-        if self.current_path and notes:
+        if current_path and notes:
             try:
-                os.makedirs(self.current_path, exist_ok=True)
+                os.makedirs(current_path, exist_ok=True)
                 timestamp = self.timer.stop_time.strftime("%Y-%m-%d at %H-%M")
-                file_path = os.path.join(self.current_path, f"{timestamp}.txt")
+                file_path = os.path.join(current_path, f"{timestamp}.txt")
                 with open(file_path, "w", encoding="utf-8") as file:
                     file.write(notes)
             except Exception as e:

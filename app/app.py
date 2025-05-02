@@ -52,6 +52,7 @@ class App(QApplication):
         for view in self.view_list:
             self.navigation_manager.add_view(view)
             KeybindManager.activate_keybinds(view)
+
         self.navigation_manager.navigate_to(ViewState.LOGIN)
         self.navigation_manager.do_show()
 

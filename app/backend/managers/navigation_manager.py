@@ -3,6 +3,7 @@ from PyQt6.QtCore import QObject
 
 from ..views import View
 from ..helpers import Signal, ViewState, Items
+from ..core.settings import APPLICATION_NAME
 
 
 class NavigationManager(QObject):
@@ -26,6 +27,7 @@ class NavigationManager(QObject):
         return self.stacked_widget.currentWidget()
 
     def do_show(self) -> None:
+        self.stacked_widget.setWindowTitle(APPLICATION_NAME)
         self.stacked_widget.show()
 
     def handle_navigation(self, signal: Signal) -> None:

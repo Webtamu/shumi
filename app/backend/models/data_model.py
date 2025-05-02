@@ -3,33 +3,34 @@ from ..managers import SyncManager, SessionManager, AuthManager
 
 from .models import Model
 from ..helpers import Signal, Logger, Items, Actions
-
-USER_DEFINED_TIME_PERIOD = 10
+from ..core.settings import USER_DEFINED_TIME_PERIOD
 
 
 class DataModel(Model):
-    """
-    This class houses local storage that can be synced to cloud.
-    """
-
     def __init__(self) -> None:
         super().__init__()
         self.data_map = {
-            Items.SYNC: {"state": False, "text": "Sync", },
+            # Authentication related items
             Items.LOGIN_LOGIN: {"state": False, "text": "Login", "nav": True},
+            Items.PROFILE_LOGOUT: {"state": False, "text": "Logout", "nav": True},
+            Items.CREATE_ACCOUNT_CREATE: {"state": False, "text": "Create account"},
+
+            # Session related items
             Items.START: {"state": False, "text": "Start Session", "nav": True},
             Items.STOP: {"state": False, "text": "Stop Session", "nav": True},
             Items.BEGIN_TAKE: {"state": False, "text": "Begin Take", "nav": True},
-            Items.TIMER: {"state": False, "text": str(USER_DEFINED_TIME_PERIOD), },
-            Items.CREATE_ACCOUNT_CREATE: {"state": False, "text": "Create account", },
-            Items.HOME_WELCOME: {"state": False, "text": "", },
-            Items.HOME_CURRENT_STREAK: {"state": False, "text": "", },
-            Items.HOME_DAILY_AVERAGE: {"state": False, "text": "", },
-            Items.HOME_HIGHEST_STREAK: {"state": False, "text": "", },
-            Items.PROFILE_EMAIL: {"state": False, "text": "", },
-            Items.PROFILE_USERNAME: {"state": False, "text": "", },
-            Items.PROFILE_USERNAME: {"state": False, "text": "", },
-            Items.PROFILE_LOGOUT: {"state": False, "text": "Logout", },
+            Items.TIMER: {"state": False, "text": str(USER_DEFINED_TIME_PERIOD)},
+
+            # Sync related items
+            Items.SYNC: {"state": False, "text": "Sync"},
+
+            # Profile and stats display items
+            Items.HOME_WELCOME: {"state": False, "text": ""},
+            Items.HOME_CURRENT_STREAK: {"state": False, "text": ""},
+            Items.HOME_DAILY_AVERAGE: {"state": False, "text": ""},
+            Items.HOME_HIGHEST_STREAK: {"state": False, "text": ""},
+            Items.PROFILE_EMAIL: {"state": False, "text": ""},
+            Items.PROFILE_USERNAME: {"state": False, "text": ""},
         }
 
         self.model_type = "Data"
@@ -57,19 +58,17 @@ class DataModel(Model):
         }
 
     def update_model(self, signal: Signal) -> None:
-        """
-        Update the model based on the given signal.
-        """
+        item_entry = self.data_map[signal.item]
+        signal.nav = item_entry.get("nav", False)
+
         if actions := self.action_map.get(signal.item):
             for action in actions:
                 action(signal)
 
-        item_entry = self.data_map[signal.item]
         if signal.action != Actions.LABEL_SET:  # Don't overwrite dynamic text
             item_entry["state"] = not item_entry["state"]
             signal.text = item_entry["text"]
             signal.state = item_entry["state"]
-            signal.nav = item_entry.get("nav", False)
 
         if signal.debug:
             Logger.info(f'{self.model_type} Model Handled: {signal}')

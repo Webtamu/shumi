@@ -1,4 +1,4 @@
-# 🎵 JAM App
+# 🎵 SHUMI
 
 A growth & productivity app for tracking your practice sessions, visualizing progress, and building streaks.
 

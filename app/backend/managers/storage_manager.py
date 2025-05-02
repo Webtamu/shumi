@@ -1,19 +1,14 @@
 from PyQt6.QtWidgets import QFileDialog
-from PyQt6.QtCore import QSettings
 from ..helpers import Signal, Actions, Items, ViewState
 import os
 
 from ..core.eventbus import event_bus
-
-QSETTINGS_ORG = "WEBTAMU"
-QSETTINGS_APP = "SHUMI"
-QSETTINGS_STORAGE_KEY = "storage_directory"
-QSETTINGS_DARK_MODE_KEY = "dark_mode"
+from ..core.settings import get_settings, QSETTINGS_STORAGE_KEY, QSETTINGS_DARK_MODE_KEY
 
 
 class StorageManager:
     def __init__(self):
-        self.settings = QSettings(QSETTINGS_ORG, QSETTINGS_APP)
+        self.settings = get_settings()
         self.current_path = self.settings.value(QSETTINGS_STORAGE_KEY, defaultValue="")
         self.dark_mode: bool = self.settings.value(QSETTINGS_DARK_MODE_KEY, defaultValue=False, type=bool)
         if self.current_path:
@@ -45,9 +40,6 @@ class StorageManager:
                 state=self.dark_mode
                 )
         event_bus.publish(dark_mode_signal)
-
-    def get_directory(self):
-        return self.current_path
 
     def set_directory(self, path: str):
         if os.path.isdir(path):
