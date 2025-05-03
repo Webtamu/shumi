@@ -181,7 +181,7 @@
               </widget>
              </item>
              <item>
-              <widget class="QComboBox" name="deviceIOutput"/>
+              <widget class="QComboBox" name="deviceOutput"/>
              </item>
             </layout>
            </widget>

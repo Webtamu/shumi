@@ -1,5 +1,6 @@
 from PyQt6.QtWidgets import QFileDialog
 from ..helpers import Signal, Actions, Items, ViewState
+import sounddevice
 import os
 
 from ..core.eventbus import event_bus
@@ -15,6 +16,7 @@ class StorageManager:
             self.update_path()
         if self.dark_mode:
             self.update_dark_mode()
+        self.list_audio_devices()
 
     def select_directory(self, signal=None):
         dir_path = QFileDialog.getExistingDirectory(None, "Select Storage Directory", self.current_path or "")
@@ -49,3 +51,34 @@ class StorageManager:
     def set_dark_mode(self, signal: Signal) -> None:
         self.dark_mode = signal.state
         self.settings.setValue(QSETTINGS_DARK_MODE_KEY, self.dark_mode)
+
+    def list_audio_devices(self) -> None:
+        devices = sounddevice.query_devices()
+        input_index, output_index = sounddevice.default.device
+
+        input_devices = []
+        output_devices = []
+
+        for i, device in enumerate(devices):
+            name = device['name'].strip()
+            if device['max_input_channels'] > 0:
+                input_devices.append(name)
+            if device['max_output_channels'] > 0:
+                output_devices.append(name)
+
+        input_signal = Signal(
+            item=Items.SETTINGS_INPUT_DEVICE,
+            action=Actions.COMBO_SET,
+            source=ViewState.ALL,
+            data=input_devices
+        )
+
+        output_signal = Signal(
+            item=Items.SETTINGS_OUTPUT_DEVICE,
+            action=Actions.COMBO_SET,
+            source=ViewState.ALL,
+            data=output_devices
+        )
+
+        event_bus.publish(input_signal)
+        event_bus.publish(output_signal)

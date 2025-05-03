@@ -1,5 +1,5 @@
 from PyQt6 import uic
-from PyQt6.QtWidgets import QPushButton, QCheckBox, QToolButton, QLabel
+from PyQt6.QtWidgets import QPushButton, QCheckBox, QToolButton, QLabel, QComboBox
 
 from ..views import View
 from ..helpers import Items, Actions, ViewState
@@ -57,4 +57,12 @@ class SettingsView(View):
                 "instance": self.window.findChild(QPushButton, "btnSync"),
                 "action": Actions.BTN_PRESS
             },
+            Items.SETTINGS_INPUT_DEVICE: {
+                "instance": self.window.findChild(QComboBox, "deviceInput"),
+                "action": Actions.COMBO_SET
+            },
+            Items.SETTINGS_OUTPUT_DEVICE: {
+                "instance": self.window.findChild(QComboBox, "deviceOutput"),
+                "action": Actions.COMBO_SET
+            }
         }

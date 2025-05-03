@@ -74,6 +74,8 @@ class Items(Enum):
     DARK_MODE = auto()
     SETTINGS_PATH = auto()
     SETTINGS_PATH_SELECTED = auto()
+    SETTINGS_INPUT_DEVICE = auto()
+    SETTINGS_OUTPUT_DEVICE = auto()
     REPORT_BUG = auto()
     ABOUT = auto()
     CONTACT = auto()
@@ -115,8 +117,7 @@ class ViewState(Enum):
 class Actions(Enum):
     BTN_PRESS = auto()
     BOX_CHECK = auto()
-    LIST_SET = auto()
-    BROWSE_SET = auto()
+    COMBO_SET = auto()
     LABEL_SET = auto()
     LABEL_PRESS = auto()
     NONE = auto()

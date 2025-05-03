@@ -19,6 +19,8 @@ class PreferencesModel(Model):
             Items.LOGIN_STAY_SIGNED_IN: {"state": False, "text": "Stay signed in"},
             Items.SETTINGS_PATH: {"state": False, "text": "..."},
             Items.SETTINGS_PATH_SELECTED: {"state": False, "text": ""},
+            Items.SETTINGS_INPUT_DEVICE: {"state": False, "text": ""},
+            Items.SETTINGS_OUTPUT_DEVICE: {"state": False, "text": ""},
         }
 
         self.storage_manager = StorageManager()
@@ -35,7 +37,8 @@ class PreferencesModel(Model):
                 action(signal)
 
             item_entry["state"] = signal.state
-            signal.text = item_entry["text"]
+            if not signal.text:
+                signal.text = item_entry["text"]
             signal.source = ViewState.ALL
 
         if signal.debug:

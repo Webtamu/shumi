@@ -16,7 +16,8 @@ class View(QWidget):
         self.action_map = {
             Actions.BTN_PRESS: self.update_button,
             Actions.BOX_CHECK: self.update_box,
-            Actions.LABEL_SET: self.update_label
+            Actions.LABEL_SET: self.update_label,
+            Actions.COMBO_SET: self.update_combo,
         }
         super().__init__()
 
@@ -56,3 +57,8 @@ class View(QWidget):
 
     def update_label(self, item: QWidget, signal: Signal) -> None:
         item.setText(signal.text)
+
+    def update_combo(self, item: QWidget, signal: Signal) -> None:
+        was_blocked = item.blockSignals(True)
+        item.addItems(signal.data)
+        item.blockSignals(was_blocked)
