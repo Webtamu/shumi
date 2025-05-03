@@ -13,3 +13,4 @@ local_data.duckdb.wal
 study_sessions.duckdb
 study_sessions.duckdb.wal
 .dev
+.venv

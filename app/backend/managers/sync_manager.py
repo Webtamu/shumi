@@ -1,5 +1,7 @@
 from ..helpers import Logger, Signal, Items, Actions, ViewState
 from ..services import DuckDBService, SupabaseService
+from datetime import datetime
+import re
 from ..core.context import app_context
 from ..core.eventbus import event_bus
 
@@ -28,11 +30,47 @@ class SyncManager:
         else:
             Logger.error('Failed to sync any sessions.')
 
-    def sync_from_cloud(self) -> None:
+    def parse_iso_datetime(self, dt_str):
+        # Handle nanoseconds/microseconds of variable length
+        if '.' in dt_str:
+            dt_str = re.sub(r'\.(\d+)', lambda m: '.%s' % m.group(1).ljust(6, '0')[:6], dt_str)
+        return datetime.fromisoformat(dt_str)
+
+    def sync_from_cloud(self, signal: Signal = None) -> None:
         """
-        Sync cloud data to local DuckDB.
+        Sync cloud data to local DuckDB by replacing all of the user's sessions
+        with what exists in the cloud database.
         """
-        return
+        try:
+            # Get current authenticated user
+            user = self.cloud_database.get_user_info()
+            Logger.debug(f"Fetching sessions for {user.user.user_metadata.get('full_name')}.")
+            if not user or not user.user:
+                Logger.error("No authenticated user for cloud sync")
+                return
+
+            cloud_sessions = self.cloud_database.fetch_data("study_sessions").data
+
+            self.local_database.con.execute(
+                "DELETE FROM session WHERE user_id = ?",
+                (user.user.id,)
+            )
+
+            for session in cloud_sessions:
+                try:
+                    self.local_database.insert_data(
+                        user_id=session['user_id'],
+                        start_time=self.parse_iso_datetime(session['timestamp_start']),
+                        stop_time=self.parse_iso_datetime(session['timestamp_stop']),
+                        synced=True
+                    )
+                except Exception as e:
+                    Logger.error(f"Failed to insert session {session.get('session_id')}: {e}")
+
+            Logger.info(f"Synced {len(cloud_sessions)} session(s) from Supabase")
+
+        except Exception as e:
+            Logger.error(f"Cloud to local sync failed: {e}")
 
     def refresh_fields(self, signal: Signal = None):
         signals = self.generate_field_signals()
