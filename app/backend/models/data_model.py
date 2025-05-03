@@ -44,7 +44,7 @@ class DataModel(Model):
         self.auth_manager = AuthManager(auth_service=self.cloud_database)
 
         self.action_map = {
-            Items.SYNC: [self.sync_manager.sync_to_cloud, 
+            Items.SYNC: [self.sync_manager.sync_to_cloud,
                          self.sync_manager.sync_from_cloud,
                          self.sync_manager.refresh_fields],
             Items.LOGIN_LOGIN: [self.auth_manager.login,
