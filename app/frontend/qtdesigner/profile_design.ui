@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>808</width>
-    <height>1062</height>
+    <width>787</width>
+    <height>1056</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -64,56 +64,31 @@
       </property>
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
-        <widget class="QFrame" name="frame_6">
+        <widget class="QFrame" name="frame_8">
          <property name="frameShape">
           <enum>QFrame::Shape::Box</enum>
          </property>
          <property name="frameShadow">
           <enum>QFrame::Shadow::Raised</enum>
          </property>
-         <layout class="QVBoxLayout" name="verticalLayout_3">
+         <layout class="QHBoxLayout" name="horizontalLayout_3">
           <item>
-           <widget class="QFrame" name="frame_12">
-            <property name="frameShape">
-             <enum>QFrame::Shape::StyledPanel</enum>
+           <widget class="QLabel" name="label">
+            <property name="text">
+             <string/>
             </property>
-            <property name="frameShadow">
-             <enum>QFrame::Shadow::Raised</enum>
+            <property name="pixmap">
+             <pixmap>profile_test.png</pixmap>
             </property>
-            <widget class="QLabel" name="label">
-             <property name="geometry">
-              <rect>
-               <x>320</x>
-               <y>50</y>
-               <width>101</width>
-               <height>101</height>
-              </rect>
-             </property>
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="text">
-              <string/>
-             </property>
-             <property name="pixmap">
-              <pixmap>profile_test.png</pixmap>
-             </property>
-             <property name="scaledContents">
-              <bool>true</bool>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignmentFlag::AlignCenter</set>
-             </property>
-            </widget>
+            <property name="scaledContents">
+             <bool>true</bool>
+            </property>
            </widget>
           </item>
           <item>
            <widget class="QPushButton" name="btnChangeProfilePic">
             <property name="text">
-             <string>Change Profile Picture</string>
+             <string>Upload New</string>
             </property>
            </widget>
           </item>
@@ -143,7 +118,6 @@
             </property>
            </widget>
           </item>
-          
           <item>
            <widget class="QPushButton" name="btnChangeUsername">
             <property name="text">
