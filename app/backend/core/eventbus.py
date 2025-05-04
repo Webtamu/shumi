@@ -6,8 +6,9 @@ class EventBus:
     def __init__(self):
         self._signal_queue: Queue[Signal] = Queue()
 
-    def publish(self, signal: Signal) -> None:
-        self._signal_queue.put(signal)  # Safe from any thread
+    def publish(self, *signals: Signal) -> None:
+        for signal in signals:
+            self._signal_queue.put(signal)
 
     def get_next_signal(self) -> Signal:
         try:

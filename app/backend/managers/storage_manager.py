@@ -4,7 +4,13 @@ import sounddevice
 import os
 
 from ..core.eventbus import event_bus
-from ..core.settings import get_settings, QSETTINGS_STORAGE_KEY, QSETTINGS_DARK_MODE_KEY, QSETTINGS_INPUT_DEVICE, QSETTINGS_OUTPUT_DEVICE
+from ..core.settings import (
+    get_settings,
+    QSETTINGS_STORAGE_KEY,
+    QSETTINGS_DARK_MODE_KEY,
+    QSETTINGS_INPUT_DEVICE,
+    QSETTINGS_OUTPUT_DEVICE
+)
 
 
 class StorageManager:
@@ -66,14 +72,13 @@ class StorageManager:
             action=Actions.COMBO_SET,
             source=ViewState.ALL
         )
-        event_bus.publish(input_device_signal)
         output_device_signal = Signal(
             item=Items.SETTINGS_OUTPUT_DEVICE,
             text=output_device,
             action=Actions.COMBO_SET,
             source=ViewState.ALL
         )
-        event_bus.publish(output_device_signal)
+        event_bus.publish(input_device_signal, output_device_signal)
 
     def set_input_device(self, signal: Signal) -> None:
         self.settings.setValue(QSETTINGS_INPUT_DEVICE, signal.text)
@@ -83,7 +88,9 @@ class StorageManager:
 
     def list_audio_devices(self) -> None:
         devices = sounddevice.query_devices()
-        input_index, output_index = sounddevice.default.device
+
+        # Nice-to-have: Set default input/output devices to currently used ones if not set
+        # input_index, output_index = sounddevice.default.device
 
         input_devices = []
         output_devices = []
@@ -109,5 +116,4 @@ class StorageManager:
             data=output_devices
         )
 
-        event_bus.publish(input_signal)
-        event_bus.publish(output_signal)
+        event_bus.publish(input_signal, output_signal)
