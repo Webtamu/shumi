@@ -27,6 +27,8 @@ class PreferencesModel(Model):
 
         self.action_map = {
             Items.SETTINGS_PATH: self.storage_manager.select_directory,
+            Items.SETTINGS_INPUT_DEVICE: self.storage_manager.set_input_device,
+            Items.SETTINGS_OUTPUT_DEVICE: self.storage_manager.set_output_device,
             Items.DARK_MODE: self.storage_manager.set_dark_mode,
         }
 

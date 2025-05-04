@@ -4,7 +4,7 @@ import sounddevice
 import os
 
 from ..core.eventbus import event_bus
-from ..core.settings import get_settings, QSETTINGS_STORAGE_KEY, QSETTINGS_DARK_MODE_KEY
+from ..core.settings import get_settings, QSETTINGS_STORAGE_KEY, QSETTINGS_DARK_MODE_KEY, QSETTINGS_INPUT_DEVICE, QSETTINGS_OUTPUT_DEVICE
 
 
 class StorageManager:
@@ -17,6 +17,7 @@ class StorageManager:
         if self.dark_mode:
             self.update_dark_mode()
         self.list_audio_devices()
+        self.set_input_output_devices()
 
     def select_directory(self, signal=None):
         dir_path = QFileDialog.getExistingDirectory(None, "Select Storage Directory", self.current_path or "")
@@ -51,6 +52,34 @@ class StorageManager:
     def set_dark_mode(self, signal: Signal) -> None:
         self.dark_mode = signal.state
         self.settings.setValue(QSETTINGS_DARK_MODE_KEY, self.dark_mode)
+
+    def get_input_output_devices(self) -> tuple:
+        input_device = self.settings.value(QSETTINGS_INPUT_DEVICE, defaultValue=None)
+        output_device = self.settings.value(QSETTINGS_OUTPUT_DEVICE, defaultValue=None)
+        return input_device, output_device
+
+    def set_input_output_devices(self) -> None:
+        input_device, output_device = self.get_input_output_devices()
+        input_device_signal = Signal(
+            item=Items.SETTINGS_INPUT_DEVICE,
+            text=input_device,
+            action=Actions.COMBO_SET,
+            source=ViewState.ALL
+        )
+        event_bus.publish(input_device_signal)
+        output_device_signal = Signal(
+            item=Items.SETTINGS_OUTPUT_DEVICE,
+            text=output_device,
+            action=Actions.COMBO_SET,
+            source=ViewState.ALL
+        )
+        event_bus.publish(output_device_signal)
+
+    def set_input_device(self, signal: Signal) -> None:
+        self.settings.setValue(QSETTINGS_INPUT_DEVICE, signal.text)
+
+    def set_output_device(self, signal: Signal) -> None:
+        self.settings.setValue(QSETTINGS_OUTPUT_DEVICE, signal.text)
 
     def list_audio_devices(self) -> None:
         devices = sounddevice.query_devices()

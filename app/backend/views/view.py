@@ -60,5 +60,8 @@ class View(QWidget):
 
     def update_combo(self, item: QWidget, signal: Signal) -> None:
         was_blocked = item.blockSignals(True)
-        item.addItems(signal.data)
+        if signal.data:
+            item.addItems(signal.data)
+        if signal.text:
+            item.setCurrentText(signal.text)
         item.blockSignals(was_blocked)
