@@ -1,4 +1,4 @@
-name: Distro Compile Test
+name: Distro Test
 
 on:
   push:
@@ -69,7 +69,16 @@ jobs:
       - name: Install project dependencies
         run: |
           python -m pip install --no-cache-dir -r requirements.txt
-        
+
+      - name: Set PYTHONPATH for pytest
+        run: |
+          echo "Setting PYTHONPATH"
+          export PYTHONPATH=$(pwd)
+
       # Run compilation test
       - name: Compile test
         run: pytest tests/test_compile.py -v
+
+      # Run auth unit tests
+      - name: Run auth unit tests
+        run: pytest tests/test_auth.py -v
