@@ -6,6 +6,7 @@ flake8
 flake8-pyproject
 pytz
 pytest
+pytest-mock
 pytest-qt
 PyQt6-WebEngine
 sounddevice
