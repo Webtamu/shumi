@@ -19,6 +19,7 @@ jobs:
     
     env:
       PYTHONIOENCODING: utf-8
+      PYTHONPATH: ${{ github.workspace }}  # Set PYTHONPATH globally for all steps
 
     steps:
       - uses: actions/checkout@v4
@@ -69,11 +70,6 @@ jobs:
       - name: Install project dependencies
         run: |
           python -m pip install --no-cache-dir -r requirements.txt
-
-      - name: Set PYTHONPATH for pytest
-        run: |
-          echo "Setting PYTHONPATH"
-          export PYTHONPATH=$(pwd)
 
       # Run compilation test
       - name: Compile test
