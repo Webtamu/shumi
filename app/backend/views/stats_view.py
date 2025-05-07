@@ -23,7 +23,7 @@ class StatsView(View):
         self.window = uic.loadUi("app/frontend/qtdesigner/stats_design.ui")
         self.initialize_style()
 
-        html_path = os.path.abspath("app/frontend/experiments/index.html")
+        html_path = os.path.abspath("app/frontend/static/index.html")
         self.webEngineView = self.window.findChild(QWebEngineView, "graphTest")
         self.channel = QWebChannel(self)
         print(self.channel)
