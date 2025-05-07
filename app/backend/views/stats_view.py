@@ -1,13 +1,19 @@
 from PyQt6 import uic
 from PyQt6.QtWidgets import QPushButton, QSizePolicy
-from PyQt6.QtCore import QUrl
+from PyQt6.QtCore import QUrl, QObject, pyqtSlot
 from PyQt6.QtWebEngineWidgets import QWebEngineView
+from PyQt6.QtWebEngineCore import QWebEngineSettings
+from PyQt6.QtWebChannel import QWebChannel
 
 from ..views import View
 from ..helpers import Items, Actions, ViewState
 
 import os
 
+class PyObj(QObject):
+    @pyqtSlot(str)
+    def sendData(self, data):
+        print(f"Received from JS: {data}")
 
 class StatsView(View):
     def __init__(self) -> None:
@@ -18,7 +24,20 @@ class StatsView(View):
 
         html_path = os.path.abspath("app/frontend/experiments/index.html")
         self.webEngineView = self.window.findChild(QWebEngineView, "graphTest")
+
+        
+        #self.webEngineView.settings().setAttribute(QWebEngineSettings.WebAttribute.WebAttribute.DeveloperExtrasEnabled, True)
+
+        self.channel = QWebChannel(self)
+        print(self.channel)
+        self.obj = PyObj(self)
+        self.channel.registerObject("pyObj", self.obj)
+        self.webEngineView.page().setWebChannel(self.channel)
+
         self.webEngineView.setUrl(QUrl.fromLocalFile(html_path))
+
+
+
 
         # Make sure the QWebEngineView fills the layout
         size_policy = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)

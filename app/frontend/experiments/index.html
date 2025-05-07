@@ -43,7 +43,21 @@
     <div id="tooltip" class="tooltip" style="display: none;"></div>
 
     <script src="d3.v7.min.js"></script>
+    <script src="qrc:///qtwebchannel/qwebchannel.js"></script>
+
+
     <script>
+
+        window.onload = function () {
+            new QWebChannel(qt.webChannelTransport, function(channel) {
+                window.pyObj = channel.objects.pyObj;
+
+                // Now you can use pyObj directly within this function or in the global scope
+                // For testing, you can just call a function here if you want
+                pyObj.sendData('Test message from JS');
+            });
+        };
+
         const svg = d3.select("#chart");
         let width = window.innerWidth;
         let height = window.innerHeight;
@@ -128,9 +142,15 @@
         }
 
         function updateData() {
+            // Generate new data and update the chart
+    // Generate new data and update the chart
             data = generateDummyData();
             render(data);
-        }
+
+            // Send the new data to Python directly without error handling
+            const dataString = JSON.stringify(data);
+            pyObj.sendData(`Updated Data from JS: ${dataString}`);
+                }
 
         window.addEventListener("resize", () => {
             width = window.innerWidth;

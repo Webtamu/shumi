@@ -1,0 +1,171 @@
+# High-Level MVC Structure Overview
+
+main:
+  imports:
+    - app.App
+
+app/app:
+  imports:
+    - app.backend.core.ApplicationController
+    - app.backend.models.ApplicationModel
+    - app.backend.models.PreferencesModel
+    - app.backend.models.DataModel
+    - app.backend.views.*
+    - app.backend.managers.NavigationManager
+    - app.backend.managers.KeybindManager
+    - app.backend.helpers.Logger
+    - app.backend.helpers.ViewState
+    - app.backend.helpers.Items
+    - app.backend.helpers.KeyAction
+
+app/backend/services/supabase_service:
+  imports:
+    - app.backend.helpers.Logger
+
+app/backend/services/duckdb_service:
+  imports:
+    - app.backend.helpers.Logger
+
+app/backend/helpers/logger:
+  imports:
+    - app.backend.helpers.Colors
+
+app/backend/helpers/timer:
+  imports:
+    - app.backend.helpers.Signal
+    - app.backend.helpers.Items
+    - app.backend.helpers.ViewState
+    - app.backend.helpers.Actions
+
+app/backend/helpers/__init__:
+  imports:
+    - app.backend.helpers.enums.Items
+    - app.backend.helpers.enums.KeyAction
+    - app.backend.helpers.enums.ViewState
+    - app.backend.helpers.enums.Actions
+    - app.backend.helpers.enums.StatusCodes
+    - app.backend.helpers.colors.Colors
+    - app.backend.helpers.signals.Signal
+    - app.backend.helpers.logger.Logger
+    - app.backend.helpers.connections.Connections
+    - app.backend.helpers.timer.Timer
+
+app/backend/helpers/connections:
+  imports:
+    - app.backend.helpers.Signal
+    - app.backend.helpers.Actions
+    - app.backend.ui.ClickableLabel
+
+app/backend/views/profile_view:
+  imports:
+    - app.backend.views.View
+    - app.backend.helpers.Items
+    - app.backend.helpers.Actions
+    - app.backend.helpers.ViewState
+
+app/backend/services/__init__:
+  imports:
+    - app.backend.services.duckdb_service.DuckDBService
+    - app.backend.services.supabase_service.SupabaseService
+
+app/backend/views/__init__:
+  imports:
+    - app.backend.views.view.View
+    - app.backend.views.login_view.LoginView
+    - app.backend.views.create_view.CreateView
+    - app.backend.views.home_view.HomeView
+    - app.backend.views.settings_view.SettingsView
+    - app.backend.views.stats_view.StatsView
+    - app.backend.views.profile_view.ProfileView
+    - app.backend.views.session_view.SessionView
+    - app.backend.views.summary_view.SummaryView
+
+app/backend/helpers/enums:
+  imports:
+    - app.backend.helpers.Items
+    - app.backend.helpers.KeyAction
+    - app.backend.helpers.ViewState
+    - app.backend.helpers.Actions
+    - app.backend.helpers.StatusCodes
+
+app/backend/helpers/signals:
+  imports:
+    - app.backend.helpers.Items
+    - app.backend.helpers.Actions
+    - app.backend.helpers.ViewState
+    - app.backend.helpers.Colors
+
+app/backend/views/home_view:
+  imports:
+    - app.backend.views.View
+    - app.backend.helpers.Items
+    - app.backend.helpers.Actions
+    - app.backend.helpers.ViewState
+
+app/backend/views/settings_view:
+  imports:
+    - app.backend.views.View
+    - app.backend.helpers.Items
+    - app.backend.helpers.Actions
+    - app.backend.helpers.ViewState
+
+app/backend/views/summary_view:
+  imports:
+    - app.backend.views.View
+    - app.backend.helpers.Items
+    - app.backend.helpers.Actions
+    - app.backend.helpers.ViewState
+
+app/backend/views/create_view:
+  imports:
+    - app.backend.views.View
+    - app.backend.helpers.Items
+    - app.backend.helpers.Actions
+    - app.backend.helpers.ViewState
+    - app.backend.ui.ClickableLabel
+    - app.backend.ui.PasswordLineEdit
+
+app/backend/views/login_view:
+  imports:
+    - app.backend.views.View
+    - app.backend.ui.ClickableLabel
+    - app.backend.ui.PasswordLineEdit
+    - app.backend.helpers.Items
+    - app.backend.helpers.Actions
+    - app.backend.helpers.ViewState
+
+app/backend/views/view:
+  imports:
+    - app.backend.helpers.Signal
+    - app.backend.helpers.Items
+    - app.backend.helpers.Actions
+    - app.backend.helpers.ViewState
+
+app/backend/views/session_view:
+  imports:
+    - app.backend.views.View
+    - app.backend.helpers.Items
+    - app.backend.helpers.Actions
+    - app.backend.helpers.ViewState
+
+app/backend/models/__init__:
+  imports:
+    - app.backend.models.preferences_model.PreferencesModel
+    - app.backend.models.data_model.DataModel
+    - app.backend.models.application_model.ApplicationModel
+    - app.backend.models.models.Model
+
+app/backend/models/application_model:
+  imports:
+    - app.backend.models.models.Model
+    - app.backend.helpers.Signal
+    - app.backend.helpers.Items
+    - app.backend.helpers.Logger
+
+app/backend/models/data_model:
+  imports:
+    - app.backend.services.DuckDBService
+    - app.backend.services.SupabaseService
+    - app.backend.managers.SyncManager
+    - app.backend.managers.SessionManager
+    - app.backend.managers.AuthManager 
