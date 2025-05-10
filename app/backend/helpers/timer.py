@@ -45,12 +45,13 @@ class Timer(QThread):
 
             # Timer finished or stopped, this signal is sent twice right now, once when we press stop timer,
             # and once when the timer expires.
-            self.timer_signal.emit(Signal(
-                item=Items.STOP,
-                action=Actions.LABEL_SET,
-                source=ViewState.SESSION,
-                data=[])
-            )
+            if self.is_running:
+                self.timer_signal.emit(Signal(
+                    item=Items.STOP,
+                    action=Actions.LABEL_SET,
+                    source=ViewState.SESSION,
+                    data=[])
+                )
 
     def start_timer(self, time_limit: int) -> None:
         self.mutex.lock()

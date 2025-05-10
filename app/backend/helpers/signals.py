@@ -12,7 +12,6 @@ class Signal:
     text: Optional[str] = None
     data: dict = None
     source: ViewState = ViewState.DEFAULT
-    debug: bool = True
     nav: bool = False
 
     def __str__(self):
