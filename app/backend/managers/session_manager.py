@@ -34,7 +34,7 @@ class SessionManager:
         self.audio_buffer = []
         self.audio_stream = sounddevice.InputStream(
             samplerate=44100,
-            channels=2,
+            channels=1,
             dtype='float32',
             callback=self.audio_callback
         )
