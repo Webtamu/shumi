@@ -10,3 +10,4 @@ pytest-mock
 pytest-qt
 PyQt6-WebEngine
 sounddevice
+numpy
