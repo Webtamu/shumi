@@ -6,6 +6,7 @@ from ..core.settings import get_settings, QSETTINGS_STORAGE_KEY, USER_DEFINED_TI
 import os
 import sounddevice
 import numpy
+from scipy.io import wavfile
 
 
 class SessionManager:
@@ -59,10 +60,19 @@ class SessionManager:
         current_path = self.settings.value(QSETTINGS_STORAGE_KEY, defaultValue="")
         if current_path:
             try:
+                # os.makedirs(current_path, exist_ok=True)
+                # timestamp = self.timer.stop_time.strftime("%Y-%m-%d at %H-%M")
+                # file_path = os.path.join(current_path, f"{timestamp}.npy")
+                # numpy.save(file_path, audio_data)
+                # Logger.critical(f"Audio saved to {file_path}")
+
                 os.makedirs(current_path, exist_ok=True)
                 timestamp = self.timer.stop_time.strftime("%Y-%m-%d at %H-%M")
-                file_path = os.path.join(current_path, f"{timestamp}.npy")
-                numpy.save(file_path, audio_data)
+                file_path = os.path.join(current_path, f"{timestamp}.wav")
+
+                # Normalize float32 [-1.0, 1.0] to int16 range for WAV
+                audio_int16 = numpy.int16(audio_data * 32767)
+                wavfile.write(file_path, 44100, audio_int16)
                 Logger.critical(f"Audio saved to {file_path}")
             except Exception as e:
                 Logger.critical(f"Failed to save audio: {e}")
