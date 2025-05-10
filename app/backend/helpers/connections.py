@@ -1,4 +1,5 @@
 from PyQt6.QtWidgets import QWidget, QComboBox
+from PyQt6.QtCore import QObject
 from typing import Callable
 from ..helpers import Signal, Actions
 from ..ui import ClickableLabel
@@ -42,12 +43,17 @@ class Connections:
         widget.clicked.connect(function)
 
     @staticmethod
+    def connect_web_object(signal: Signal, widget, function: Callable) -> None:
+        widget.obj.web_signal.connect(function)
+    
+    @staticmethod
     def connect_item(widget: QWidget, signal: Signal, function: Callable) -> None:
         connection_map: dict[Actions, Callable] = {
             Actions.BTN_PRESS: Connections.connect_button,
             Actions.LABEL_PRESS: Connections.connect_label,
             Actions.BOX_CHECK: Connections.connect_box,
             Actions.COMBO_SET: Connections.connect_combo,
+            Actions.WEB_BTN_PRESS: Connections.connect_web_object,
             Actions.NONE: lambda *args, **kwargs: None,
         }
         if action := connection_map.get(signal.action):

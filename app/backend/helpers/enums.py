@@ -87,6 +87,9 @@ class Items(Enum):
     # SUMMARY VIEW ITEMS
     SUMMARY_NOTES = auto()
 
+    # STATS VIEW ITEMS
+    STATS_GRAPH = auto()
+
     # NAVIGATION ITEMS
     HOME = auto()
     PROFILE = auto()
@@ -120,5 +123,6 @@ class Actions(Enum):
     COMBO_SET = auto()
     LABEL_SET = auto()
     LABEL_PRESS = auto()
+    WEB_BTN_PRESS = auto()
     NONE = auto()
     DEFAULT = auto()

@@ -31,6 +31,9 @@ class DataModel(Model):
             Items.HOME_HIGHEST_STREAK: {"state": False, "text": ""},
             Items.PROFILE_EMAIL: {"state": False, "text": ""},
             Items.PROFILE_USERNAME: {"state": False, "text": ""},
+
+            # STATS ITEMS
+            Items.STATS_GRAPH: {"state": False, "text": ""},
         }
 
         self.model_type = "Data"
