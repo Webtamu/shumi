@@ -1,5 +1,4 @@
 from PyQt6.QtWidgets import QWidget, QComboBox
-from PyQt6.QtCore import QObject
 from typing import Callable
 from ..helpers import Signal, Actions
 from ..ui import ClickableLabel
@@ -45,7 +44,7 @@ class Connections:
     @staticmethod
     def connect_web_object(signal: Signal, widget, function: Callable) -> None:
         widget.obj.web_signal.connect(function)
-    
+
     @staticmethod
     def connect_item(widget: QWidget, signal: Signal, function: Callable) -> None:
         connection_map: dict[Actions, Callable] = {

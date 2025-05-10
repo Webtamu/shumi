@@ -10,7 +10,7 @@ from ..helpers import Items, Actions, ViewState, Signal, Logger
 import os
 
 
-class PyObj(QObject):    
+class PyObj(QObject):
     web_signal = pyqtSignal(Signal)
 
     @pyqtSlot(str)
