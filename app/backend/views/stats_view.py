@@ -24,10 +24,10 @@ class PyObj(QObject):
 
 
 class QWebWindow():
-    def __init__(self, webengine: QWebEngineView, html: str, view: View) -> None:
+    def __init__(self, webengine: QWebEngineView, html: str) -> None:
         self.webengine = webengine
-        self.channel = QWebChannel(view)
-        self.obj = PyObj(view)
+        self.channel = QWebChannel()
+        self.obj = PyObj()
         self.channel.registerObject("pyObj", self.obj)
         self.webengine.page().setWebChannel(self.channel)
         self.webengine.setUrl(QUrl.fromLocalFile(html))
@@ -62,7 +62,7 @@ class StatsView(View):
                 "action": Actions.BTN_PRESS
             },
             Items.STATS_GRAPH: {
-                "instance": QWebWindow(self.window.findChild(QWebEngineView, "graphTest"), html_path, self),
+                "instance": QWebWindow(self.window.findChild(QWebEngineView, "graphTest"), html_path),
                 "action": Actions.WEB_BTN_PRESS
             }
         }

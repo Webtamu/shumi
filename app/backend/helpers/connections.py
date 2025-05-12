@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QWidget, QComboBox
+from PyQt6.QtWidgets import QWidget, QComboBox, QCheckBox
 from typing import Callable
 from ..helpers import Signal, Actions
 from ..ui import ClickableLabel
@@ -10,7 +10,7 @@ class Connections:
         widget.clicked.connect(lambda _: function(signal))
 
     @staticmethod
-    def connect_box(signal: Signal, widget: QWidget, function: Callable) -> None:
+    def connect_box(signal: Signal, widget: QCheckBox, function: Callable) -> None:
         widget.stateChanged.connect(
             lambda state: function(Signal(
                 item=signal.item,
@@ -19,7 +19,6 @@ class Connections:
                 source=signal.source,
                 state=bool(state),  # crucial
                 nav=signal.nav,
-                debug=signal.debug
             ))
         )
 
@@ -32,7 +31,6 @@ class Connections:
                 text=widget.itemText(index),
                 source=signal.source,
                 nav=signal.nav,
-                debug=signal.debug
             ))
         )
 
