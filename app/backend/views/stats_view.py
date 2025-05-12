@@ -15,7 +15,6 @@ class PyObj(QObject):
 
     @pyqtSlot(str)
     def sendData(self, data):
-        Logger.critical(data)
         self.web_signal.emit(Signal(
             item=Items.STATS_GRAPH,
             action=Actions.WEB_BTN_PRESS,
