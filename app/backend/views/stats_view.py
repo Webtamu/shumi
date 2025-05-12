@@ -5,7 +5,7 @@ from PyQt6.QtWebEngineWidgets import QWebEngineView
 from PyQt6.QtWebChannel import QWebChannel
 
 from ..views import View
-from ..helpers import Items, Actions, ViewState, Signal, Logger
+from ..helpers import Items, Actions, ViewState, Signal
 
 import os
 

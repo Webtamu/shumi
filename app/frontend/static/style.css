@@ -1,0 +1,31 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    height: 100%;
+    width: 100%;
+    font-family: sans-serif;
+}
+.bar:hover {
+    opacity: 0.8;
+}
+.tooltip {
+    position: absolute;
+    pointer-events: none;
+    background: rgba(0,0,0,0.7);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+}
+#chart {
+    display: block;
+    width: 100vw;
+    height: 100vh;
+}
+button {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 10;
+}
