@@ -14,12 +14,16 @@ A growth & productivity app for tracking your practice sessions, visualizing pro
 ---
 
 ## 🔧 Tech Stack
-- 💻 **Python/PyQT** - Backend/UI 
-- 📦 **Supabase** – Auth & Cloud Storage
-- 🗃️ **DuckDB** – Local storage
-- 🎵 **NAudio** – Audio processing
-- 📦 **MSIX** – App packaging
 
+- 💻 **Python / PyQt** – Core backend logic and desktop GUI framework
+- 📦 **Supabase** – User authentication and scalable cloud storage
+- 🗃️ **DuckDB** – Lightweight, in-process SQL OLAP database for local analytics
+- 🦀 **Rust** – Safe and efficient system-level operations and performance-critical tasks
+- 🌐 **HTML** – Markup structure for UI components
+- 🎨 **CSS** – Styling and layout for responsive and clean design
+- ⚡️ **JavaScript** – Interactive logic and dynamic DOM behavior
+- 🔥 **Svelte** – Reactive front-end framework for fast and lean web components
+ 
 ---
 
 *Practice makes progress.* 💪🎶

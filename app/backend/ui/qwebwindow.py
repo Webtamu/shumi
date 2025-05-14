@@ -1,4 +1,3 @@
-from PyQt6.QtWidgets import QSizePolicy
 from PyQt6.QtCore import QUrl, QObject, pyqtSlot, pyqtSignal
 from PyQt6.QtWebEngineWidgets import QWebEngineView
 from PyQt6.QtWebChannel import QWebChannel
@@ -33,5 +32,3 @@ class QWebWindow():
         self.channel.registerObject("pyObj", self.obj)
         self.webengine.page().setWebChannel(self.channel)
         self.webengine.setUrl(QUrl.fromLocalFile(html))
-        size_policy = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
-        self.webengine.setSizePolicy(size_policy)
