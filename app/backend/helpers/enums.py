@@ -51,6 +51,9 @@ class Items(Enum):
     LOGIN_CREATE_ACCOUNT = auto()
     LOGIN_CANT_SIGN_IN = auto()
 
+    # HOME VIEW ITEMS
+    HOME_HEATMAP = auto()
+
     # CREATE ACCOUNT VIEW ITEMS
     CREATE_ACCOUNT_USERNAME = auto()
     CREATE_ACCOUNT_PASSWORD = auto()

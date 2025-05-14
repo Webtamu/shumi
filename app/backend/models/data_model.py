@@ -32,6 +32,9 @@ class DataModel(Model):
             Items.PROFILE_EMAIL: {"state": False, "text": ""},
             Items.PROFILE_USERNAME: {"state": False, "text": ""},
 
+            # HOME ITEMS
+            Items.HOME_HEATMAP: {"state": False, "text": ""},
+
             # STATS ITEMS
             Items.STATS_GRAPH: {"state": False, "text": ""},
         }

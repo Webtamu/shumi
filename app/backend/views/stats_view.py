@@ -1,38 +1,11 @@
 from PyQt6 import uic
-from PyQt6.QtWidgets import QPushButton, QSizePolicy
-from PyQt6.QtCore import QUrl, QObject, pyqtSlot, pyqtSignal
+from PyQt6.QtWidgets import QPushButton
 from PyQt6.QtWebEngineWidgets import QWebEngineView
-from PyQt6.QtWebChannel import QWebChannel
 
 from ..views import View
-from ..helpers import Items, Actions, ViewState, Signal
-
+from ..helpers import Items, Actions, ViewState
+from ..ui import QWebWindow
 import os
-
-
-class PyObj(QObject):
-    web_signal = pyqtSignal(Signal)
-
-    @pyqtSlot(str)
-    def sendData(self, data):
-        self.web_signal.emit(Signal(
-            item=Items.STATS_GRAPH,
-            action=Actions.WEB_BTN_PRESS,
-            source=ViewState.STATS,
-            web={data}
-        ))
-
-
-class QWebWindow():
-    def __init__(self, webengine: QWebEngineView, html: str) -> None:
-        self.webengine = webengine
-        self.channel = QWebChannel()
-        self.obj = PyObj()
-        self.channel.registerObject("pyObj", self.obj)
-        self.webengine.page().setWebChannel(self.channel)
-        self.webengine.setUrl(QUrl.fromLocalFile(html))
-        size_policy = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
-        self.webengine.setSizePolicy(size_policy)
 
 
 class StatsView(View):
@@ -42,7 +15,7 @@ class StatsView(View):
         self.window = uic.loadUi("app/frontend/qtdesigner/stats_design.ui")
         self.initialize_style()
 
-        html_path = os.path.abspath("app/frontend/static/index.html")
+        html_path = os.path.abspath("app/frontend/static/components/chart/index.html")
 
         self.item_map = {
             Items.HOME: {
@@ -62,7 +35,10 @@ class StatsView(View):
                 "action": Actions.BTN_PRESS
             },
             Items.STATS_GRAPH: {
-                "instance": QWebWindow(self.window.findChild(QWebEngineView, "graphTest"), html_path),
+                "instance": QWebWindow(self.window.findChild(QWebEngineView, "graphTest"),
+                                       html=html_path,
+                                       item=Items.STATS_GRAPH,
+                                       view_state=self.view_state),
                 "action": Actions.WEB_BTN_PRESS
             }
         }

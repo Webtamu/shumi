@@ -1,8 +1,11 @@
 from PyQt6 import uic
 from PyQt6.QtWidgets import QPushButton, QLabel
+from PyQt6.QtWebEngineWidgets import QWebEngineView
 
 from ..views import View
 from ..helpers import Items, Actions, ViewState
+from ..ui import QWebWindow
+import os
 
 
 class HomeView(View):
@@ -11,8 +14,16 @@ class HomeView(View):
         self.view_state = ViewState.HOME
         self.window = uic.loadUi("app/frontend/qtdesigner/home_design.ui")
         self.initialize_style()
+        html_path = os.path.abspath("app/frontend/static/components/heatmap/heatmap.html")
 
         self.item_map = {
+            Items.HOME_HEATMAP: {
+                "instance": QWebWindow(self.window.findChild(QWebEngineView, "heatmapTest"),
+                                       html=html_path,
+                                       item=Items.HOME_HEATMAP,
+                                       view_state=self.view_state),
+                "action": Actions.WEB_BTN_PRESS
+            },
             Items.START: {
                 "instance": self.window.findChild(QPushButton, "btnStart"),
                 "action": Actions.BTN_PRESS
