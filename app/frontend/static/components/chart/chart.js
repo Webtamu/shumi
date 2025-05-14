@@ -1,9 +1,20 @@
+
 window.onload = function () {
     new QWebChannel(qt.webChannelTransport, function(channel) {
         window.pyObj = channel.objects.pyObj;
-        pyObj.sendData('Test message from JS');
+        pyObj.sendData('Bar Chart initialized');
     });
 };
+
+window.receiveDataFromPython = function(data) {
+    console.log(data);
+    if (typeof data === 'string') {
+        data = JSON.parse(data);
+    }
+    updateChartWithExternalData(data);
+
+};
+
 
 const svg = d3.select("#chart");
 let width = window.innerWidth;
@@ -62,9 +73,19 @@ function render(data) {
                     .style("display", "block")
                     .style("left", (event.pageX + 10) + "px")
                     .style("top", (event.pageY - 20) + "px")
-                    .html(`<strong>${d.hour}:00</strong><br>${d.value} reviews`);
+                    .html(`<strong>${d.hour}:00</strong><br>${d.value} reviews, session ${d.session_id}`);
             })
             .on("mouseleave", () => tooltip.style("display", "none"))
+            .on("click", (event, d) => {
+                if (window.pyObj) {
+                    const barData = {
+                        hour: d.hour,
+                        value: d.value,
+                        session_id: d.session_id,
+                    };
+                    pyObj.sendData(JSON.stringify(barData));
+                }
+            })
             .transition()
             .duration(800)
             .attr("y", d => yScale(d.value))
@@ -86,6 +107,15 @@ function render(data) {
             .attr("height", 0)
             .remove()
     );
+}
+
+
+function updateChartWithExternalData(newData) {
+    console.log("Updating chart with:", newData);
+    if (newData.data) {
+        data = newData.data;
+        render(data);
+    }
 }
 
 function updateData() {

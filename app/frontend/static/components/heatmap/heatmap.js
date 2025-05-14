@@ -50,14 +50,37 @@ function render(data) {
         .attr("height", cellSize)
         .attr("y", d => d.date.getDay() * (cellSize + 2))
         .attr("fill", d => colorScale(d.value))
-        .on("mousemove", (event, d) => {
+        .on("mousemove", function (event, d) {
+
+            d3.select(this)
+                .attr("stroke", "black")
+                .attr("stroke-width", 1.5)
+                .style("cursor", "pointer");
+
             tooltip
                 .style("display", "block")
                 .style("left", (event.pageX + 10) + "px")
                 .style("top", (event.pageY - 20) + "px")
                 .html(`<strong>${d3.timeFormat("%B %d, %Y")(d.date)}</strong><br>${d.value} commits`);
         })
-        .on("mouseleave", () => tooltip.style("display", "none"));
+        .on("mouseleave", function () {
+            d3.select(this)
+                .attr("stroke", "none");
+    
+            tooltip.style("display", "none");
+        })
+        .on("click", (event, d) => {
+            if (window.pyObj) {
+                const cellData = {
+                    date: d.formattedDate,
+                    day: d.day,
+                    value: d.value,
+                    weekNumber: d3.timeWeek.count(d3.timeYear(d.date), d.date),
+                    year: d.date.getFullYear()
+                };
+                pyObj.sendData(JSON.stringify(cellData));
+            }
+        });
 }
 
 function updateData() {
