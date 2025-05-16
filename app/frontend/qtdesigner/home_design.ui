@@ -26,8 +26,7 @@
    <string>Shumi</string>
   </property>
   <property name="windowIcon">
-   <iconset theme="weather-overcast">
-    <normaloff>.</normaloff>.</iconset>
+   <iconset theme="weather-overcast"/>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -40,10 +39,10 @@
        </sizepolicy>
       </property>
       <property name="frameShape">
-       <enum>QFrame::Box</enum>
+       <enum>QFrame::Shape::Box</enum>
       </property>
       <property name="frameShadow">
-       <enum>QFrame::Raised</enum>
+       <enum>QFrame::Shadow::Raised</enum>
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
@@ -73,19 +72,19 @@
     <item>
      <widget class="QFrame" name="frame_2">
       <property name="layoutDirection">
-       <enum>Qt::LeftToRight</enum>
+       <enum>Qt::LayoutDirection::LeftToRight</enum>
       </property>
       <property name="frameShape">
-       <enum>QFrame::Box</enum>
+       <enum>QFrame::Shape::Box</enum>
       </property>
       <property name="frameShadow">
-       <enum>QFrame::Raised</enum>
+       <enum>QFrame::Shadow::Raised</enum>
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout_3">
        <item>
         <widget class="QLabel" name="lblWelcome">
          <property name="layoutDirection">
-          <enum>Qt::LeftToRight</enum>
+          <enum>Qt::LayoutDirection::LeftToRight</enum>
          </property>
          <property name="text">
           <string>Welcome, &lt;User&gt; - Let's practice some &lt;Instrument&gt; today!</string>
@@ -98,16 +97,16 @@
     <item>
      <widget class="QFrame" name="frame_3">
       <property name="frameShape">
-       <enum>QFrame::Box</enum>
+       <enum>QFrame::Shape::Box</enum>
       </property>
       <property name="frameShadow">
-       <enum>QFrame::Raised</enum>
+       <enum>QFrame::Shadow::Raised</enum>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_3">
        <item>
         <widget class="QWebEngineView" name="heatmapTest" native="true">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -117,16 +116,16 @@
        <item>
         <widget class="QFrame" name="frame_4">
          <property name="frameShape">
-          <enum>QFrame::Box</enum>
+          <enum>QFrame::Shape::Box</enum>
          </property>
          <property name="frameShadow">
-          <enum>QFrame::Raised</enum>
+          <enum>QFrame::Shadow::Raised</enum>
          </property>
          <layout class="QHBoxLayout" name="horizontalLayout_2">
           <item>
            <widget class="QLabel" name="lblCurrentStreak">
             <property name="frameShape">
-             <enum>QFrame::NoFrame</enum>
+             <enum>QFrame::Shape::NoFrame</enum>
             </property>
             <property name="text">
              <string>Current Streak: 0</string>
@@ -168,7 +167,7 @@
      <x>0</x>
      <y>0</y>
      <width>1000</width>
-     <height>22</height>
+     <height>33</height>
     </rect>
    </property>
   </widget>
