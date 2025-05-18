@@ -1,6 +1,5 @@
 from PyQt6.QtWidgets import QLabel
 from PyQt6.QtCore import pyqtSignal, Qt, QPoint
-from PyQt6.QtGui import QPalette
 from ..helpers import Signal
 
 
@@ -35,12 +34,6 @@ class ClickableLabel(QLabel):
         self.setPalette(palette)
         self.setBackgroundRole(original_label.backgroundRole())
         self.setAutoFillBackground(original_label.autoFillBackground())
-        fg_color = palette.color(QPalette.ColorRole.WindowText).name()
-        bg_color = palette.color(QPalette.ColorRole.Window).name()
-        original_style = original_label.styleSheet()
-        self.default_style = original_style if original_style else f"color: {fg_color}; background-color: {bg_color};"
-        self.hover_style = f"{self.default_style} text-decoration: underline;"
-        self.setStyleSheet(self.default_style)
 
     def replace_in_layout(self, original_label: QLabel):
         if self.layout:
@@ -62,11 +55,15 @@ class ClickableLabel(QLabel):
         self.original_label = original_label
 
     def enterEvent(self, event):
-        self.setStyleSheet(self.hover_style)
+        font = self.font()
+        font.setUnderline(True)
+        self.setFont(font)
         super().enterEvent(event)
 
     def leaveEvent(self, event):
-        self.setStyleSheet(self.default_style)
+        font = self.font()
+        font.setUnderline(False)
+        self.setFont(font)
         super().leaveEvent(event)
 
     def mousePressEvent(self, event):

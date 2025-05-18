@@ -5,6 +5,14 @@ window.onload = function () {
     });
 };
 
+window.receiveDataFromPython = function(data) {
+    console.log(data);
+    if (typeof data === 'string') {
+        data = JSON.parse(data);
+    }
+    // updateChartWithExternalData(data);
+};
+
 const svg = d3.select("#heatmap");
 let width = window.innerWidth;
 let height = window.innerHeight;
