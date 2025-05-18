@@ -13,7 +13,7 @@ from .backend.views import (
     SummaryView,
 )
 from .backend.managers import NavigationManager, KeybindManager
-from .backend.helpers import Logger, ViewState, Items, KeyAction
+from .backend.helpers import ViewState, Items, KeyAction
 
 
 class App(QApplication):
@@ -43,7 +43,6 @@ class App(QApplication):
         )
 
         self.navigation_manager = NavigationManager()
-
         self.initialize_views()
 
     def initialize_views(self):
@@ -57,6 +56,3 @@ class App(QApplication):
     def initialize_keybinds(self):
         KeybindManager.add_keybind(ViewState.LOGIN, KeyAction.PRESS_ENTER, Items.LOGIN_LOGIN)
         KeybindManager.add_keybind(ViewState.HOME, KeyAction.PRESS_S, Items.SETTINGS)
-
-    def __del__(self):
-        Logger.info("Closing Application, saving data!")

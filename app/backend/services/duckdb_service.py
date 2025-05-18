@@ -1,148 +1,129 @@
-import duckdb
+import uuid
+import pandas as pd
+import ibis
 import pytz
 from datetime import datetime, timedelta
-from typing import List, Dict, Any
+from typing import List, Dict
 
 from ..helpers import Logger
 
 
 class DuckDBService:
     def __init__(self, db_path: str = "study_sessions.duckdb") -> None:
-        """Initialize DuckDB connection."""
-        self.con = duckdb.connect(db_path)
-        self.con.execute(
-            '''
-            CREATE TABLE IF NOT EXISTS session (
-                session_id TEXT PRIMARY KEY DEFAULT uuid(),
-                user_id TEXT,
-                timestamp_start TIMESTAMP,
-                timestamp_stop TIMESTAMP,
-                synced BOOLEAN DEFAULT FALSE
-            )
-            '''
-        )
+        self.con = ibis.duckdb.connect(db_path)
+        session_schema = ibis.schema({
+            "session_id": "string",
+            "user_id": "string",
+            "timestamp_start": "timestamp",
+            "timestamp_stop": "timestamp",
+            "synced": "boolean",
+        })
 
-    def insert_data(self,
-                    user_id: str,
-                    start_time: Any,
-                    stop_time: Any,
-                    synced: bool = False) -> None:
+        if "session" not in self.con.list_tables():
+            self.con.create_table("session", schema=session_schema)
 
-        """Insert data into local DuckDB."""
-        self.con.execute(
-            """
-            INSERT INTO session (user_id, timestamp_start, timestamp_stop, synced)
-            VALUES (?, ?, ?, ?)
-            """,
-            (user_id, start_time.isoformat(), stop_time.isoformat(), synced)
-        )
+    def insert_data(self, user_id: str, start_time: str, stop_time: str, synced: bool = False) -> None:
+        session_id = str(uuid.uuid4())
 
-        self.con.execute("SELECT * FROM session").fetchall()
+        df = pd.DataFrame([{
+            "session_id": session_id,
+            "user_id": user_id,
+            "timestamp_start": pd.to_datetime(start_time),
+            "timestamp_stop": pd.to_datetime(stop_time),
+            "synced": synced
+        }])
+        self.con.insert("session", df)
 
-    def collect_unsynced(self) -> List[Dict[str, Any]]:
-        """Return all unsynced session rows as list of dicts."""
-        result = self.con.execute(
-            "SELECT session_id, user_id, timestamp_start, timestamp_stop FROM session WHERE synced = FALSE"
-        ).fetchall()
-        cols = [desc[0] for desc in self.con.description]
-        return [dict(zip(cols, row)) for row in result]
+    def collect_unsynced(self) -> List[Dict]:
+        session_table = self.con.table("session")
+        unsynced_sessions = session_table.filter(session_table.synced.isin([False])) \
+            .select(session_table.session_id,
+                    session_table.user_id,
+                    session_table.timestamp_start,
+                    session_table.timestamp_stop)
+
+        result = unsynced_sessions.execute()
+        # Ensure proper handling of result format
+        return [dict(zip(result.columns, row)) for row in result]
 
     def mark_as_synced(self, session_ids: List[str]) -> None:
-        """Mark given session_ids as synced."""
         if not session_ids:
             return
 
-        placeholders = ", ".join("?" for _ in session_ids)
-        query = f"""
-            UPDATE session
-            SET synced = TRUE
-            WHERE session_id IN ({placeholders})
-        """
-        self.con.execute(query, session_ids)
+        session_table = self.con.table("session")
+        updated_sessions = session_table.filter(session_table.session_id.isin(session_ids)) \
+            .mutate(synced=True)
+        updated_sessions.execute()
 
     def get_current_streak(self, user_id: str, timezone_str: str = 'UTC') -> int:
-        """
-        Calculate user's current daily streak based on their timezone.
-
-        Args:
-            user_id (str): The ID of the user.
-            timezone_str (str): Timezone like 'Asia/Tokyo', 'America/Los_Angeles'.
-
-        Returns:
-            int: Number of consecutive days user has activity including today.
-        """
         try:
             tz = pytz.timezone(timezone_str)
+            session_table = self.con.table("session")
 
-            # Fetch all session start timestamps for the user
-            rows = self.con.execute(
-                """
-                SELECT timestamp_start FROM session
-                WHERE user_id = ?
-                ORDER BY timestamp_start DESC
-                """, (user_id,)
-            ).fetchall()
+            df = session_table.filter(session_table.user_id == user_id) \
+                .select(session_table.timestamp_start) \
+                .order_by(session_table.timestamp_start.desc()) \
+                .execute()
 
-            # Convert timestamps to dates in the user's time zone
+            # Convert timestamps to local dates
             date_set = set()
-            for row in rows:
-                utc_time = row[0].replace(tzinfo=pytz.utc)
-                local_date = utc_time.astimezone(tz).date()
+            for row in df.itertuples(index=False):
+                timestamp = row.timestamp_start
+                if isinstance(timestamp, str):
+                    timestamp = pd.to_datetime(timestamp)
+                if timestamp.tzinfo is None:
+                    timestamp = timestamp.replace(tzinfo=pytz.utc)
+                local_date = timestamp.astimezone(tz).date()
                 date_set.add(local_date)
 
-            # Check streak backwards from today
+            # Count consecutive days including today
             today = datetime.now(tz).date()
             streak = 0
             while today in date_set:
                 streak += 1
                 today -= timedelta(days=1)
+
             Logger.debug(f"Streak calculated as {streak}")
             return streak
 
         except Exception as e:
-            Logger.error(f"Failed to calculate streak: {e}")
+            Logger.error(f"Failed to calculate current streak: {e}")
             return 0
 
     def get_highest_streak(self, user_id: str, timezone_str: str = 'UTC') -> int:
-        """
-        Calculate the highest streak the user ever achieved.
-
-        Args:
-            user_id (str): The ID of the user.
-            timezone_str (str): Timezone like 'Asia/Tokyo', 'America/Los_Angeles'.
-
-        Returns:
-            int: Highest streak achieved.
-        """
         try:
             tz = pytz.timezone(timezone_str)
+            session_table = self.con.table("session")
 
-            rows = self.con.execute(
-                """
-                SELECT timestamp_start FROM session
-                WHERE user_id = ?
-                ORDER BY timestamp_start ASC
-                """, (user_id,)
-            ).fetchall()
+            # Query all timestamps for the user, ordered by timestamp_start (ASC)
+            df = session_table.filter(session_table.user_id == user_id) \
+                .select(session_table.timestamp_start) \
+                .order_by(session_table.timestamp_start.asc()) \
+                .execute()
 
-            if not rows:
+            if df.empty:
                 return 0
 
-            date_list = []
-            for row in rows:
-                utc_time = row[0].replace(tzinfo=pytz.utc)
-                local_date = utc_time.astimezone(tz).date()
-                date_list.append(local_date)
+            # Convert timestamps to local dates in the specified timezone
+            dates = set()
+            for row in df.itertuples(index=False):
+                timestamp = row.timestamp_start
+                if isinstance(timestamp, str):
+                    timestamp = pd.to_datetime(timestamp)
+                if timestamp.tzinfo is None:
+                    timestamp = timestamp.replace(tzinfo=pytz.utc)
+                local_date = timestamp.astimezone(tz).date()
+                dates.add(local_date)
 
-            if not date_list:
+            if not dates:
                 return 0
 
-            date_list = sorted(set(date_list))
+            # Sort the dates and calculate the highest streak
+            dates = sorted(dates)
             highest_streak = 1
             current_streak = 1
-
-            for i in range(1, len(date_list)):
-                if (date_list[i] - date_list[i - 1]).days == 1:
+            for i in range(1, len(dates)):
+                if (dates[i] - dates[i - 1]).days == 1:
                     current_streak += 1
                     highest_streak = max(highest_streak, current_streak)
                 else:
@@ -156,52 +137,59 @@ class DuckDBService:
             return 0
 
     def get_average_session_minutes(self, user_id: str) -> float:
-        """
-        Calculate average session duration in hours.
-
-        Args:
-            user_id (str): The ID of the user.
-
-        Returns:
-            float: Average hours per session.
-        """
         try:
-            rows = self.con.execute(
-                """
-                SELECT timestamp_start, timestamp_stop FROM session
-                WHERE user_id = ?
-                """, (user_id,)
-            ).fetchall()
+            # Fetch the session table and filter by user_id
+            session_table = self.con.table("session")
+            sessions = session_table.filter(session_table.user_id == user_id) \
+                .select(session_table.timestamp_start, session_table.timestamp_stop)
 
-            if not rows:
+            # Execute the query and retrieve the result
+            result = sessions.execute()
+            if result.empty:
                 return 0.0
 
-            total_duration = timedelta(0)
+            # Calculate total duration in minutes and count of sessions
+            total_duration_seconds = 0
             session_count = 0
 
-            for start, stop in rows:
-                if start and stop:
-                    duration = stop - start
-                    total_duration += duration
-                    session_count += 1
+            # Iterate over the DataFrame rows
+            for _, row in result.iterrows():
+                timestamp_start = row['timestamp_start']
+                timestamp_stop = row['timestamp_stop']
+
+                # Convert to datetime if they're in string format
+                if isinstance(timestamp_start, str):
+                    timestamp_start = pd.to_datetime(timestamp_start)
+                if isinstance(timestamp_stop, str):
+                    timestamp_stop = pd.to_datetime(timestamp_stop)
+
+                # Ensure that timestamps are in datetime format
+                if isinstance(timestamp_start, datetime) and isinstance(timestamp_stop, datetime):
+                    duration = (timestamp_stop - timestamp_start).total_seconds() / 60  # Convert to minutes
+                    if duration > 0:  # Ignore sessions with negative duration
+                        total_duration_seconds += duration
+                        session_count += 1
 
             if session_count == 0:
                 return 0.0
 
-            average_minutes = round(total_duration.total_seconds() / 60 / session_count, 2)
+            # Calculate average session duration in minutes
+            average_minutes = total_duration_seconds / session_count
             Logger.debug(f"Average session minutes calculated as {average_minutes:.2f}")
-            return average_minutes
+            return round(average_minutes, 2)
 
         except Exception as e:
             Logger.error(f"Failed to calculate average session time: {e}")
             return 0.0
 
-    def fetch_data(self, table_name: str) -> List[Dict[str, Any]]:
-        """Fetch all data from the given table as list of dictionaries."""
+    def fetch_data(self, table_name: str) -> List[Dict]:
         try:
-            result = self.con.execute(f"SELECT * FROM {table_name}").fetchall()
-            cols = [desc[0] for desc in self.con.description]
-            return [dict(zip(cols, row)) for row in result]
+            table = self.con.table(table_name)
+            result = table.execute()
+            if len(result) == 0:
+                return []
+            columns = table.columns
+            return [dict(zip(columns, row)) for row in result]
         except Exception as e:
             Logger.error(f"Data fetch failed: {e}")
             return []

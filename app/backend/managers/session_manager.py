@@ -25,7 +25,9 @@ class SessionManager:
         self.audio_buffer.append(indata.copy())
 
     def add_session(self, user_id, start_time, stop_time) -> None:
-        self.local_database.insert_data(user_id, start_time, stop_time)
+        self.local_database.insert_data(user_id=user_id,
+                                        start_time=start_time,
+                                        stop_time=stop_time)
 
     def begin_session(self, signal: Signal) -> None:
         if self.timer:
@@ -60,12 +62,6 @@ class SessionManager:
         current_path = self.settings.value(QSETTINGS_STORAGE_KEY, defaultValue="")
         if current_path:
             try:
-                # os.makedirs(current_path, exist_ok=True)
-                # timestamp = self.timer.stop_time.strftime("%Y-%m-%d at %H-%M")
-                # file_path = os.path.join(current_path, f"{timestamp}.npy")
-                # numpy.save(file_path, audio_data)
-                # Logger.critical(f"Audio saved to {file_path}")
-
                 os.makedirs(current_path, exist_ok=True)
                 timestamp = self.timer.stop_time.strftime("%Y-%m-%d at %H-%M")
                 file_path = os.path.join(current_path, f"{timestamp}.wav")
