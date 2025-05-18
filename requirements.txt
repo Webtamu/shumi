@@ -12,3 +12,4 @@ PyQt6-WebEngine
 sounddevice
 numpy
 scipy
+ibis-framework[duckdb]
