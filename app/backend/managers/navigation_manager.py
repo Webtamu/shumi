@@ -18,7 +18,6 @@ class NavigationManager(QObject):
         self.stacked_widget.addWidget(view.window)
         self.view_map[view.view_state] = self.counter
         self.counter += 1
-        view.nav_signal.connect(self.handle_navigation)
 
     def navigate_to(self, view_state: ViewState) -> None:
         if view_state in self.view_map:

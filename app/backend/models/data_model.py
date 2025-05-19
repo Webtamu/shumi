@@ -52,10 +52,10 @@ class DataModel(Model):
         self.action_map = {
             Items.SYNC: [self.sync_manager.sync_to_cloud,
                          self.sync_manager.sync_from_cloud,
-                         self.sync_manager.refresh_fields],
+                         self.sync_manager.refresh_fields,],
             Items.LOGIN_LOGIN: [self.auth_manager.login,
                                 self.sync_manager.update_streak_stats,
-                                self.sync_manager.refresh_fields],
+                                self.sync_manager.refresh_fields,],
             Items.PROFILE_LOGOUT: [self.auth_manager.logout],
             Items.START: [self.session_manager.begin_session],
             Items.STOP: [self.session_manager.stop_session,

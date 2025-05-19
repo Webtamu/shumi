@@ -1,12 +1,10 @@
 from PyQt6.QtWidgets import QWidget
-from PyQt6.QtCore import pyqtSignal
 from abc import abstractmethod
 
 from ..helpers import Signal, Items, Actions, ViewState
 
 
 class View(QWidget):
-    nav_signal = pyqtSignal(Signal)
 
     @abstractmethod
     def __init__(self) -> None:
@@ -31,9 +29,6 @@ class View(QWidget):
 
         if action := self.action_map.get(signal.action):
             action(item_entry["instance"], signal)
-
-        if signal.nav:
-            self.nav_signal.emit(signal)
 
     def toggle_dark_mode(self, signal: Signal) -> None:
         stylesheet_path = (

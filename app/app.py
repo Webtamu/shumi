@@ -12,8 +12,6 @@ from .backend.views import (
     SessionView,
     SummaryView,
 )
-from .backend.managers import NavigationManager, KeybindManager
-from .backend.helpers import ViewState, Items, KeyAction
 
 
 class App(QApplication):
@@ -24,8 +22,6 @@ class App(QApplication):
             PreferencesModel(),
             DataModel()
         ]
-
-        self.initialize_keybinds()
 
         self.view_list = [
             LoginView(),
@@ -41,18 +37,3 @@ class App(QApplication):
             model_list=self.model_list,
             view_list=self.view_list
         )
-
-        self.navigation_manager = NavigationManager()
-        self.initialize_views()
-
-    def initialize_views(self):
-        for view in self.view_list:
-            self.navigation_manager.add_view(view)
-            KeybindManager.activate_keybinds(view)
-
-        self.navigation_manager.navigate_to(ViewState.LOGIN)
-        self.navigation_manager.do_show()
-
-    def initialize_keybinds(self):
-        KeybindManager.add_keybind(ViewState.LOGIN, KeyAction.PRESS_ENTER, Items.LOGIN_LOGIN)
-        KeybindManager.add_keybind(ViewState.HOME, KeyAction.PRESS_S, Items.SETTINGS)

@@ -12,7 +12,7 @@ class Logger:
         if cls.instance is None:
             # Create singleton logger
             cls.instance = logging.getLogger('app')
-            cls.instance.setLevel(logging.WARNING)
+            cls.instance.setLevel(logging.DEBUG)
 
             handler = logging.StreamHandler(sys.stdout)
             formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s',
