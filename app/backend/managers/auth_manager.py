@@ -1,7 +1,8 @@
-from ..helpers import Logger, Signal
+from ..helpers import Logger, Signal, Items, Actions, ViewState
 from ..services import SupabaseService
 from ..core.context import app_context
 from ..core.settings import get_settings, QSETTINGS_ACCESS_TOKEN, QSETTINGS_REFRESH_TOKEN, QSETTINGS_LAST_LOGIN
+from ..core.eventbus import event_bus
 import datetime
 
 
@@ -9,7 +10,7 @@ class AuthManager:
     def __init__(self, auth_service: SupabaseService):
         self.auth_service = auth_service
         self.settings = get_settings()
-        # self.login()  # Attempt auto-login on initialization
+        self.attempt_auto_login()
 
     def validate_creds(self, creds: dict) -> bool:
         username = creds.get("user")
@@ -127,3 +128,11 @@ class AuthManager:
             self.populate_user_context()
         else:
             signal.nav = False
+
+    def attempt_auto_login(self) -> None:
+        login_signal = Signal(
+            item=Items.LOGIN_LOGIN,
+            action=Actions.BTN_PRESS,
+            source=ViewState.LOGIN,
+        )
+        event_bus.publish(login_signal)
