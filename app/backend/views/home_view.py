@@ -9,13 +9,10 @@ import os
 
 
 class HomeView(View):
-    def __init__(self) -> None:
-        super().__init__()
+    def setup(self) -> None:
         self.view_state = ViewState.HOME
         self.window = uic.loadUi("app/frontend/qtdesigner/home_design.ui")
-        self.initialize_style()
         html_path = os.path.abspath("app/frontend/static/components/heatmap/heatmap.html")
-
         self.item_map = {
             Items.HOME_HEATMAP: {
                 "instance": QWebWindow(self.window.findChild(QWebEngineView, "heatmapTest"),

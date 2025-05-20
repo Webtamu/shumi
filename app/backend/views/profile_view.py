@@ -6,12 +6,9 @@ from ..helpers import Items, Actions, ViewState
 
 
 class ProfileView(View):
-    def __init__(self) -> None:
-        super().__init__()
+    def setup(self) -> None:
         self.view_state = ViewState.PROFILE
         self.window = uic.loadUi("app/frontend/qtdesigner/profile_design.ui")
-        self.initialize_style()
-
         self.item_map = {
             Items.HOME: {
                 "instance": self.window.findChild(QPushButton, "btnHome"),

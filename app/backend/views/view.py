@@ -1,4 +1,6 @@
-from PyQt6.QtWidgets import QWidget
+from PyQt6.QtWidgets import QWidget, QPushButton
+from PyQt6.QtCore import Qt
+from PyQt6.QtGui import QCursor
 from abc import abstractmethod
 
 from ..helpers import Signal, Items, Actions, ViewState
@@ -8,6 +10,7 @@ class View(QWidget):
 
     @abstractmethod
     def __init__(self) -> None:
+        super().__init__()
         self.view_state = ViewState.DEFAULT
         self.window = None
         self.item_map = {}
@@ -17,7 +20,23 @@ class View(QWidget):
             Actions.LABEL_SET: self.update_label,
             Actions.COMBO_SET: self.update_combo,
         }
-        super().__init__()
+        self.setup()
+        self.initialize_style()
+        self.initialize_buttons()
+
+    @abstractmethod
+    def setup(self) -> None:
+        pass
+
+    def initialize_buttons(self) -> None:
+        for item_data in self.item_map.values():
+            widget = item_data["instance"]
+            if isinstance(widget, QPushButton):
+                widget.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+
+    def initialize_style(self) -> None:
+        with open("app/frontend/resources/light_mode.qss", "r") as file:
+            self.window.setStyleSheet(file.read())
 
     def update_view(self, signal: Signal) -> None:
         if signal.item == Items.DARK_MODE:
@@ -35,10 +54,6 @@ class View(QWidget):
             "app/frontend/resources/dark_mode.qss" if signal.state else "app/frontend/resources/light_mode.qss"
         )
         with open(stylesheet_path, "r") as file:
-            self.window.setStyleSheet(file.read())
-
-    def initialize_style(self) -> None:
-        with open("app/frontend/resources/light_mode.qss", "r") as file:
             self.window.setStyleSheet(file.read())
 
     def update_button(self, item: QWidget, signal: Signal) -> None:

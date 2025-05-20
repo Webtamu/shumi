@@ -9,14 +9,10 @@ import os
 
 
 class StatsView(View):
-    def __init__(self) -> None:
-        super().__init__()
+    def setup(self) -> None:
         self.view_state = ViewState.STATS
         self.window = uic.loadUi("app/frontend/qtdesigner/stats_design.ui")
-        self.initialize_style()
-
         html_path = os.path.abspath("app/frontend/static/components/chart/index.html")
-
         self.item_map = {
             Items.HOME: {
                 "instance": self.window.findChild(QPushButton, "btnHome"),

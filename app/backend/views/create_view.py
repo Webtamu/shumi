@@ -7,12 +7,9 @@ from ..ui import ClickableLabel, PasswordLineEdit
 
 
 class CreateView(View):
-    def __init__(self) -> None:
-        super().__init__()
+    def setup(self) -> None:
         self.view_state = ViewState.CREATE
         self.window = uic.loadUi("app/frontend/qtdesigner/create_account_design.ui")
-        self.initialize_style()
-
         self.item_map = {
             Items.CREATE_ACCOUNT_USERNAME: {
                 "instance": self.window.findChild(QLineEdit, "inputUsernameCreation"),

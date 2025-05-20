@@ -6,12 +6,9 @@ from ..helpers import Items, Actions, ViewState
 
 
 class SessionView(View):
-    def __init__(self) -> None:
-        super().__init__()
+    def setup(self) -> None:
         self.view_state = ViewState.SESSION
         self.window = uic.loadUi("app/frontend/qtdesigner/session_design.ui")
-        self.initialize_style()
-
         self.item_map = {
             Items.STOP: {
                 "instance": self.window.findChild(QPushButton, "btnStop"),
