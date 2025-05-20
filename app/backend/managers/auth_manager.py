@@ -94,6 +94,9 @@ class AuthManager:
             return False
 
     def attempt_manual_login(self, signal: Signal) -> None:
+        if not signal or not signal.data:
+            return
+
         email = signal.data.get("username")
         password = signal.data.get("password")
         stay_signed_in = signal.data.get("stay_signed_in")
