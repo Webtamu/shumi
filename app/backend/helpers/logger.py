@@ -4,19 +4,32 @@ import atexit
 from ..helpers import Colors
 
 
+class ColorFormatter(logging.Formatter):
+    LEVEL_COLORS = {
+        'DEBUG': Colors.BLUE,
+        'INFO': Colors.GREEN,
+        'WARNING': Colors.YELLOW,
+        'ERROR': Colors.RED,
+        'CRITICAL': Colors.MAGENTA,
+    }
+
+    def format(self, record):
+        color = self.LEVEL_COLORS.get(record.levelname, "")
+        message = super().format(record)
+        return f"{color}{message}{Colors.RESET}"
+
+
 class Logger:
     instance = None
 
     @classmethod
     def get_logger(cls):
         if cls.instance is None:
-            # Create singleton logger
             cls.instance = logging.getLogger('app')
             cls.instance.setLevel(logging.DEBUG)
 
             handler = logging.StreamHandler(sys.stdout)
-            formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s',
-                                          datefmt='%Y-%m-%d %H:%M:%S')
+            formatter = ColorFormatter('%(levelname)s - %(message)s')
             handler.setFormatter(formatter)
 
             cls.instance.addHandler(handler)
@@ -26,41 +39,27 @@ class Logger:
 
     @classmethod
     def debug(cls, message):
-        """Log a blue debug message."""
-        if cls.get_logger():
-            cls.get_logger().debug(f"{Colors.BLUE}{message}{Colors.RESET}")
+        cls.get_logger().debug(message)
 
     @classmethod
     def info(cls, message):
-        """Log a green info message."""
-        if cls.get_logger():
-            cls.get_logger().info(f"{Colors.GREEN}{message}{Colors.RESET}")
+        cls.get_logger().info(message)
 
     @classmethod
     def warning(cls, message):
-        """Log a yellow warning message."""
-        if cls.get_logger():
-            cls.get_logger().warning(f"{Colors.YELLOW}{message}{Colors.RESET}")
+        cls.get_logger().warning(message)
 
     @classmethod
     def error(cls, message):
-        """Log a red error message."""
-        if cls.get_logger():
-            cls.get_logger().error(f"{Colors.RED}{message}{Colors.RESET}")
+        cls.get_logger().error(message)
 
     @classmethod
     def critical(cls, message):
-        """Log a magenta critical message."""
-        if cls.get_logger():
-            cls.get_logger().critical(f"{Colors.MAGENTA}{message}{Colors.RESET}")
+        cls.get_logger().critical(message)
 
 
-# Registering cleanup method using atexit
 def cleanup_logger():
-    logger = Logger.get_logger()
-    if logger:
-        Logger.info("Application is closing, performing cleanup.")
+    Logger.info("Application is closing, performing cleanup.")
 
 
-# Register the cleanup function for safe logging during application shutdown
 atexit.register(cleanup_logger)

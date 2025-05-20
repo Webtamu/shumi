@@ -16,7 +16,7 @@ class Signal:
     nav: bool = False
 
     def __str__(self):
-        return (f"ActionType={Colors.CYAN}{self.action}{Colors.RESET}, "
+        return (f"{Colors.RESET}Action={Colors.CYAN}{self.action}{Colors.RESET}, "
                 f"Item={Colors.CYAN}{self.item}{Colors.RESET}, "
                 f"State={Colors.CYAN}{self.state}{Colors.RESET}, "
                 f"Text={Colors.CYAN}'{self.text}'{Colors.RESET}, "

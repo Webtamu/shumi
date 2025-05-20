@@ -43,5 +43,5 @@ class PreferencesModel(Model):
                 signal.text = item_entry["text"]
             signal.source = ViewState.ALL
 
-        Logger.debug(f'{self.model_type} Model Handled: {signal}')
+        Logger.debug(signal)
         self.model_signal.emit(signal)

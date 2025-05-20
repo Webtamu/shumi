@@ -40,5 +40,5 @@ class ApplicationModel(Model):
         signal.state = item_entry["state"]
         signal.nav = item_entry.get("nav", False)
 
-        Logger.debug(f'{self.model_type} Model Handled: {signal}')
+        Logger.debug(signal)
         self.model_signal.emit(signal)

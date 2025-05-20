@@ -78,5 +78,5 @@ class DataModel(Model):
             signal.text = item_entry["text"]
             signal.state = item_entry["state"]
 
-        Logger.debug(f'{self.model_type} Model Handled: {signal}')
+        Logger.debug(signal)
         self.model_signal.emit(signal)
