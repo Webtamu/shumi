@@ -1,7 +1,7 @@
 from PyQt6.QtCore import QUrl, QObject, pyqtSlot, pyqtSignal
 from PyQt6.QtWebEngineWidgets import QWebEngineView
 from PyQt6.QtWebChannel import QWebChannel
-from ..helpers import Signal, Items, Actions, ViewState
+from ..helpers import Signal, Items, Actions, ViewState, Logger
 import json
 
 
@@ -67,4 +67,5 @@ class QWebWindow():
             })
 
     def update_chart_data(self, data):
+        Logger.critical(f"Updating JS with {data}")
         self.obj.send_to_js(data)

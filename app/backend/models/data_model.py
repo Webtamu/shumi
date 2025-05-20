@@ -63,6 +63,7 @@ class DataModel(Model):
                          self.sync_manager.refresh_fields],
             Items.BEGIN_TAKE: [self.session_manager.save_session_notes],
             Items.CREATE_ACCOUNT_CREATE: [self.auth_manager.create_account],
+            Items.HOME_HEATMAP: [self.session_manager.update_sessions]
         }
 
     def update_model(self, signal: Signal) -> None:

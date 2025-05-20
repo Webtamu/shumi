@@ -6,11 +6,40 @@ window.onload = function () {
 };
 
 window.receiveDataFromPython = function(data) {
-    console.log(data);
+    console.log("Received raw session data:", data);
+
     if (typeof data === 'string') {
-        data = JSON.parse(data);
+        try {
+            data = JSON.parse(data);
+        } catch (e) {
+            console.error("Could not parse JSON string:", e);
+            return;
+        }
     }
-    // updateChartWithExternalData(data);
+
+    // Aggregate durations by date (YYYY-MM-DD)
+    const sessionMap = {};
+
+    data.forEach(entry => {
+        const start = new Date(entry.timestamp_start);
+        const stop = new Date(entry.timestamp_stop);
+        const dateStr = start.toISOString().split('T')[0];
+        const duration = (stop - start) / 1000;
+
+        if (!sessionMap[dateStr]) {
+            sessionMap[dateStr] = 0;
+        }
+
+        sessionMap[dateStr] += duration;
+    });
+
+    // Normalize (scale to 0–10 range)
+    Object.keys(sessionMap).forEach(date => {
+        sessionMap[date] = Math.min(10, Math.round(sessionMap[date] / 10));
+    });
+
+    allData = sessionMap;
+    render(currentYear);
 };
 
 const svg = d3.select("#heatmap");
@@ -31,14 +60,6 @@ const yearDisplay = d3.select("#year-display");
 // Sample data - in a real app, this would come from your backend
 let allData = {
     // Format: "YYYY-MM-DD": value
-    "2023-01-15": 5,
-    "2023-03-20": 8,
-    "2023-06-10": 3,
-    "2023-12-25": 10,
-    "2022-07-04": 7,
-    "2022-09-01": 2,
-    "2024-02-14": 9,
-    "2024-05-01": 4
 };
 
 function generateYearData(year) {

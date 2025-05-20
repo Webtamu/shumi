@@ -7,9 +7,12 @@ from typing import List, Dict
 
 from ..helpers import Logger
 
+DUCKDB_SESSION_TABLE_NAME = "session"
+DUCKDB_LOCAL_FILE = "study_sessions.duckdb"
+
 
 class DuckDBService:
-    def __init__(self, db_path: str = "study_sessions.duckdb") -> None:
+    def __init__(self, db_path: str = DUCKDB_LOCAL_FILE) -> None:
         self.con = ibis.duckdb.connect(db_path)
         session_schema = ibis.schema({
             "session_id": "string",
@@ -20,7 +23,7 @@ class DuckDBService:
         })
 
         if "session" not in self.con.list_tables():
-            self.con.create_table("session", schema=session_schema)
+            self.con.create_table(DUCKDB_SESSION_TABLE_NAME, schema=session_schema)
 
     def insert_data(self, user_id: str, start_time: str, stop_time: str, synced: bool = False) -> None:
         session_id = str(uuid.uuid4())
@@ -32,10 +35,10 @@ class DuckDBService:
             "timestamp_stop": pd.to_datetime(stop_time),
             "synced": synced
         }])
-        self.con.insert("session", df)
+        self.con.insert(DUCKDB_SESSION_TABLE_NAME, df)
 
     def collect_unsynced(self) -> List[Dict]:
-        session_table = self.con.table("session")
+        session_table = self.con.table(DUCKDB_SESSION_TABLE_NAME)
         unsynced_sessions = session_table.filter(session_table.synced.isin([False])) \
             .select(session_table.session_id,
                     session_table.user_id,
@@ -50,7 +53,7 @@ class DuckDBService:
         if not session_ids:
             return
 
-        session_table = self.con.table("session")
+        session_table = self.con.table(DUCKDB_SESSION_TABLE_NAME)
         updated_sessions = session_table.filter(session_table.session_id.isin(session_ids)) \
             .mutate(synced=True)
         updated_sessions.execute()
@@ -58,7 +61,7 @@ class DuckDBService:
     def get_current_streak(self, user_id: str, timezone_str: str = 'UTC') -> int:
         try:
             tz = pytz.timezone(timezone_str)
-            session_table = self.con.table("session")
+            session_table = self.con.table(DUCKDB_SESSION_TABLE_NAME)
 
             df = session_table.filter(session_table.user_id == user_id) \
                 .select(session_table.timestamp_start) \
@@ -93,7 +96,7 @@ class DuckDBService:
     def get_highest_streak(self, user_id: str, timezone_str: str = 'UTC') -> int:
         try:
             tz = pytz.timezone(timezone_str)
-            session_table = self.con.table("session")
+            session_table = self.con.table(DUCKDB_SESSION_TABLE_NAME)
 
             # Query all timestamps for the user, ordered by timestamp_start (ASC)
             df = session_table.filter(session_table.user_id == user_id) \
@@ -139,7 +142,7 @@ class DuckDBService:
     def get_average_session_minutes(self, user_id: str) -> float:
         try:
             # Fetch the session table and filter by user_id
-            session_table = self.con.table("session")
+            session_table = self.con.table(DUCKDB_SESSION_TABLE_NAME)
             sessions = session_table.filter(session_table.user_id == user_id) \
                 .select(session_table.timestamp_start, session_table.timestamp_stop)
 
@@ -185,11 +188,8 @@ class DuckDBService:
     def fetch_data(self, table_name: str) -> List[Dict]:
         try:
             table = self.con.table(table_name)
-            result = table.execute()
-            if len(result) == 0:
-                return []
-            columns = table.columns
-            return [dict(zip(columns, row)) for row in result]
+            df = table.execute()
+            return df.to_dict(orient="records")
         except Exception as e:
             Logger.error(f"Data fetch failed: {e}")
             return []

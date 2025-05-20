@@ -4,6 +4,7 @@ from PyQt6.QtGui import QCursor
 from abc import abstractmethod
 
 from ..helpers import Signal, Items, Actions, ViewState
+from ..ui import QWebWindow
 
 
 class View(QWidget):
@@ -19,6 +20,7 @@ class View(QWidget):
             Actions.BOX_CHECK: self.update_box,
             Actions.LABEL_SET: self.update_label,
             Actions.COMBO_SET: self.update_combo,
+            Actions.WEB_HEATMAP_SET: self.update_heatmap
         }
         self.setup()
         self.initialize_style()
@@ -75,3 +77,6 @@ class View(QWidget):
         if signal.text:
             item.setCurrentText(signal.text)
         item.blockSignals(was_blocked)
+
+    def update_heatmap(self, item: QWebWindow, signal: Signal) -> None:
+        item.update_chart_data(signal.data)

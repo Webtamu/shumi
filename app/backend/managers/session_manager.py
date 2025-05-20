@@ -1,4 +1,4 @@
-from ..helpers import Timer, Signal, Logger
+from ..helpers import Timer, Signal, Logger, Actions
 from ..services import DuckDBService
 from ..core.eventbus import event_bus
 from ..core.context import app_context
@@ -85,3 +85,17 @@ class SessionManager:
                     file.write(notes)
             except Exception as e:
                 Logger.critical(f"Failed to save notes: {e}")
+
+    def update_sessions(self, signal: Signal) -> None:
+        sessions = self.local_database.fetch_data("session")
+        parsed_sessions = []
+        for s in sessions:
+            parsed_sessions.append({
+                "session_id": s["session_id"],
+                "user_id": s["user_id"],
+                "timestamp_start": s["timestamp_start"].isoformat(),
+                "timestamp_stop": s["timestamp_stop"].isoformat(),
+                "synced": s["synced"]
+            })
+        signal.data = parsed_sessions
+        signal.action = Actions.WEB_HEATMAP_SET
