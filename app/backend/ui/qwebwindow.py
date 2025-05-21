@@ -57,14 +57,16 @@ class QWebWindow():
 
     def _on_load_finished(self, ok):
         if ok:
-            self.update_chart_data({
-                "data": [{"hour": 0, "value": 50, "session_id": 1},
-                         {"hour": 1, "value": 20, "session_id": 2},
-                         {"hour": 2, "value": 30, "session_id": 3},
-                         {"hour": 3, "value": 20, "session_id": 4},
-                         {"hour": 4, "value": 40, "session_id": 5},
-                         {"hour": 5, "value": 10, "session_id": 6},]
-            })
+            pass
+        # Commenting out for now, need to uniquely populate each item (heatmap vs bar)
+            # self.update_chart_data({
+            #     "data": [{"hour": 0, "value": 50, "session_id": 1},
+            #              {"hour": 1, "value": 20, "session_id": 2},
+            #              {"hour": 2, "value": 30, "session_id": 3},
+            #              {"hour": 3, "value": 20, "session_id": 4},
+            #              {"hour": 4, "value": 40, "session_id": 5},
+            #              {"hour": 5, "value": 10, "session_id": 6},]
+            # })
 
     def update_chart_data(self, data):
         Logger.critical(f"Updating JS with {data}")

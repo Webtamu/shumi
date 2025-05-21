@@ -6,6 +6,7 @@ from ..core.settings import get_settings, QSETTINGS_STORAGE_KEY, USER_DEFINED_TI
 import os
 import sounddevice
 import numpy
+import json
 from scipy.io import wavfile
 
 
@@ -97,5 +98,5 @@ class SessionManager:
                 "timestamp_stop": s["timestamp_stop"].isoformat(),
                 "synced": s["synced"]
             })
-        signal.data = parsed_sessions
+        signal.data = json.dumps(parsed_sessions)
         signal.action = Actions.WEB_HEATMAP_SET

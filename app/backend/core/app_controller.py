@@ -36,7 +36,6 @@ class ApplicationController(QObject):
             self.navigator.add_view(view)
             KeybindManager.activate_keybinds(view)
 
-        self.navigator.navigate_to(ViewState.LOGIN)
         self.navigator.do_show()
 
     def initialize_keybinds(self):

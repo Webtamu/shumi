@@ -5,6 +5,9 @@ from abc import abstractmethod
 
 from ..helpers import Signal, Items, Actions, ViewState
 from ..ui import QWebWindow
+from datetime import datetime
+import json
+from collections import defaultdict
 
 
 class View(QWidget):
@@ -79,4 +82,17 @@ class View(QWidget):
         item.blockSignals(was_blocked)
 
     def update_heatmap(self, item: QWebWindow, signal: Signal) -> None:
-        item.update_chart_data(signal.data)
+        raw_data = json.loads(signal.data)
+        session_count = defaultdict(int)
+
+        for entry in raw_data:
+            start = datetime.fromisoformat(entry["timestamp_start"])
+            date_str = start.strftime("%Y-%m-%d")
+            session_count[date_str] += 1
+
+        normalized_data = {
+            date: min(10, count)
+            for date, count in session_count.items()
+        }
+
+        item.update_chart_data(json.dumps(normalized_data))

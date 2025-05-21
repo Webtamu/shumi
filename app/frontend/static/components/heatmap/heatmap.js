@@ -17,28 +17,8 @@ window.receiveDataFromPython = function(data) {
         }
     }
 
-    // Aggregate durations by date (YYYY-MM-DD)
-    const sessionMap = {};
-
-    data.forEach(entry => {
-        const start = new Date(entry.timestamp_start);
-        const stop = new Date(entry.timestamp_stop);
-        const dateStr = start.toISOString().split('T')[0];
-        const duration = (stop - start) / 1000;
-
-        if (!sessionMap[dateStr]) {
-            sessionMap[dateStr] = 0;
-        }
-
-        sessionMap[dateStr] += duration;
-    });
-
-    // Normalize (scale to 0–10 range)
-    Object.keys(sessionMap).forEach(date => {
-        sessionMap[date] = Math.min(10, Math.round(sessionMap[date] / 10));
-    });
-
-    allData = sessionMap;
+    // Data is already in format: { "YYYY-MM-DD": value }
+    allData = data;
     render(currentYear);
 };
 
