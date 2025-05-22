@@ -39,8 +39,6 @@ class DataModel(Model):
             Items.STATS_GRAPH: {"state": False, "text": ""},
         }
 
-        self.model_type = "Data"
-
         self.local_database = DuckDBService()
         self.cloud_database = SupabaseService()
 
@@ -61,9 +59,10 @@ class DataModel(Model):
             Items.STOP: [self.session_manager.stop_session,
                          self.sync_manager.update_streak_stats,
                          self.sync_manager.refresh_fields],
-            Items.BEGIN_TAKE: [self.session_manager.save_session_notes],
+            Items.BEGIN_TAKE: [self.session_manager.save_session_notes,
+                               self.session_manager.update_web_components],
             Items.CREATE_ACCOUNT_CREATE: [self.auth_manager.create_account],
-            Items.HOME_HEATMAP: [self.session_manager.update_sessions]
+            Items.HOME_HEATMAP: [self.session_manager.update_heatmap]
         }
 
     def update_model(self, signal: Signal) -> None:

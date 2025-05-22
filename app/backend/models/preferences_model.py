@@ -11,7 +11,6 @@ class PreferencesModel(Model):
 
     def __init__(self) -> None:
         super().__init__()
-        self.model_type = "Preferences"
         self.data_map = {
             Items.DARK_MODE: {"state": False, "text": "Dark Mode"},
             Items.LANGUAGE: {"state": False, "text": "Language"},

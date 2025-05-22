@@ -17,7 +17,6 @@ class Model(QObject):
         super().__init__()
         self.data_map = {}
         self.action_map = {}
-        self.model_type = None
 
     def can_handle(self, signal: Signal) -> bool:
         """

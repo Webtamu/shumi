@@ -26,7 +26,6 @@ class ApplicationModel(Model):
         }
 
         self.action_map = {}
-        self.model_type = "Application"
 
     # Update data store and notify controller
     def update_model(self, signal: Signal) -> None:
