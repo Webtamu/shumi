@@ -88,6 +88,9 @@ class SessionManager:
                 Logger.critical(f"Failed to save notes: {e}")
 
     def update_sessions(self, signal: Signal) -> None:
+        if signal.action == Actions.WEB_BTN_PRESS:
+            return
+
         sessions = self.local_database.fetch_data("session")
         parsed_sessions = []
         for s in sessions:

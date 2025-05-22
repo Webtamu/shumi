@@ -1,7 +1,7 @@
 from PyQt6.QtCore import QUrl, QObject, pyqtSlot, pyqtSignal
 from PyQt6.QtWebEngineWidgets import QWebEngineView
 from PyQt6.QtWebChannel import QWebChannel
-from ..helpers import Signal, Items, Actions, ViewState, Logger
+from ..helpers import Signal, Items, Actions, ViewState
 import json
 
 
@@ -33,6 +33,24 @@ class PyObj(QObject):
             self.web_signal.emit(Signal(
                 item=self.item_type,
                 action=Actions.WEB_BTN_PRESS,
+                source=self.view_state,
+                web={"data": data}
+            ))
+
+    @pyqtSlot(str)
+    def initializeComponent(self, data):
+        try:
+            parsed = json.loads(data)
+            self.web_signal.emit(Signal(
+                item=self.item_type,
+                action=Actions.WEB_HEATMAP_SET,
+                source=self.view_state,
+                web=parsed
+            ))
+        except json.JSONDecodeError:
+            self.web_signal.emit(Signal(
+                item=self.item_type,
+                action=Actions.WEB_HEATMAP_SET,
                 source=self.view_state,
                 web={"data": data}
             ))
@@ -69,5 +87,4 @@ class QWebWindow():
             # })
 
     def update_chart_data(self, data):
-        Logger.critical(f"Updating JS with {data}")
         self.obj.send_to_js(data)

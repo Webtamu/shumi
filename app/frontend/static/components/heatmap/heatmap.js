@@ -1,7 +1,7 @@
 window.onload = function () {
     new QWebChannel(qt.webChannelTransport, function(channel) {
         window.pyObj = channel.objects.pyObj;
-        pyObj.sendData('Heatmap initialized');
+        pyObj.initializeComponent('Heatmap initialized');
     });
 };
 
@@ -37,10 +37,7 @@ const colorScale = d3.scaleSequential(d3.interpolateYlOrRd)
 let currentYear = new Date().getFullYear();
 const yearDisplay = d3.select("#year-display");
 
-// Sample data - in a real app, this would come from your backend
-let allData = {
-    // Format: "YYYY-MM-DD": value
-};
+let allData = {};
 
 function generateYearData(year) {
     const startDate = new Date(year, 0, 1);
@@ -59,7 +56,6 @@ function generateYearData(year) {
 }
 
 function render(year) {
-    const data = generateYearData(year);
     yearDisplay.text(year);
     
     svg.selectAll("*").remove();
