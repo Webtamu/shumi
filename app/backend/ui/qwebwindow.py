@@ -43,14 +43,14 @@ class PyObj(QObject):
             parsed = json.loads(data)
             self.web_signal.emit(Signal(
                 item=self.item_type,
-                action=Actions.WEB_HEATMAP_SET,
+                action=Actions.WEB_COMPONENT_SET,
                 source=self.view_state,
                 web=parsed
             ))
         except json.JSONDecodeError:
             self.web_signal.emit(Signal(
                 item=self.item_type,
-                action=Actions.WEB_HEATMAP_SET,
+                action=Actions.WEB_COMPONENT_SET,
                 source=self.view_state,
                 web={"data": data}
             ))

@@ -5,7 +5,7 @@ from abc import abstractmethod
 
 from ..helpers import Signal, Items, Actions, ViewState
 from ..ui import QWebWindow
-from datetime import datetime
+from datetime import datetime, timedelta
 import json
 from collections import defaultdict
 
@@ -23,7 +23,7 @@ class View(QWidget):
             Actions.BOX_CHECK: self.update_box,
             Actions.LABEL_SET: self.update_label,
             Actions.COMBO_SET: self.update_combo,
-            Actions.WEB_HEATMAP_SET: self.update_heatmap
+            Actions.WEB_COMPONENT_SET: self.update_web_component
         }
         self.setup()
         self.initialize_style()
@@ -81,6 +81,46 @@ class View(QWidget):
             item.setCurrentText(signal.text)
         item.blockSignals(was_blocked)
 
+    def update_web_component(self, item: QWebWindow, signal: Signal) -> None:
+        if signal.item == Items.HOME_HEATMAP:
+            self.update_heatmap(item, signal)
+        elif signal.item == Items.STATS_GRAPH:
+            self.update_graph(item, signal)
+
+    def update_graph(self, item: QWebWindow, signal: Signal) -> None:
+        try:
+            raw_data = json.loads(signal.data)
+
+            today = datetime.now().date()
+            seven_days_ago = today - timedelta(days=6)
+            session_totals = defaultdict(float)
+
+            for entry in raw_data:
+                try:
+                    start = datetime.fromisoformat(entry["timestamp_start"])
+                    stop = datetime.fromisoformat(entry["timestamp_stop"])
+                    date_str = start.date().isoformat()
+
+                    if seven_days_ago <= start.date() <= today:
+                        duration = (stop - start).total_seconds()  # in seconds
+                        session_totals[date_str] += duration
+                except Exception as e:
+                    print(f"Error parsing session: {e}")
+
+            # Ensure all 7 days are represented
+            result = []
+            for i in range(7):
+                day = seven_days_ago + timedelta(days=i)
+                date_str = day.isoformat()
+                result.append({
+                    "date": date_str,
+                    "value": round(session_totals.get(date_str, 0), 2)
+                })
+            item.update_chart_data(json.dumps({"data": result}))
+
+        except Exception as e:
+            print(f"Error in update_graph: {e}")
+
     def update_heatmap(self, item: QWebWindow, signal: Signal) -> None:
         raw_data = json.loads(signal.data)
         session_count = defaultdict(int)
@@ -94,5 +134,4 @@ class View(QWidget):
             date: min(10, count)
             for date, count in session_count.items()
         }
-
         item.update_chart_data(json.dumps(normalized_data))

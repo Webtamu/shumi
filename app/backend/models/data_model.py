@@ -62,7 +62,8 @@ class DataModel(Model):
             Items.BEGIN_TAKE: [self.session_manager.save_session_notes,
                                self.session_manager.update_web_components],
             Items.CREATE_ACCOUNT_CREATE: [self.auth_manager.create_account],
-            Items.HOME_HEATMAP: [self.session_manager.update_heatmap]
+            Items.HOME_HEATMAP: [self.session_manager.update_heatmap],
+            Items.STATS_GRAPH: [self.session_manager.update_chart_data],
         }
 
     def update_model(self, signal: Signal) -> None:

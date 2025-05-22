@@ -103,10 +103,18 @@ class SessionManager:
     def update_web_components(self, signal: Signal) -> None:
         heatmap_signal = Signal(
                 item=Items.HOME_HEATMAP,
-                action=Actions.WEB_HEATMAP_SET,
+                action=Actions.WEB_COMPONENT_SET,
                 source=ViewState.HOME,
                 )
         event_bus.publish(heatmap_signal)
+
+    def update_chart_data(self, signal: Signal) -> None:
+        if signal.action == Actions.WEB_BTN_PRESS:
+            return
+
+        sessions = self.get_session_data()
+        signal.data = json.dumps(sessions)
+        signal.action = Actions.WEB_COMPONENT_SET
 
     def update_heatmap(self, signal: Signal) -> None:
         if signal.action == Actions.WEB_BTN_PRESS:
@@ -114,4 +122,4 @@ class SessionManager:
 
         sessions = self.get_session_data()
         signal.data = json.dumps(sessions)
-        signal.action = Actions.WEB_HEATMAP_SET
+        signal.action = Actions.WEB_COMPONENT_SET

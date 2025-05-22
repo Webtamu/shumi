@@ -127,6 +127,6 @@ class Actions(Enum):
     LABEL_SET = auto()
     LABEL_PRESS = auto()
     WEB_BTN_PRESS = auto()
-    WEB_HEATMAP_SET = auto()
+    WEB_COMPONENT_SET = auto()
     NONE = auto()
     DEFAULT = auto()
