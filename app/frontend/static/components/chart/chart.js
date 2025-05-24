@@ -13,6 +13,8 @@ window.receiveDataFromPython = function(data) {
     updateChartWithExternalData(data);
 };
 
+let data = [];
+
 const svg = d3.select("#chart");
 let width = window.innerWidth;
 let height = window.innerHeight;
@@ -102,13 +104,6 @@ function updateChartWithExternalData(newData) {
         data = newData.data;
         render(data);
     }
-}
-
-function updateData() {
-    data = generateDummyData();
-    render(data);
-    const dataString = JSON.stringify(data);
-    pyObj.sendData(`Updated Data from JS: ${dataString}`);
 }
 
 window.addEventListener("resize", () => {

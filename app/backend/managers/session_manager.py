@@ -106,7 +106,12 @@ class SessionManager:
                 action=Actions.WEB_COMPONENT_SET,
                 source=ViewState.HOME,
                 )
-        event_bus.publish(heatmap_signal)
+        chart_signal = Signal(
+                item=Items.STATS_GRAPH,
+                action=Actions.WEB_COMPONENT_SET,
+                source=ViewState.STATS,
+                )
+        event_bus.publish(heatmap_signal, chart_signal)
 
     def update_chart_data(self, signal: Signal) -> None:
         if signal.action == Actions.WEB_BTN_PRESS:
