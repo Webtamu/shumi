@@ -21,39 +21,21 @@ class PyObj(QObject):
 
     @pyqtSlot(str)
     def sendData(self, data):
-        try:
-            parsed = json.loads(data)
-            self.web_signal.emit(Signal(
-                item=self.item_type,
-                action=Actions.WEB_BTN_PRESS,
-                source=self.view_state,
-                web=parsed
-            ))
-        except json.JSONDecodeError:
-            self.web_signal.emit(Signal(
-                item=self.item_type,
-                action=Actions.WEB_BTN_PRESS,
-                source=self.view_state,
-                web={"data": data}
-            ))
+        self.web_signal.emit(Signal(
+            item=self.item_type,
+            action=Actions.WEB_BTN_PRESS,
+            source=self.view_state,
+            web={"data": data}
+        ))
 
     @pyqtSlot(str)
     def initializeComponent(self, data):
-        try:
-            parsed = json.loads(data)
-            self.web_signal.emit(Signal(
-                item=self.item_type,
-                action=Actions.WEB_COMPONENT_SET,
-                source=self.view_state,
-                web=parsed
-            ))
-        except json.JSONDecodeError:
-            self.web_signal.emit(Signal(
-                item=self.item_type,
-                action=Actions.WEB_COMPONENT_SET,
-                source=self.view_state,
-                web={"data": data}
-            ))
+        self.web_signal.emit(Signal(
+            item=self.item_type,
+            action=Actions.WEB_COMPONENT_SET,
+            source=self.view_state,
+            web={"data": data}
+        ))
 
     def send_to_js(self, data):
         if self._web_page:
@@ -70,21 +52,6 @@ class QWebWindow():
         self.channel.registerObject("pyObj", self.obj)
         self.webengine.page().setWebChannel(self.channel)
         self.webengine.setUrl(QUrl.fromLocalFile(html))
-
-        self.webengine.page().loadFinished.connect(self._on_load_finished)
-
-    def _on_load_finished(self, ok):
-        if ok:
-            pass
-        # Commenting out for now, need to uniquely populate each item (heatmap vs bar)
-            # self.update_chart_data({
-            #     "data": [{"hour": 0, "value": 50, "session_id": 1},
-            #              {"hour": 1, "value": 20, "session_id": 2},
-            #              {"hour": 2, "value": 30, "session_id": 3},
-            #              {"hour": 3, "value": 20, "session_id": 4},
-            #              {"hour": 4, "value": 40, "session_id": 5},
-            #              {"hour": 5, "value": 10, "session_id": 6},]
-            # })
 
     def update_chart_data(self, data):
         self.obj.send_to_js(data)

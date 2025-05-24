@@ -3,27 +3,29 @@ from PyQt6.QtWidgets import QPushButton, QLabel
 
 from ..views import View
 from ..helpers import Items, Actions, ViewState
+from ..ui import NavBar
 
 
 class ProfileView(View):
     def setup(self) -> None:
         self.view_state = ViewState.PROFILE
         self.window = uic.loadUi("app/frontend/qtdesigner/profile_design.ui")
+        nav_widget: NavBar = self.window.findChild(NavBar, "navBar")
         self.item_map = {
             Items.HOME: {
-                "instance": self.window.findChild(QPushButton, "btnHome"),
+                "instance": nav_widget.btnHome,
                 "action": Actions.BTN_PRESS
             },
             Items.SETTINGS: {
-                "instance": self.window.findChild(QPushButton, "btnSettings"),
+                "instance": nav_widget.btnSettings,
                 "action": Actions.BTN_PRESS
             },
             Items.PROFILE: {
-                "instance": self.window.findChild(QPushButton, "btnProfile"),
+                "instance": nav_widget.btnProfile,
                 "action": Actions.BTN_PRESS
             },
             Items.STATS: {
-                "instance": self.window.findChild(QPushButton, "btnStats"),
+                "instance": nav_widget.btnStats,
                 "action": Actions.BTN_PRESS
             },
             Items.PROFILE_LOGOUT: {

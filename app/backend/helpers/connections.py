@@ -17,7 +17,7 @@ class Connections:
                 action=signal.action,
                 text=signal.text,
                 source=signal.source,
-                state=bool(state),  # crucial
+                state=bool(state),
                 nav=signal.nav,
             ))
         )

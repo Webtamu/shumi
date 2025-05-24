@@ -26,65 +26,27 @@
    <string>Shumi</string>
   </property>
   <property name="windowIcon">
-   <iconset theme="weather-overcast"/>
+   <iconset theme="weather-overcast">
+    <normaloff>.</normaloff>.</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout_2">
     <item>
-     <widget class="QFrame" name="frame">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="frameShape">
-       <enum>QFrame::Shape::Box</enum>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Shadow::Raised</enum>
-      </property>
-      <layout class="QHBoxLayout" name="horizontalLayout">
-       <item>
-        <widget class="QPushButton" name="btnProfile">
-         <property name="text">
-          <string>Profile</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="btnSettings">
-         <property name="text">
-          <string>Settings</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="btnStats">
-         <property name="text">
-          <string>Stats</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
+     <widget class="NavBar" name="navBar" native="true"/>
     </item>
     <item>
      <widget class="QFrame" name="frame_2">
       <property name="layoutDirection">
-       <enum>Qt::LayoutDirection::LeftToRight</enum>
+       <enum>Qt::LeftToRight</enum>
       </property>
       <property name="frameShape">
-       <enum>QFrame::Shape::Box</enum>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Shadow::Raised</enum>
+       <enum>QFrame::NoFrame</enum>
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout_3">
        <item>
         <widget class="QLabel" name="lblWelcome">
          <property name="layoutDirection">
-          <enum>Qt::LayoutDirection::LeftToRight</enum>
+          <enum>Qt::LeftToRight</enum>
          </property>
          <property name="text">
           <string>Welcome, &lt;User&gt; - Let's practice some &lt;Instrument&gt; today!</string>
@@ -97,16 +59,13 @@
     <item>
      <widget class="QFrame" name="frame_3">
       <property name="frameShape">
-       <enum>QFrame::Shape::Box</enum>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Shadow::Raised</enum>
+       <enum>QFrame::NoFrame</enum>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_3">
        <item>
         <widget class="QWebEngineView" name="heatmapTest" native="true">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -116,16 +75,13 @@
        <item>
         <widget class="QFrame" name="frame_4">
          <property name="frameShape">
-          <enum>QFrame::Shape::Box</enum>
-         </property>
-         <property name="frameShadow">
-          <enum>QFrame::Shadow::Raised</enum>
+          <enum>QFrame::NoFrame</enum>
          </property>
          <layout class="QHBoxLayout" name="horizontalLayout_2">
           <item>
            <widget class="QLabel" name="lblCurrentStreak">
             <property name="frameShape">
-             <enum>QFrame::Shape::NoFrame</enum>
+             <enum>QFrame::NoFrame</enum>
             </property>
             <property name="text">
              <string>Current Streak: 0</string>
@@ -167,7 +123,7 @@
      <x>0</x>
      <y>0</y>
      <width>1000</width>
-     <height>33</height>
+     <height>22</height>
     </rect>
    </property>
   </widget>
@@ -178,6 +134,12 @@
    <class>QWebEngineView</class>
    <extends>QWidget</extends>
    <header>qwebengineview.h</header>
+  </customwidget>
+  <customwidget>
+   <class>NavBar</class>
+   <extends>QWidget</extends>
+   <header location="global">app.backend.ui.navbar</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

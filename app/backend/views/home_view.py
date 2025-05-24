@@ -4,7 +4,7 @@ from PyQt6.QtWebEngineWidgets import QWebEngineView
 
 from ..views import View
 from ..helpers import Items, Actions, ViewState
-from ..ui import QWebWindow
+from ..ui import QWebWindow, NavBar
 import os
 
 
@@ -13,6 +13,8 @@ class HomeView(View):
         self.view_state = ViewState.HOME
         self.window = uic.loadUi("app/frontend/qtdesigner/home_design.ui")
         html_path = os.path.abspath("app/frontend/static/components/heatmap/heatmap.html")
+        nav_widget: NavBar = self.window.findChild(NavBar, "navBar")
+
         self.item_map = {
             Items.HOME_HEATMAP: {
                 "instance": QWebWindow(self.window.findChild(QWebEngineView, "heatmapTest"),
@@ -26,15 +28,15 @@ class HomeView(View):
                 "action": Actions.BTN_PRESS
             },
             Items.SETTINGS: {
-                "instance": self.window.findChild(QPushButton, "btnSettings"),
+                "instance": nav_widget.btnSettings,
                 "action": Actions.BTN_PRESS
             },
             Items.PROFILE: {
-                "instance": self.window.findChild(QPushButton, "btnProfile"),
+                "instance": nav_widget.btnProfile,
                 "action": Actions.BTN_PRESS
             },
             Items.STATS: {
-                "instance": self.window.findChild(QPushButton, "btnStats"),
+                "instance": nav_widget.btnStats,
                 "action": Actions.BTN_PRESS
             },
             Items.HOME_WELCOME: {
