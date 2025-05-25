@@ -30,7 +30,6 @@ jobs:
           python-version: ${{ matrix.python-version }}
           cache: 'pip'
 
-      # Install Rust
       - name: Set up Rust
         uses: actions-rs/toolchain@v1
         with:
@@ -38,7 +37,6 @@ jobs:
           profile: minimal
           override: true
 
-      # Optional: cache Rust artifacts
       - name: Cache Cargo registry and build
         uses: actions/cache@v3
         with:
@@ -50,7 +48,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-cargo-
 
-      # Ubuntu-specific setup
+      # Linux setup
       - name: Setup xvfb and dependencies (Linux)
         if: runner.os == 'Linux'
         run: |
@@ -60,19 +58,18 @@ jobs:
             libxcb-keysyms1 libxcb-randr0 libxcb-render-util0 libxcb-xinerama0 \
             libxcb-xinput0 libxcb-xfixes0 libxcb-shape0 libglib2.0-0 libgl1-mesa-dev \
             '^libxcb.*-dev' libx11-xcb-dev libglu1-mesa-dev libxrender-dev libxi-dev \
-            libxkbcommon-dev libxkbcommon-x11-dev \
-            portaudio19-dev
+            libxkbcommon-dev libxkbcommon-x11-dev portaudio19-dev
 
           sudo /usr/bin/Xvfb $DISPLAY -screen 0 1280x1024x24 &
 
-      # macOS-specific setup
+      # macOS setup
       - name: Install Qt dependencies (macOS)
         if: runner.os == 'macOS'
         run: |
           brew install qt@6
           echo "CMAKE_PREFIX_PATH=$(brew --prefix qt@6)" >> $GITHUB_ENV
 
-      # Windows-specific setup
+      # Windows setup
       - name: Install Qt dependencies (Windows)
         if: runner.os == 'Windows'
         uses: jurplel/install-qt-action@v3
@@ -87,10 +84,10 @@ jobs:
           python -m pip install --upgrade pip wheel setuptools
           python -m pip install pytest pytest-qt maturin
 
-      # Build and install Rust extension using maturin
       - name: Build and install Rust extension
         run: |
-          maturin develop --manifest-path app/backend/rslib/Cargo.toml
+          maturin build --release --manifest-path app/backend/rslib/Cargo.toml -o dist
+          pip install dist/*.whl
 
       - name: Install project dependencies
         run: |
