@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import QWidget, QComboBox, QCheckBox
 from typing import Callable
 from ..helpers import Signal, Actions
-from ..ui import ClickableLabel
+from ..widgets import ClickableLabel
 
 
 class Connections:

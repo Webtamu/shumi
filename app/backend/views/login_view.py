@@ -2,7 +2,7 @@ from PyQt6 import uic
 from PyQt6.QtWidgets import QPushButton, QLineEdit, QCheckBox, QLabel
 
 from ..views import View
-from ..ui import ClickableLabel, PasswordLineEdit
+from ..widgets import ClickableLabel, PasswordLineEdit
 from ..helpers import Items, Actions, ViewState
 
 

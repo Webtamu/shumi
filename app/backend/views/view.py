@@ -4,7 +4,7 @@ from PyQt6.QtGui import QCursor
 from abc import abstractmethod
 
 from ..helpers import Signal, Items, Actions, ViewState
-from ..ui import QWebWindow
+from ..widgets import QWebWindow
 from datetime import datetime, timedelta
 import json
 from collections import defaultdict

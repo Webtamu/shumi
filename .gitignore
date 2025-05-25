@@ -16,4 +16,4 @@ study_sessions.duckdb.wal
 .venv
 /user/*
 /target/
-/app/rust_ext/target/
+/app/backend/rslib/target/

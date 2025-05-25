@@ -183,7 +183,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "rust_ext"
+name = "rslib"
 version = "0.1.0"
 dependencies = [
  "pyo3",

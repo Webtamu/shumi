@@ -4,7 +4,7 @@ from PyQt6.QtWebEngineWidgets import QWebEngineView
 
 from ..views import View
 from ..helpers import Items, Actions, ViewState
-from ..ui import QWebWindow, NavBar
+from ..widgets import QWebWindow, NavBar
 import os
 
 

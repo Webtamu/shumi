@@ -1,6 +1,6 @@
 from .models import Model
 from ..helpers import Signal, Items, Logger
-from rust_ext import rust_hello
+from rslib import rust_hello
 
 
 class ApplicationModel(Model):

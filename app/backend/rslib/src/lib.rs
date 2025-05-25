@@ -8,7 +8,7 @@ fn rust_hello() {
 
 /// Rust module definition
 #[pymodule]
-fn rust_ext(_py: Python, m: &PyModule) -> PyResult<()> {
+fn rslib(_py: Python, m: &PyModule) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(rust_hello, m)?)?;
     Ok(())
 }

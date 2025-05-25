@@ -3,7 +3,7 @@ from PyQt6.QtWidgets import QPushButton, QLineEdit, QLabel
 
 from ..views import View
 from ..helpers import Items, Actions, ViewState
-from ..ui import ClickableLabel, PasswordLineEdit
+from ..widgets import ClickableLabel, PasswordLineEdit
 
 
 class CreateView(View):

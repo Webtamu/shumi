@@ -16,20 +16,40 @@ jobs:
         python-version: ['3.12.9']
 
     runs-on: ${{ matrix.os }}
-    
+
     env:
       PYTHONIOENCODING: utf-8
-      PYTHONPATH: ${{ github.workspace }}  # Set PYTHONPATH globally for all steps
+      PYTHONPATH: ${{ github.workspace }}
 
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
           cache: 'pip'
-      
+
+      # Install Rust
+      - name: Set up Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          profile: minimal
+          override: true
+
+      # Optional: cache Rust artifacts
+      - name: Cache Cargo registry and build
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-
+
       # Ubuntu-specific setup
       - name: Setup xvfb and dependencies (Linux)
         if: runner.os == 'Linux'
@@ -50,10 +70,8 @@ jobs:
         if: runner.os == 'macOS'
         run: |
           brew install qt@6
-          echo "Qt installed with brew"
-          # Make sure Qt is in PATH for PyQt to find during installation
           echo "CMAKE_PREFIX_PATH=$(brew --prefix qt@6)" >> $GITHUB_ENV
-      
+
       # Windows-specific setup
       - name: Install Qt dependencies (Windows)
         if: runner.os == 'Windows'
@@ -63,21 +81,18 @@ jobs:
           host: 'windows'
           target: 'desktop'
           arch: 'win64_msvc2019_64'
-      
+
       - name: Install pip dependencies
         run: |
           python -m pip install --upgrade pip wheel setuptools
           python -m pip install pytest pytest-qt
-          
-      # Install other requirements with better error reporting
+
       - name: Install project dependencies
         run: |
           python -m pip install --no-cache-dir -r requirements.txt
 
-      # Run compilation test
       - name: Compile test
         run: pytest tests/test_compile.py -v
 
-      # Run auth unit tests
       - name: Run auth unit tests
         run: pytest tests/test_auth.py -v

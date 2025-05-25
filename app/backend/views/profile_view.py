@@ -3,7 +3,7 @@ from PyQt6.QtWidgets import QPushButton, QLabel
 
 from ..views import View
 from ..helpers import Items, Actions, ViewState
-from ..ui import NavBar
+from ..widgets import NavBar
 
 
 class ProfileView(View):
