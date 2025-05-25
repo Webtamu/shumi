@@ -85,7 +85,12 @@ jobs:
       - name: Install pip dependencies
         run: |
           python -m pip install --upgrade pip wheel setuptools
-          python -m pip install pytest pytest-qt
+          python -m pip install pytest pytest-qt maturin
+
+      # Build and install Rust extension using maturin
+      - name: Build and install Rust extension
+        run: |
+          maturin develop --manifest-path app/backend/rslib/Cargo.toml
 
       - name: Install project dependencies
         run: |
