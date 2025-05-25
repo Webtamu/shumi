@@ -85,9 +85,20 @@ jobs:
           python -m pip install pytest pytest-qt maturin
 
       - name: Build and install Rust extension
+        shell: bash
         run: |
           maturin build --release --manifest-path app/backend/rslib/Cargo.toml -o dist
+          # On Linux/macOS, glob works fine:
           pip install dist/*.whl
+        if: runner.os != 'Windows'
+
+      - name: Build and install Rust extension (Windows)
+        shell: pwsh
+        run: |
+          maturin build --release --manifest-path app/backend/rslib/Cargo.toml -o dist
+          $wheel = Get-ChildItem dist -Filter *.whl | Select-Object -First 1
+          pip install $wheel.FullName
+        if: runner.os == 'Windows'
 
       - name: Install project dependencies
         run: |
