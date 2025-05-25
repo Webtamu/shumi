@@ -1,0 +1,14 @@
+[package]
+name = "rust_ext"
+version = "0.1.0"
+edition = "2024"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies.pyo3]
+version = "0.20.0"
+features = ["extension-module"]
+
+[package.metadata.maturin]
+name = "rust_ext"

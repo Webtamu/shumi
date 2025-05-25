@@ -15,3 +15,5 @@ study_sessions.duckdb.wal
 .dev
 .venv
 /user/*
+/target/
+/app/rust_ext/target/
