@@ -13,3 +13,4 @@ sounddevice
 numpy
 scipy
 ibis-framework[duckdb]
+maturin
