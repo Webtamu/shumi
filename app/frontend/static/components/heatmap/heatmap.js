@@ -39,22 +39,6 @@ const yearDisplay = d3.select("#year-display");
 
 let allData = {};
 
-function generateYearData(year) {
-    const startDate = new Date(year, 0, 1);
-    const endDate = new Date(year, 11, 31);
-    
-    return d3.timeDays(startDate, endDate).map(date => {
-        const dateStr = d3.timeFormat("%Y-%m-%d")(date);
-        return {
-            date,
-            dateStr,
-            day: date.getDay(),
-            value: allData[dateStr] || 0,
-            formattedDate: d3.timeFormat("%B %d, %Y")(date)
-        };
-    });
-}
-
 function render(year) {
     yearDisplay.text(year);
     
