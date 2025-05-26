@@ -27,7 +27,6 @@ class DuckDBService:
 
     def insert_data(self, user_id: str, start_time: str, stop_time: str, synced: bool = False) -> None:
         session_id = str(uuid.uuid4())
-
         df = pd.DataFrame([{
             "session_id": session_id,
             "user_id": user_id,
@@ -46,17 +45,29 @@ class DuckDBService:
                     session_table.timestamp_stop)
 
         result = unsynced_sessions.execute()
-        # Ensure proper handling of result format
-        return [dict(zip(result.columns, row)) for row in result]
+        result["timestamp_start"] = result["timestamp_start"].apply(str)
+        result["timestamp_stop"] = result["timestamp_stop"].apply(str)
+        return result.to_dict(orient='records')
 
     def mark_as_synced(self, session_ids: List[str]) -> None:
         if not session_ids:
             return
 
-        session_table = self.con.table(DUCKDB_SESSION_TABLE_NAME)
-        updated_sessions = session_table.filter(session_table.session_id.isin(session_ids)) \
-            .mutate(synced=True)
-        updated_sessions.execute()
+        try:
+            # Load the full table into a DataFrame
+            session_table = self.con.table(DUCKDB_SESSION_TABLE_NAME)
+            df = session_table.execute()
+
+            # Update the 'synced' field where session_id is in session_ids
+            df.loc[df['session_id'].isin(session_ids), 'synced'] = True
+
+            # Replace the table with the updated DataFrame
+            self.con.drop_table(DUCKDB_SESSION_TABLE_NAME)
+            self.con.create_table(DUCKDB_SESSION_TABLE_NAME, df)
+
+            Logger.debug(f"Marked {len(session_ids)} sessions as synced.")
+        except Exception as e:
+            Logger.error(f"Failed to mark sessions as synced: {e}")
 
     def get_current_streak(self, user_id: str, timezone_str: str = 'UTC') -> int:
         try:

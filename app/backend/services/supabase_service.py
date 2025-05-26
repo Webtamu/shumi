@@ -81,8 +81,8 @@ class SupabaseService:
 
         for row in session_rows:
             try:
-                row["timestamp_start"] = row["timestamp_start"].isoformat()
-                row["timestamp_stop"] = row["timestamp_stop"].isoformat()
+                row["timestamp_start"] = row["timestamp_start"]
+                row["timestamp_stop"] = row["timestamp_stop"]
                 response = self.client.table("study_sessions").insert(row).execute()
                 if response.data:
                     synced_ids.append(row["session_id"])
