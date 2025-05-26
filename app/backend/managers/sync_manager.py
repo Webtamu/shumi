@@ -17,13 +17,11 @@ class SyncManager:
         """
 
         unsynced_rows = self.local_database.collect_unsynced()
-        print(unsynced_rows)
         if not unsynced_rows:
             Logger.info('No unsynced sessions to upload.')
             return
 
         synced_rows = self.cloud_database.upload_unsynced_sessions(unsynced_rows)
-        print(synced_rows)
         if synced_rows:
             self.local_database.mark_as_synced(synced_rows)
             Logger.info(f'Synced {len(synced_rows)} session(s) to Supabase.')
@@ -50,7 +48,6 @@ class SyncManager:
             return
 
         cloud_sessions = self.cloud_database.fetch_data("study_sessions").data
-        print(cloud_sessions)
         self.local_database.con.raw_sql(f"DELETE FROM session WHERE user_id = '{user.user.id}'")
 
         for session in cloud_sessions:
