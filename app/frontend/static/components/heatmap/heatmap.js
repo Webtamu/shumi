@@ -26,13 +26,23 @@ let width = window.innerWidth;
 let height = window.innerHeight;
 svg.attr("width", width).attr("height", height);
 
-const tooltip = d3.select("#tooltip");
+const videoTooltip = d3.select("#video-tooltip");
+const videoEl = document.getElementById("tooltip-video");
+const tooltipDate = document.getElementById("tooltip-date");
+const tooltipValue = document.getElementById("tooltip-value");
 const dayLabels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 const colorScale = d3.scaleSequential(d3.interpolateYlOrRd).domain([0, 10]);
 
 let currentYear = new Date().getFullYear();
 let allData = {};
 let g = svg.append("g");
+
+let userInteracted = false;
+
+// Track user interaction (any click counts)
+document.addEventListener('click', () => {
+    userInteracted = true;
+});
 
 function render(year) {
     width = window.innerWidth;
@@ -124,24 +134,44 @@ function render(year) {
             .attr("fill", d => d.isValid ? colorScale(d.value) : "none")
             .attr("stroke", d => d.isValid ? "#ddd" : "none")
             .attr("stroke-width", 0.5)
-            .on("mousemove", function (event, d) {
+            .on("mouseover", function (event, d) {
                 if (!d.isValid) return;
+                
                 d3.select(this)
                     .attr("stroke", "black")
                     .attr("stroke-width", 1.5)
                     .style("cursor", "pointer");
-                tooltip
+                
+                // Update tooltip content
+                tooltipDate.textContent = d.formattedDate;
+                tooltipValue.textContent = `Count: ${d.value}`;
+                
+                // Show combined tooltip
+                videoTooltip
                     .style("display", "block")
                     .style("left", (event.pageX + 10) + "px")
-                    .style("top", (event.pageY - 20) + "px")
-                    .html(`<strong>${d.formattedDate}</strong><br>Value: ${d.value}`);
+                    .style("top", (event.pageY - 120) + "px");
+                
+                
+                videoEl.currentTime = 0;
+                videoEl.play();
+                
             })
-            .on("mouseleave", function (event, d) {
+            .on("mousemove", function (event, d) {
+                if (!d.isValid) return;
+                
+                videoTooltip
+                    .style("left", (event.pageX + 10) + "px")
+                    .style("top", (event.pageY - 120) + "px");
+            })
+            .on("mouseout", function (event, d) {
                 if (!d.isValid) return;
                 d3.select(this)
                     .attr("stroke", "#ddd")
                     .attr("stroke-width", 0.5);
-                tooltip.style("display", "none");
+                videoTooltip.style("display", "none");
+                videoEl.pause();
+                videoEl.currentTime = 0;
             })
             .on("click", (event, d) => {
                 if (!d.isValid || !window.pyObj) return;

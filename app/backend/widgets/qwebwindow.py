@@ -1,5 +1,6 @@
 from PyQt6.QtCore import QUrl, QObject, pyqtSlot, pyqtSignal
 from PyQt6.QtWebEngineWidgets import QWebEngineView
+from PyQt6.QtWebEngineCore import QWebEngineSettings
 from PyQt6.QtWebChannel import QWebChannel
 from ..helpers import Signal, Items, Actions, ViewState
 import json
@@ -46,6 +47,9 @@ class PyObj(QObject):
 class QWebWindow():
     def __init__(self, webengine: QWebEngineView, html: str, item: Items, view_state: ViewState) -> None:
         self.webengine = webengine
+        print("hello")
+        webengine.settings().setAttribute(QWebEngineSettings.WebAttribute.PlaybackRequiresUserGesture, False)
+        webengine.settings().setAttribute(QWebEngineSettings.WebAttribute.PluginsEnabled, True)
         self.channel = QWebChannel()
         self.obj = PyObj(item, view_state)
         self.obj.set_web_page(self.webengine.page())

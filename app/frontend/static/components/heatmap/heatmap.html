@@ -7,10 +7,19 @@
 </head>
 <body>
     <svg id="heatmap"></svg>
-    <div id="tooltip" class="tooltip" style="display: none;"></div>
+    <div id="video-tooltip" class="video-tooltip">
+        <video id="tooltip-video" controls>
+            <source src="sample.webm" type="video/webm">
+            Your browser does not support the video tag.
+        </video>
+        <div class="tooltip-text">
+            <strong id="tooltip-date"></strong>
+            <span id="tooltip-value"></span>
+        </div>
+    </div>
 
     <script src="../../lib/d3.v7.min.js"></script>
     <script src="qrc:///qtwebchannel/qwebchannel.js"></script>
-    <script src="heatmap.js"></script>
+    <script src ="heatmap.js"></script>
 </body>
 </html>

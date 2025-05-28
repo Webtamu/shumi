@@ -6,12 +6,29 @@ html, body {
     width: 100%;
     font-family: sans-serif;
 }
-.tooltip {
+.video-tooltip {
     position: absolute;
+    display: none;
     pointer-events: none;
-    background: rgba(0,0,0,0.7);
+    background: rgba(0, 0, 0, 0.8);
+    padding: 12px;
+    border-radius: 8px;
     color: white;
-    padding: 4px 8px;
+    max-width: 224px;
+}
+.video-tooltip video {
+    width: 200px;
+    height: auto;
+    display: block;
+    margin-bottom: 8px;
     border-radius: 4px;
+}
+.tooltip-text {
     font-size: 12px;
+    line-height: 1.4;
+}
+.tooltip-text strong {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 13px;
 }
