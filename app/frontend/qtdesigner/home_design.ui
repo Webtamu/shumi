@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>683</width>
-    <height>508</height>
+    <height>720</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -67,13 +67,39 @@
      </widget>
     </item>
     <item>
+     <widget class="QFrame" name="petFrame">
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>18</height>
+       </size>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout_5">
+       <item alignment="Qt::AlignHCenter">
+        <widget class="QLabel" name="pet">
+         <property name="text">
+          <string>Puffle.gif</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item>
      <widget class="QFrame" name="frame_3">
       <property name="frameShape">
        <enum>QFrame::NoFrame</enum>
       </property>
-      <layout class="QVBoxLayout" name="verticalLayout" stretch="2,0,2,0,0">
+      <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,2,0,0">
        <item>
-        <widget class="QTableView" name="tableView"/>
+        <widget class="QListWidget" name="listWidget">
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>60</height>
+          </size>
+         </property>
+        </widget>
        </item>
        <item>
         <widget class="QFrame" name="frame">
@@ -138,7 +164,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QWebEngineView" name="heatmapTest" native="true">
+        <widget class="QWebEngineView" name="heatmapTest">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
            <horstretch>0</horstretch>
@@ -198,7 +224,7 @@
      <x>0</x>
      <y>0</y>
      <width>683</width>
-     <height>22</height>
+     <height>36</height>
     </rect>
    </property>
   </widget>
@@ -208,7 +234,7 @@
   <customwidget>
    <class>QWebEngineView</class>
    <extends>QWidget</extends>
-   <header>qwebengineview.h</header>
+   <header location="global">QtWebEngineWidgets/QWebEngineView</header>
   </customwidget>
   <customwidget>
    <class>NavBar</class>

@@ -146,7 +146,7 @@ function render(year) {
                 tooltipValue.textContent = `Count: ${d.value}`;
             
                 videoTooltip.style("display", "block");
-                videoEl.currentTime = 10;
+                videoEl.currentTime = 0;
                 videoEl.play();
             })
             .on("mousemove", function (event, d) {
