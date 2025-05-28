@@ -15,6 +15,7 @@ html, body {
     border-radius: 8px;
     color: white;
     max-width: 224px;
+    z-index: 100;
 }
 .video-tooltip video {
     width: 200px;
@@ -22,6 +23,25 @@ html, body {
     display: block;
     margin-bottom: 8px;
     border-radius: 4px;
+    /* Hide controls overlay */
+    -webkit-mask-image: linear-gradient(to bottom, black, black);
+    mask-image: linear-gradient(to bottom, black, black);
+}
+/* Hide native controls */
+.video-tooltip video::-webkit-media-controls {
+    display: none !important;
+}
+.video-tooltip video::-webkit-media-controls-enclosure {
+    display: none !important;
+}
+.video-tooltip video::-webkit-media-controls-panel {
+    display: none !important;
+}
+.video-tooltip video::-webkit-media-controls-play-button {
+    display: none !important;
+}
+.video-tooltip video::-webkit-media-controls-start-playback-button {
+    display: none !important;
 }
 .tooltip-text {
     font-size: 12px;
