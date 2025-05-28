@@ -136,43 +136,62 @@ function render(year) {
             .attr("stroke-width", 0.5)
             .on("mouseover", function (event, d) {
                 if (!d.isValid) return;
-                
+            
                 d3.select(this)
                     .attr("stroke", "black")
                     .attr("stroke-width", 1.5)
                     .style("cursor", "pointer");
-                
-                // Update tooltip content
+            
                 tooltipDate.textContent = d.formattedDate;
                 tooltipValue.textContent = `Count: ${d.value}`;
-                
-                // Show combined tooltip
-                videoTooltip
-                    .style("display", "block")
-                    .style("left", (event.pageX + 10) + "px")
-                    .style("top", (event.pageY - 120) + "px");
-                
-                
-                videoEl.currentTime = 0;
+            
+                videoTooltip.style("display", "block");
+                videoEl.currentTime = 10;
                 videoEl.play();
-                
             })
             .on("mousemove", function (event, d) {
                 if (!d.isValid) return;
-                
+            
+                const tooltipWidth = videoTooltip.node().offsetWidth;
+                const tooltipHeight = videoTooltip.node().offsetHeight;
+                const padding = 20;
+            
+                const mouseX = event.pageX;
+                const mouseY = event.pageY;
+            
+                // Position horizontally (left or right of cursor)
+                let left;
+                if (mouseX + tooltipWidth + padding > window.innerWidth) {
+                    left = mouseX - tooltipWidth - padding; // left side
+                } else {
+                    left = mouseX + padding; // right side
+                }
+            
+                // Position vertically (centered on mouseY)
+                let top = mouseY - tooltipHeight / 2;
+            
+                // Clamp vertically within bounds
+                if (top < padding) {
+                    top = padding;
+                } else if (top + tooltipHeight > window.innerHeight - padding) {
+                    top = window.innerHeight - tooltipHeight - padding;
+                }
+            
                 videoTooltip
-                    .style("left", (event.pageX + 10) + "px")
-                    .style("top", (event.pageY - 120) + "px");
+                    .style("left", `${left}px`)
+                    .style("top", `${top}px`);
             })
             .on("mouseout", function (event, d) {
                 if (!d.isValid) return;
                 d3.select(this)
                     .attr("stroke", "#ddd")
                     .attr("stroke-width", 0.5);
+            
                 videoTooltip.style("display", "none");
                 videoEl.pause();
                 videoEl.currentTime = 0;
             })
+            
             .on("click", (event, d) => {
                 if (!d.isValid || !window.pyObj) return;
                 const cellData = {

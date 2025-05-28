@@ -47,7 +47,6 @@ class PyObj(QObject):
 class QWebWindow():
     def __init__(self, webengine: QWebEngineView, html: str, item: Items, view_state: ViewState) -> None:
         self.webengine = webengine
-        print("hello")
         webengine.settings().setAttribute(QWebEngineSettings.WebAttribute.PlaybackRequiresUserGesture, False)
         webengine.settings().setAttribute(QWebEngineSettings.WebAttribute.PluginsEnabled, True)
         self.channel = QWebChannel()

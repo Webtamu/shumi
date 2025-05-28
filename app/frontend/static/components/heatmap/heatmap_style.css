@@ -18,7 +18,7 @@ html, body {
     z-index: 100;
 }
 .video-tooltip video {
-    width: 200px;
+    width: 100px;
     height: auto;
     display: block;
     margin-bottom: 8px;
