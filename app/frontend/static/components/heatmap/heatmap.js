@@ -17,7 +17,6 @@ window.receiveDataFromPython = function(data) {
         }
     }
 
-    // Data is already in format: { "YYYY-MM-DD": value }
     allData = data;
     render(currentYear);
 };
@@ -28,86 +27,87 @@ let height = window.innerHeight;
 svg.attr("width", width).attr("height", height);
 
 const tooltip = d3.select("#tooltip");
-const margin = { top: 80, right: 40, bottom: 40, left: 60 };
-const cellSize = 15;
 const dayLabels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-const colorScale = d3.scaleSequential(d3.interpolateYlOrRd)
-    .domain([0, 10]);
+const colorScale = d3.scaleSequential(d3.interpolateYlOrRd).domain([0, 10]);
 
 let currentYear = new Date().getFullYear();
-const yearDisplay = d3.select("#year-display");
-
 let allData = {};
+let g = svg.append("g");
 
 function render(year) {
-    yearDisplay.text(year);
-    
-    svg.selectAll("*").remove();
     width = window.innerWidth;
     height = window.innerHeight;
     svg.attr("width", width).attr("height", height);
 
-    const weeks = d3.timeWeeks(new Date(year, 0, 1), new Date(year, 11, 31));
+    const allWeeks = d3.timeWeeks(new Date(year, 0, 1), new Date(year, 11, 31));
+    const totalWeekCount = allWeeks.length;
+
+    const margin = { top: 30, right: 20, bottom: 20, left: 40 };
+    const gridSpacing = 2;
+
+    // Determine cell size based on vertical space
+    const cellSize = Math.floor(
+        (height - margin.top - margin.bottom - (7 - 1) * gridSpacing) / 7
+    );
+
+    // Calculate how many weeks can fit horizontally
+    const maxVisibleWeeks = Math.floor(
+        (width - margin.left - margin.right + gridSpacing) / (cellSize + gridSpacing)
+    );
+
+    // Center around middle of the year if not all weeks fit
+    let weeks;
+    if (maxVisibleWeeks < totalWeekCount) {
+        const mid = Math.floor(totalWeekCount / 2);
+        const start = Math.max(0, mid - Math.floor(maxVisibleWeeks / 2));
+        weeks = allWeeks.slice(start, start + maxVisibleWeeks);
+    } else {
+        weeks = allWeeks;
+    }
+
     const weekCount = weeks.length;
 
-    const g = svg.append("g")
-        .attr("transform", `translate(${margin.left},${margin.top})`);
+    const heatmapWidth = weekCount * (cellSize + gridSpacing) - gridSpacing;
+    const heatmapHeight = 7 * (cellSize + gridSpacing) - gridSpacing;
 
-    // Add day labels on the left
-    dayLabels.forEach((day, i) => {
-        g.append("text")
-            .attr("x", -10)
-            .attr("y", (i + 0.5) * (cellSize + 2))
-            .attr("text-anchor", "end")
-            .attr("dominant-baseline", "middle")
-            .attr("font-size", 10)
-            .text(day);
-    });
+    const offsetX = (width - heatmapWidth) / 2;
+    const offsetY = (height - heatmapHeight) / 2;
 
-    // Add month labels at the top
-    const monthFormat = d3.timeFormat("%b");
-    const monthPositions = [];
-    
-    // Calculate month positions
-    weeks.forEach((week, weekIndex) => {
-        const firstDayOfWeek = new Date(week);
-        const month = firstDayOfWeek.getMonth();
-        
-        if (!monthPositions[month] || weekIndex < monthPositions[month].weekIndex) {
-            monthPositions[month] = {
-                weekIndex,
-                month
-            };
-        }
-    });
+    g.transition().duration(500)
+        .attr("transform", `translate(${offsetX},${offsetY})`);
 
-    // Draw month labels
-    monthPositions.forEach((pos, month) => {
-        if (pos) {
-            g.append("text")
-                .attr("x", (pos.weekIndex + 0.5) * (cellSize + 2))
-                .attr("y", -10)
-                .attr("text-anchor", "middle")
-                .attr("font-size", 10)
-                .text(monthFormat(new Date(year, month, 1)));
-        }
-    });
+    const weekGroups = g.selectAll("g.week")
+        .data(weeks, d => d);
 
-    // Create cells
-    g.selectAll("g.week")
-        .data(weeks)
-        .join("g")
-        .attr("class", "week")
-        .attr("transform", (d, i) => `translate(${i * (cellSize + 2)},0)`)
-        .selectAll("rect.day")
-        .data((week, weekIndex) => {
-            return dayLabels.map((_, dayIndex) => {
+    const weekEnter = weekGroups.enter()
+        .append("g")
+        .attr("class", "week");
+
+    weekGroups.merge(weekEnter)
+        .transition().duration(500)
+        .attr("transform", (d, i) => `translate(${i * (cellSize + gridSpacing)}, 0)`);
+
+    const labels = g.selectAll("text.day-label").data(dayLabels);
+    labels.enter()
+        .append("text")
+        .attr("class", "day-label")
+        .attr("x", -8)
+        .attr("text-anchor", "end")
+        .attr("dominant-baseline", "middle")
+        .attr("font-size", 10)
+        .merge(labels)
+        .transition().duration(500)
+        .attr("y", (d, i) => (i + 0.5) * (cellSize + gridSpacing))
+        .text(d => d);
+
+    weekGroups.merge(weekEnter).each(function(week, weekIndex) {
+        const cells = d3.select(this).selectAll("rect.day")
+            .data(dayLabels.map((_, dayIndex) => {
                 const date = new Date(week);
                 date.setDate(date.getDate() + dayIndex);
                 const dateStr = d3.timeFormat("%Y-%m-%d")(date);
-                const isValid = date.getFullYear() === year && 
-                                 date.getMonth() >= 0 && date.getMonth() <= 11;
-                
+                const isValid = date.getFullYear() === year;
+
                 return {
                     date,
                     dateStr,
@@ -117,72 +117,64 @@ function render(year) {
                     weekIndex,
                     isValid
                 };
+            }), d => d.dateStr);
+
+        const cellsEnter = cells.enter().append("rect")
+            .attr("class", "day")
+            .attr("fill", d => d.isValid ? colorScale(d.value) : "none")
+            .attr("stroke", d => d.isValid ? "#ddd" : "none")
+            .attr("stroke-width", 0.5)
+            .on("mousemove", function (event, d) {
+                if (!d.isValid) return;
+                d3.select(this)
+                    .attr("stroke", "black")
+                    .attr("stroke-width", 1.5)
+                    .style("cursor", "pointer");
+                tooltip
+                    .style("display", "block")
+                    .style("left", (event.pageX + 10) + "px")
+                    .style("top", (event.pageY - 20) + "px")
+                    .html(`<strong>${d.formattedDate}</strong><br>Value: ${d.value}`);
+            })
+            .on("mouseleave", function (event, d) {
+                if (!d.isValid) return;
+                d3.select(this)
+                    .attr("stroke", "#ddd")
+                    .attr("stroke-width", 0.5);
+                tooltip.style("display", "none");
+            })
+            .on("click", (event, d) => {
+                if (!d.isValid || !window.pyObj) return;
+                const cellData = {
+                    date: d.formattedDate,
+                    day: dayLabels[d.day],
+                    value: d.value,
+                    weekNumber: d.weekIndex + 1,
+                    year: d.date.getFullYear()
+                };
+                pyObj.sendData(JSON.stringify(cellData));
             });
-        })
-        .join("rect")
-        .attr("class", "day")
-        .attr("width", cellSize)
-        .attr("height", cellSize)
-        .attr("y", d => d.day * (cellSize + 2))
-        .attr("fill", d => d.isValid ? colorScale(d.value) : "none")
-        .attr("stroke", d => d.isValid ? "#ddd" : "none")
-        .attr("stroke-width", 0.5)
-        .on("mousemove", function (event, d) {
-            if (!d.isValid) return;
-            
-            d3.select(this)
-                .attr("stroke", "black")
-                .attr("stroke-width", 1.5)
-                .style("cursor", "pointer");
 
-            tooltip
-                .style("display", "block")
-                .style("left", (event.pageX + 10) + "px")
-                .style("top", (event.pageY - 20) + "px")
-                .html(`<strong>${d.formattedDate}</strong><br>Value: ${d.value}`);
-        })
-        .on("mouseleave", function (event, d) {
-            if (!d.isValid) return;
-            
-            d3.select(this)
-                .attr("stroke", "#ddd")
-                .attr("stroke-width", 0.5);
+        cells.merge(cellsEnter)
+            .transition().duration(500)
+            .attr("width", cellSize)
+            .attr("height", cellSize)
+            .attr("y", d => d.day * (cellSize + gridSpacing))
+            .attr("fill", d => d.isValid ? colorScale(d.value) : "none")
+            .attr("stroke", d => d.isValid ? "#ddd" : "none");
 
-            tooltip.style("display", "none");
-        })
-        .on("click", (event, d) => {
-            if (!d.isValid || !window.pyObj) return;
-            
-            const cellData = {
-                date: d.formattedDate,
-                day: dayLabels[d.day],
-                value: d.value,
-                weekNumber: d.weekIndex + 1,
-                year: d.date.getFullYear()
-            };
-            pyObj.sendData(JSON.stringify(cellData));
-        });
+        cells.exit().remove();
+    });
+
+    weekGroups.exit().remove();
 }
-
-// Navigation handlers
-d3.select("#prev-year").on("click", () => {
-    currentYear--;
-    render(currentYear);
-    if (window.pyObj) {
-        pyObj.sendData(`Switched to year: ${currentYear}`);
-    }
-});
-
-d3.select("#next-year").on("click", () => {
-    currentYear++;
-    render(currentYear);
-    if (window.pyObj) {
-        pyObj.sendData(`Switched to year: ${currentYear}`);
-    }
-});
 
 // Initial render
 render(currentYear);
 
-// Handle window resize
-window.addEventListener("resize", () => render(currentYear));
+// Smooth resize
+let resizeTimeout;
+window.addEventListener("resize", () => {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(() => render(currentYear), 150);
+});
