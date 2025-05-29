@@ -7,7 +7,7 @@ from ..helpers import Items, Actions, ViewState
 from ..widgets import QWebWindow, NavBar
 import os
 
-#Pet test
+# Pet test
 from PyQt6.QtGui import QMovie
 
 
