@@ -6,6 +6,88 @@ html, body {
     width: 100%;
     font-family: sans-serif;
 }
+
+#heatmap-container {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+#session-container {
+    width: 100%;
+    height: 100%;
+    display: none;
+    flex-direction: row;
+}
+
+#session-video {
+    width: 50%;
+    height: 100%;
+    background: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+#session-video video {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+}
+
+#session-stats {
+    width: 50%;
+    height: 100%;
+    background: #f5f5f5;
+    padding: 5px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end; /* Push children to the bottom */
+    position: relative;
+}
+
+
+#back-button {
+    position: fixed; /* float relative to window */
+    top: 10px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    border: none;
+    padding: 5px 8px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    z-index: 999;
+}
+
+
+#back-button:hover {
+    background: rgba(0, 0, 0, 0.9);
+}
+
+.stat-item {
+    margin-bottom: 5px;
+    padding: 6px 10px;
+    background: white;
+    border-radius: 4px;
+}
+
+.stat-label {
+    font-size: 12px;
+    color: #666;
+    margin-bottom: 2px;
+}
+
+.stat-value {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+}
+
 .video-tooltip {
     position: absolute;
     display: none;
@@ -17,6 +99,7 @@ html, body {
     max-width: 224px;
     z-index: 100;
 }
+
 .video-tooltip video {
     width: 100px;
     height: auto;
@@ -27,6 +110,7 @@ html, body {
     -webkit-mask-image: linear-gradient(to bottom, black, black);
     mask-image: linear-gradient(to bottom, black, black);
 }
+
 /* Hide native controls */
 .video-tooltip video::-webkit-media-controls {
     display: none !important;
@@ -43,10 +127,12 @@ html, body {
 .video-tooltip video::-webkit-media-controls-start-playback-button {
     display: none !important;
 }
+
 .tooltip-text {
     font-size: 12px;
     line-height: 1.4;
 }
+
 .tooltip-text strong {
     display: block;
     margin-bottom: 4px;

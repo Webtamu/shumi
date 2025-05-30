@@ -6,20 +6,52 @@
     <link rel="stylesheet" href="heatmap_style.css">
 </head>
 <body>
-    <svg id="heatmap"></svg>
-    <div id="video-tooltip" class="video-tooltip">
-        <video id="tooltip-video" controls>
-            <source src="sample.webm" type="video/webm">
-            Your browser does not support the video tag.
-        </video>
-        <div class="tooltip-text">
-            <strong id="tooltip-date"></strong>
-            <span id="tooltip-value"></span>
+    <!-- Heatmap View -->
+    <div id="heatmap-container">
+        <svg id="heatmap"></svg>
+        <div id="video-tooltip" class="video-tooltip">
+            <video id="tooltip-video" controls>
+                <source src="sample.webm" type="video/webm">
+                Your browser does not support the video tag.
+            </video>
+            <div class="tooltip-text">
+                <strong id="tooltip-date"></strong>
+                <span id="tooltip-value"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Session View -->
+    <div id="session-container">
+        <div id="session-video">
+            <video id="main-video" controls>
+                <source src="sample.webm" type="video/webm">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+        <div id="session-stats">
+            <button id="back-button">← Back to Heatmap</button>
+            <div class="stat-item">
+                <div class="stat-label">📅 Date</div>
+                <div class="stat-value" id="session-date">-</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">🎯 Session Count</div>
+                <div class="stat-value" id="session-count">-</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">📆 Day of Week</div>
+                <div class="stat-value" id="session-day">-</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">📊 Week Number</div>
+                <div class="stat-value" id="session-week">-</div>
+            </div>
         </div>
     </div>
 
     <script src="../../lib/d3.v7.min.js"></script>
     <script src="qrc:///qtwebchannel/qwebchannel.js"></script>
-    <script src ="heatmap.js"></script>
+    <script src="heatmap.js"></script>
 </body>
 </html>

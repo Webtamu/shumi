@@ -39,6 +39,47 @@ let g = svg.append("g");
 
 let userInteracted = false;
 
+// Session view elements
+const heatmapContainer = document.getElementById("heatmap-container");
+const sessionContainer = document.getElementById("session-container");
+const mainVideo = document.getElementById("main-video");
+const backButton = document.getElementById("back-button");
+const sessionDate = document.getElementById("session-date");
+const sessionCount = document.getElementById("session-count");
+const sessionDay = document.getElementById("session-day");
+const sessionWeek = document.getElementById("session-week");
+
+// Back button functionality
+backButton.addEventListener('click', () => {
+    showHeatmapView();
+});
+
+function showSessionView(cellData) {
+    // Hide heatmap, show session view
+    heatmapContainer.style.display = "none";
+    sessionContainer.style.display = "flex";
+    
+    // Update session stats
+    sessionDate.textContent = cellData.date;
+    sessionCount.textContent = cellData.value;
+    sessionDay.textContent = cellData.day;
+    sessionWeek.textContent = `Week ${cellData.weekNumber}`;
+    
+    // Reset and play main video
+    mainVideo.currentTime = 0;
+    mainVideo.play();
+}
+
+function showHeatmapView() {
+    // Show heatmap, hide session view
+    heatmapContainer.style.display = "block";
+    sessionContainer.style.display = "none";
+    
+    // Pause main video
+    mainVideo.pause();
+    mainVideo.currentTime = 0;
+}
+
 // Track user interaction (any click counts)
 document.addEventListener('click', () => {
     userInteracted = true;
@@ -191,9 +232,9 @@ function render(year) {
                 videoEl.pause();
                 videoEl.currentTime = 0;
             })
-            
             .on("click", (event, d) => {
-                if (!d.isValid || !window.pyObj) return;
+                if (!d.isValid) return;
+                
                 const cellData = {
                     date: d.formattedDate,
                     day: dayLabels[d.day],
@@ -201,7 +242,14 @@ function render(year) {
                     weekNumber: d.weekIndex + 1,
                     year: d.date.getFullYear()
                 };
-                pyObj.sendData(JSON.stringify(cellData));
+                
+                // Show session view immediately
+                showSessionView(cellData);
+                
+                // Also send data to Python if available
+                if (window.pyObj) {
+                    pyObj.sendData(JSON.stringify(cellData));
+                }
             });
 
         cells.merge(cellsEnter)
