@@ -26,8 +26,7 @@
    <string>Shumi</string>
   </property>
   <property name="windowIcon">
-   <iconset theme="weather-overcast">
-    <normaloff>.</normaloff>.</iconset>
+   <iconset theme="weather-overcast"/>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -37,48 +36,29 @@
     <item>
      <widget class="Line" name="line">
       <property name="orientation">
-       <enum>Qt::Horizontal</enum>
+       <enum>Qt::Orientation::Horizontal</enum>
       </property>
      </widget>
     </item>
     <item>
      <widget class="QFrame" name="frame_2">
       <property name="layoutDirection">
-       <enum>Qt::LeftToRight</enum>
+       <enum>Qt::LayoutDirection::LeftToRight</enum>
       </property>
       <property name="frameShape">
-       <enum>QFrame::NoFrame</enum>
+       <enum>QFrame::Shape::NoFrame</enum>
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout_3">
        <item>
         <widget class="QLabel" name="lblWelcome">
          <property name="layoutDirection">
-          <enum>Qt::LeftToRight</enum>
+          <enum>Qt::LayoutDirection::LeftToRight</enum>
          </property>
          <property name="text">
           <string>Welcome, &lt;User&gt; - Let's practice some &lt;Instrument&gt; today!</string>
          </property>
          <property name="alignment">
-          <set>Qt::AlignCenter</set>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-    </item>
-    <item>
-     <widget class="QFrame" name="petFrame">
-      <property name="minimumSize">
-       <size>
-        <width>0</width>
-        <height>18</height>
-       </size>
-      </property>
-      <layout class="QHBoxLayout" name="horizontalLayout_5">
-       <item alignment="Qt::AlignHCenter">
-        <widget class="QLabel" name="pet">
-         <property name="text">
-          <string>Puffle.gif</string>
+          <set>Qt::AlignmentFlag::AlignCenter</set>
          </property>
         </widget>
        </item>
@@ -88,7 +68,7 @@
     <item>
      <widget class="QFrame" name="frame_3">
       <property name="frameShape">
-       <enum>QFrame::NoFrame</enum>
+       <enum>QFrame::Shape::NoFrame</enum>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout" stretch="2,0,0">
        <item>
@@ -104,13 +84,13 @@
        <item>
         <widget class="QFrame" name="frame_4">
          <property name="frameShape">
-          <enum>QFrame::NoFrame</enum>
+          <enum>QFrame::Shape::NoFrame</enum>
          </property>
          <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,0,0">
           <item>
            <widget class="QLabel" name="lblCurrentStreak">
             <property name="frameShape">
-             <enum>QFrame::NoFrame</enum>
+             <enum>QFrame::Shape::NoFrame</enum>
             </property>
             <property name="text">
              <string>Current Streak: 0</string>
@@ -152,7 +132,7 @@
      <x>0</x>
      <y>0</y>
      <width>683</width>
-     <height>22</height>
+     <height>33</height>
     </rect>
    </property>
   </widget>

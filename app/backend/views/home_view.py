@@ -7,9 +7,6 @@ from ..helpers import Items, Actions, ViewState
 from ..widgets import QWebWindow, NavBar
 import os
 
-# Pet test
-from PyQt6.QtGui import QMovie
-
 
 class HomeView(View):
     def setup(self) -> None:
@@ -17,12 +14,6 @@ class HomeView(View):
         self.window = uic.loadUi("app/frontend/qtdesigner/home_design.ui")
         html_path = os.path.abspath("app/frontend/static/components/heatmap/heatmap.html")
         nav_widget: NavBar = self.window.findChild(NavBar, "navBar")
-
-        # Needs refactoring, implement MVC for multiple pets maybe defined from settings?
-        pet_window = self.window.findChild(QLabel, "pet")
-        movie = QMovie("app/frontend/qtdesigner/pet.gif")
-        pet_window.setMovie(movie)
-        movie.start()
 
         self.item_map = {
             Items.HOME_HEATMAP: {

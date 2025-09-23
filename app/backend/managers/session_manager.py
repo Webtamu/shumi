@@ -34,45 +34,12 @@ class SessionManager:
         if self.timer:
             self.timer.start_timer(USER_DEFINED_TIME_PERIOD)
 
-        self.audio_buffer = []
-        self.audio_stream = sounddevice.InputStream(
-            samplerate=44100,
-            channels=1,
-            dtype='float32',
-            callback=self.audio_callback
-        )
-        self.audio_stream.start()
-
     def stop_session(self, signal: Signal) -> None:
         if self.timer:
             self.timer.stop()
             self.add_session(app_context.user_id,
                              self.timer.start_time,
                              self.timer.stop_time)
-
-        if self.audio_stream:
-            self.audio_stream.stop()
-            self.audio_stream.close()
-            self.audio_stream = None
-
-        if self.audio_buffer:
-            audio_data = numpy.concatenate(self.audio_buffer)
-            self.save_session_audio(audio_data)
-
-    def save_session_audio(self, audio_data: numpy.ndarray) -> None:
-        current_path = self.settings.value(QSETTINGS_STORAGE_KEY, defaultValue="")
-        if current_path:
-            try:
-                os.makedirs(current_path, exist_ok=True)
-                timestamp = self.timer.stop_time.strftime("%Y-%m-%d at %H-%M")
-                file_path = os.path.join(current_path, f"{timestamp}.wav")
-
-                # Normalize float32 [-1.0, 1.0] to int16 range for WAV
-                audio_int16 = numpy.int16(audio_data * 32767)
-                wavfile.write(file_path, 44100, audio_int16)
-                Logger.critical(f"Audio saved to {file_path}")
-            except Exception as e:
-                Logger.critical(f"Failed to save audio: {e}")
 
     def save_session_notes(self, signal: Signal) -> None:
         current_path = self.settings.value(QSETTINGS_STORAGE_KEY, defaultValue="")
