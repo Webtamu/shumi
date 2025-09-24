@@ -4,10 +4,7 @@ from ..core.eventbus import event_bus
 from ..core.context import app_context
 from ..core.settings import get_settings, QSETTINGS_STORAGE_KEY, USER_DEFINED_TIME_PERIOD
 import os
-import sounddevice
-import numpy
 import json
-from scipy.io import wavfile
 
 
 class SessionManager:

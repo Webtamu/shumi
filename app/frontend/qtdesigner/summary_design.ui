@@ -74,6 +74,26 @@
          </property>
         </widget>
        </item>
+       <!-- 📷 Webcam preview label -->
+       <item>
+        <widget class="QLabel" name="videoLabel">
+         <property name="minimumSize">
+          <size>
+           <width>320</width>
+           <height>240</height>
+          </size>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::Box</enum>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+         <property name="text">
+          <string>Camera Feed</string>
+         </property>
+        </widget>
+       </item>
        <item>
         <widget class="QPushButton" name="btnBeginTake">
          <property name="text">
