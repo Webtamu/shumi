@@ -28,6 +28,3 @@ wheels/
 
 # Virtual environments
 .venv
-
-# uv stuff
-uv.lock
