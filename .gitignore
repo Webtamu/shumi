@@ -17,3 +17,18 @@ study_sessions.duckdb.wal
 /user/*
 /target/
 /app/backend/rslib/target/
+
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+# uv stuff
+.python-version
+uv.lock

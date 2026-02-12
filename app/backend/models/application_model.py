@@ -1,7 +1,5 @@
 from .models import Model
 from ..helpers import Signal, Items, Logger
-from rslib import rust_hello
-
 
 class ApplicationModel(Model):
     """
@@ -26,7 +24,7 @@ class ApplicationModel(Model):
                                                         "nav": True},
         }
 
-        self.action_map = {Items.REPORT_BUG: rust_hello}
+        self.action_map = {Items.REPORT_BUG: None}
 
     # Update data store and notify controller
     def update_model(self, signal: Signal) -> None:
