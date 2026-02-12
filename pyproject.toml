@@ -3,13 +3,12 @@ name = "shumi"
 version = "1.0.0"
 description = "A growth & productivity app for tracking your practice sessions, visualizing progress, and building streaks."
 readme = "README.md"
-requires-python = ">=3.12.1"
+requires-python = ">=3.12.9"
 dependencies = [
     "duckdb>=1.4.4",
     "flake8>=7.3.0",
     "flake8-pyproject>=1.2.4",
     "ibis-framework[duckdb]>=12.0.0",
-    "maturin>=1.11.5",
     "numpy>=2.4.2",
     "opencv-python>=4.13.0.92",
     "pyqt6>=6.10.2",

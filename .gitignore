@@ -30,5 +30,4 @@ wheels/
 .venv
 
 # uv stuff
-.python-version
 uv.lock
