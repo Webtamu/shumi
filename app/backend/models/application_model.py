@@ -1,6 +1,7 @@
 from .models import Model
 from ..helpers import Signal, Items, Logger
 
+
 class ApplicationModel(Model):
     """
     This class houses temporary application metadata.
