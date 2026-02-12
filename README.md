@@ -1,6 +1,11 @@
-# SHUMI
-
-A growth & productivity app for tracking your practice sessions, visualizing progress, and building consistency.
+<div align="center"> 
+    <img src="https://raw.githubusercontent.com/netbox-community/netbox/main/docs/netbox_logo_light.svg" width="400" alt="NetBox logo" /> 
+    <p>
+        <strong>A growth & productivity app for tracking your practice sessions, visualizing progress, and building consistency.</strong></p> <a href="https://github.com/">
+        <img src="https://img.shields.io/badge/release-beta-blue" alt="Latest release" /></a>
+        <a href="https://github.com/Webtamu/shumi/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-Apache_2.0-blue.svg" alt="License" /></a>
+    </p> 
+</div>
 
 ---
 
