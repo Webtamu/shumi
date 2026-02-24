@@ -4,6 +4,7 @@ from .signals import Signal
 from .logger import Logger
 from .connections import Connections
 from .timer import Timer
+from .itemconfig import ItemConfig
 
 __all__ = [
     "Connections",
@@ -11,6 +12,7 @@ __all__ = [
     "Signal",
     "KeyAction",
     "Items",
+    "ItemConfig",
     "ViewState",
     "Actions",
     "StatusCodes",

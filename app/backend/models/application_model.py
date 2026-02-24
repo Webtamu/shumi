@@ -1,5 +1,5 @@
 from .models import Model
-from ..helpers import Signal, Items, Logger
+from ..helpers import Signal, Items, ItemConfig, Logger
 
 
 class ApplicationModel(Model):
@@ -11,21 +11,41 @@ class ApplicationModel(Model):
         super().__init__()
 
         # TEMP APP DATA STORE
-        self.data_map = {
-            Items.HOME: {"state": False, "text": "Return Home", "nav": True},
-            Items.SETTINGS: {"state": False, "text": "Settings", "nav": True},
-            Items.PROFILE: {"state": False, "text": "Profile", "nav": True},
-            Items.STATS: {"state": False, "text": "Stats", "nav": True},
-            Items.REPORT_BUG: {"state": False, "text": "Report a Bug", },
-            Items.CONTACT: {"state": False, "text": "Contact Us", },
-            Items.ABOUT: {"state": False, "text": "About", },
-            Items.LOGIN_CREATE_ACCOUNT: {"state": False, "text": "Create account", "nav": True},
-            Items.CREATE_ACCOUNT_ALREADY_HAVE_ACCOUNT: {"state": False, "text":
-                                                        "Already have an account? Sign in",
-                                                        "nav": True},
+        self.data_map: dict[Items, ItemConfig] = {
+            Items.HOME: ItemConfig(
+                text="Return Home",
+                nav=True
+            ),
+            Items.SETTINGS: ItemConfig(
+                text="Settings",
+                nav=True
+            ),
+            Items.PROFILE: ItemConfig(
+                text="Profile",
+                nav=True
+            ),
+            Items.STATS: ItemConfig(
+                text="Stats",
+                nav=True
+            ),
+            Items.REPORT_BUG: ItemConfig(
+                text="Report a Bug",
+            ),
+            Items.CONTACT: ItemConfig(
+                text="Contact Us"
+            ),
+            Items.ABOUT: ItemConfig(
+                text="About"
+            ),
+            Items.LOGIN_CREATE_ACCOUNT: ItemConfig(
+                text="Create account",
+                nav=True
+            ),
+            Items.CREATE_ACCOUNT_ALREADY_HAVE_ACCOUNT: ItemConfig(
+                text="Already have an account? Sign in",
+                nav=True
+            ),
         }
-
-        self.action_map = {Items.REPORT_BUG: None}
 
     # Update data store and notify controller
     def update_model(self, signal: Signal) -> None:
@@ -34,10 +54,9 @@ class ApplicationModel(Model):
 
         item_entry = self.data_map[signal.item]
 
-        item_entry["state"] = not item_entry["state"]
-        signal.text = item_entry["text"]
-        signal.state = item_entry["state"]
-        signal.nav = item_entry.get("nav", False)
-
+        item_entry.state = not item_entry.state
+        signal.text = item_entry.text
+        signal.state = item_entry.state
+        signal.nav = item_entry.nav
         Logger.debug(signal)
         self.model_signal.emit(signal)

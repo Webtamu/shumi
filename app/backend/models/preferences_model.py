@@ -1,5 +1,5 @@
 from .models import Model
-from ..helpers import Logger, Items, ViewState, Signal, Actions
+from ..helpers import Logger, Items, ItemConfig, ViewState, Signal, Actions
 from ..managers import StorageManager
 
 
@@ -11,15 +11,25 @@ class PreferencesModel(Model):
 
     def __init__(self) -> None:
         super().__init__()
-        self.data_map = {
-            Items.DARK_MODE: {"state": False, "text": "Dark Mode"},
-            Items.LANGUAGE: {"state": False, "text": "Language"},
-            Items.TIME: {"state": False, "text": "Time"},
-            Items.LOGIN_STAY_SIGNED_IN: {"state": False, "text": "Stay signed in"},
-            Items.SETTINGS_PATH: {"state": False, "text": "..."},
-            Items.SETTINGS_PATH_SELECTED: {"state": False, "text": ""},
-            Items.SETTINGS_INPUT_DEVICE: {"state": False, "text": ""},
-            Items.SETTINGS_OUTPUT_DEVICE: {"state": False, "text": ""},
+        self.data_map: dict[Items, ItemConfig] = {
+            Items.DARK_MODE: ItemConfig(
+                text="Dark Mode"
+            ),
+            Items.LANGUAGE: ItemConfig(
+                text="Language"
+            ),
+            Items.TIME: ItemConfig(
+                text="Time"
+            ),
+            Items.LOGIN_STAY_SIGNED_IN: ItemConfig(
+                text="Stay signed in"
+            ),
+            Items.SETTINGS_PATH: ItemConfig(
+                text="..."
+            ),
+            Items.SETTINGS_PATH_SELECTED: ItemConfig(),
+            Items.SETTINGS_INPUT_DEVICE: ItemConfig(),
+            Items.SETTINGS_OUTPUT_DEVICE: ItemConfig(),
         }
 
         self.storage_manager = StorageManager()
@@ -37,9 +47,9 @@ class PreferencesModel(Model):
             if action := self.action_map.get(signal.item):
                 action(signal)
 
-            item_entry["state"] = signal.state
+            item_entry.state = signal.state
             if not signal.text:
-                signal.text = item_entry["text"]
+                signal.text = item_entry.text
             signal.source = ViewState.ALL
 
         Logger.debug(signal)

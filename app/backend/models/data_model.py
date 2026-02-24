@@ -2,41 +2,52 @@ from ..services import DuckDBService, SupabaseService
 from ..managers import SyncManager, SessionManager, AuthManager
 
 from .models import Model
-from ..helpers import Signal, Logger, Items, Actions
+from ..helpers import Signal, Logger, Items, ItemConfig, Actions
 from ..core.settings import USER_DEFINED_TIME_PERIOD
 
 
 class DataModel(Model):
     def __init__(self) -> None:
         super().__init__()
-        self.data_map = {
-            # Authentication related items
-            Items.LOGIN_LOGIN: {"state": False, "text": "Login", "nav": True},
-            Items.PROFILE_LOGOUT: {"state": False, "text": "Logout", "nav": True},
-            Items.CREATE_ACCOUNT_CREATE: {"state": False, "text": "Create account"},
+        self.data_map: dict[Items, ItemConfig] = {
 
-            # Session related items
-            Items.START: {"state": False, "text": "Start Session", "nav": True},
-            Items.STOP: {"state": False, "text": "Stop Session", "nav": True},
-            Items.BEGIN_TAKE: {"state": False, "text": "Begin Take", "nav": True},
-            Items.TIMER: {"state": False, "text": str(USER_DEFINED_TIME_PERIOD)},
-
-            # Sync related items
-            Items.SYNC: {"state": False, "text": "Sync"},
-
-            # Profile and stats display items
-            Items.HOME_WELCOME: {"state": False, "text": ""},
-            Items.HOME_CURRENT_STREAK: {"state": False, "text": ""},
-            Items.HOME_DAILY_AVERAGE: {"state": False, "text": ""},
-            Items.HOME_HIGHEST_STREAK: {"state": False, "text": ""},
-            Items.PROFILE_EMAIL: {"state": False, "text": ""},
-            Items.PROFILE_USERNAME: {"state": False, "text": ""},
-
-            # HOME ITEMS
-            Items.HOME_HEATMAP: {"state": False, "text": ""},
-
-            # STATS ITEMS
-            Items.STATS_GRAPH: {"state": False, "text": ""},
+            Items.LOGIN_LOGIN: ItemConfig(
+                text="Login",
+                nav=True
+            ),
+            Items.PROFILE_LOGOUT: ItemConfig(
+                text="Logout",
+                nav=True
+            ),
+            Items.CREATE_ACCOUNT_CREATE: ItemConfig(
+                text="Create account"
+            ),
+            Items.START: ItemConfig(
+                text="Start Session",
+                nav=True
+            ),
+            Items.STOP: ItemConfig(
+                text="Stop Session",
+                nav=True
+            ),
+            Items.BEGIN_TAKE: ItemConfig(
+                text="Begin Take",
+                nav=True
+            ),
+            Items.TIMER: ItemConfig(
+                text=str(USER_DEFINED_TIME_PERIOD)
+            ),
+            Items.SYNC: ItemConfig(
+                text="Sync"
+            ),
+            Items.HOME_WELCOME: ItemConfig(),
+            Items.HOME_CURRENT_STREAK: ItemConfig(),
+            Items.HOME_DAILY_AVERAGE: ItemConfig(),
+            Items.HOME_HIGHEST_STREAK: ItemConfig(),
+            Items.PROFILE_EMAIL: ItemConfig(),
+            Items.PROFILE_USERNAME: ItemConfig(),
+            Items.HOME_HEATMAP: ItemConfig(),
+            Items.STATS_GRAPH: ItemConfig(),
         }
 
         self.local_database = DuckDBService()
@@ -68,16 +79,16 @@ class DataModel(Model):
 
     def update_model(self, signal: Signal) -> None:
         item_entry = self.data_map[signal.item]
-        signal.nav = item_entry.get("nav", False)
+        signal.nav = item_entry.nav
 
         if actions := self.action_map.get(signal.item):
             for action in actions:
                 action(signal)
 
         if signal.action != Actions.LABEL_SET:  # Don't overwrite dynamic text
-            item_entry["state"] = not item_entry["state"]
-            signal.text = item_entry["text"]
-            signal.state = item_entry["state"]
+            item_entry.state = not item_entry.state
+            signal.text = item_entry.text
+            signal.state = item_entry.state
 
         Logger.debug(signal)
         self.model_signal.emit(signal)

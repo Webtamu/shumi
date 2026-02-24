@@ -26,7 +26,7 @@ class Logger:
     def get_logger(cls):
         if cls.instance is None:
             cls.instance = logging.getLogger('app')
-            cls.instance.setLevel(logging.DEBUG)
+            cls.instance.setLevel(logging.INFO)
 
             handler = logging.StreamHandler(sys.stdout)
             formatter = ColorFormatter('%(levelname)s - %(message)s')
